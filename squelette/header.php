@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="styles/processus.css">
-  <link rel="stylesheet" href="styles/header.css">
+  <link rel="stylesheet" href="../styles/processus.css">
+  <link rel="stylesheet" href="../styles/header.css">
   <title>Header</title>
   
 </head>
@@ -95,16 +95,16 @@ nav {
 <header>
   <!-- Logo à gauche -->
   <div class="logo">
-    <img src="..\medias\logo_trasparent-decodumonde.png" alt="Logo Decodumonde">
+    <img src="../../medias/logo_trasparent-decodumonde.png" alt="Logo Decodumonde">
   </div>
   
   <!-- Menu à droite -->
   <nav>
     <ul>
-      <li><a href="#">Accueil</a></li>
-      <li><a href="#">Personalisation</a></li>
-      <li><a href="#">Commandes</a></li>
-      <li><a href="#">Besoin d'aides ?</a></li>
+      <li><a href="../pages/index.php">Accueil</a></li>
+      <li><a href="../EtapesPersonnalisation/etape1.php">Personalisation</a></li>
+      <li><a href="../pages/">Commandes</a></li>
+      <li><a href="../pages/">Besoin d'aides ?</a></li>
     </ul>
   </nav>
 </header>

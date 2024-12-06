@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
 
-    <link rel="stylesheet" href="../src/styles.css">
-    <link href="../dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link href="../../dist/output.css" rel="stylesheet">
 
-    <script src="../node_modules/@preline/carousel/index.js"></script> 
+    <script src="../../node_modules/@preline/carousel/index.js"></script> 
     
 
 
@@ -28,6 +28,10 @@
         }
     </style>
 </head>
+
+<header>
+  <?php require '../../squelette/header.php'; ?>
+</header>
 
 <body class="be-vietnam-pro-regular">
     <!--Main-->
@@ -49,7 +53,7 @@
                 </p>
             </div>
             <div class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mt-10 rounded-lg text-center md:text-left">
-                <a href="personnalisation.php">
+                <a href="../EtapesPersonnalisation/etape1.php">
                 <button
                 class="bg-black text-white be-vietnam-pro-bold py-3 px-7 rounded-[10px] shadow-lg shadow-gray-400 focus:ring transform transition hover:scale-105 duration-300 ease-in-out md:ml-auto md:mr-0" 
                 type="button">
@@ -61,7 +65,7 @@
 
             <!--Right Col-->
             <div class="flex flex-col px-2 py-4 w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
-                <img class="rounded-[10px] size-full" src="../media/canape.jpg" alt="Salon marocain" />
+                <img class="rounded-[10px] size-full" src="../../medias/canape.jpg" alt="Salon marocain" />
             </div>      
         </div>
     
@@ -92,42 +96,42 @@
            <!-- Premier slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/canape.jpg">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/canape.jpg">
             </div>
             </div>
             
            <!--  Deuxième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
             </div>
             </div>
             
             <!-- Troisième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéMeknès_VueDeAngle_-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
             </div>
             </div>
             
             <!-- Quatrième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/canape.jpg">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/canape.jpg">
             </div>
             </div>
 
             <!-- Cinquième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
             </div>
             </div>
 
             <!--  Sixième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéMeknès_VueDeAngle_-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
             </div>
             </div>
 
@@ -185,42 +189,42 @@
            <!-- Premier slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/canape.jpg">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/canape.jpg">
             </div>
             </div>
             
            <!--  Deuxième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
             </div>
             </div>
             
             <!-- Troisième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéMeknès_VueDeAngle_-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
             </div>
             </div>
             
             <!-- Quatrième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/canape.jpg">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/canape.jpg">
             </div>
             </div>
 
             <!-- Cinquième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
             </div>
             </div>
 
             <!--  Sixième slide -->
             <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
             <div class="flex justify-center h-full mx-6">
-                <img class="rounded-[10px] w-full h-full transition duration-700" src="../media/CanapéMeknès_VueDeAngle_-Photoroom.png">
+                <img class="rounded-[10px] w-full h-full transition duration-700" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
             </div>
             </div>
 
@@ -248,9 +252,11 @@
    
     </div> 
 <!-- End Slider -->
-  
-</body>
 
-  <?php require_once '../include/footer.php'?>
+<footer>
+  <?php require_once '../../squelette/footer.php'?>
+</footer>
+
+</body>
 
 </html>
