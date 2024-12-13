@@ -41,11 +41,17 @@
                         <input type="number" id="price"  class="input-field" require>
                     </div>
                     </div>
+                    <div class="form-row">
+                    <div class="form-group">
+                        <label for="img">Image</label>
+                        <input type="text" id="img" class="input-field" require>
+                    </div>
+                    </div>
                 </form>
                 <div class="footer">
                     <div class="buttons">
                     <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-                    <button class="btn-valider">Valider</button>
+                    <input type="submit" class="btn-valider" value="Valider"></input>
                     </div>
                 </div>
                 </div>

@@ -31,7 +31,7 @@
                         <td></td>
                         <td></td>
                         <td class="actions">
-                        <span class="edit">✏️</span>
+                        <a href="edit.php"><span class="edit">✏️</span></a>
                         <span class="delete">🗑️</span>
                         </td>
                     </tr>
@@ -40,7 +40,7 @@
                         <td></td>
                         <td></td>
                         <td class="actions">
-                        <span class="edit">✏️</span>
+                        <a href="edit.php"><span class="edit">✏️</span></a>
                         <span class="delete">🗑️</span>
                         </td>
                     </tr>
@@ -49,7 +49,7 @@
                         <td></td>
                         <td></td>
                         <td class="actions">
-                        <span class="edit">✏️</span>
+                        <a href="edit.php"><span class="edit">✏️</span></a>
                         <span class="delete">🗑️</span>
                         </td>
                     </tr>

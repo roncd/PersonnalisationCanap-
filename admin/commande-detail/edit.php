@@ -31,6 +31,12 @@
                     </div>
                     <div class="form-row">
                     <div class="form-group">
+                    <label for="structure">ID Structure</label>
+                    <input type="number" id="structure"  class="input-field" require>
+                    </div>
+                    </div>
+                    <div class="form-row">
+                    <div class="form-group">
                     <label for="dimmension">ID Dimmension</label>
                     <input type="number" id="dimmension"  class="input-field" require>
                     </div>
@@ -85,6 +91,12 @@
                     </div>
                     <div class="form-row">
                     <div class="form-group">
+                    <label for="couleurtissuBois">ID Couleur tissu bois</label>
+                    <input type="number" id="couleurtissuBois"  class="input-field" require>
+                    </div>
+                    </div>
+                    <div class="form-row">
+                    <div class="form-group">
                     <label for="motifBois">ID Motif bois</label>
                     <input type="number" id="motifBois"  class="input-field" require>
                     </div>
@@ -123,7 +135,7 @@
                 <div class="footer">
                     <div class="buttons">
                     <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-                    <button class="btn-valider">Valider</button>
+                    <input type="submit" class="btn-valider" value="Valider"></input>
                     </div>
                 </div>
                 </div>

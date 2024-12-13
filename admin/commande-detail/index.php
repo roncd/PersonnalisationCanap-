@@ -22,6 +22,7 @@
                     <th>ID</th>
                     <th>COMMANDE_ID</th>
                     <th>CLIENT_ID</th>
+                    <th>STRUCTUR_ID</th>
                     <th>DIMENSION_ID</th>
                     <th>TYPE_BANQUETTE_ID</th>
                     <th>MOUSSE_ID</th>
@@ -43,6 +44,7 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -88,8 +90,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td class="actions">
-                        <span class="edit">✏️</span>
+                        <a href="edit.php"><span class="edit">✏️</span></a>
                         <span class="delete">🗑️</span>
                         </td>
                     </tr>
@@ -113,8 +116,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td class="actions">
-                        <span class="edit">✏️</span>
+                        <a href="edit.php"><span class="edit">✏️</span></a>
                         <span class="delete">🗑️</span>
                         </td>
                     </tr>

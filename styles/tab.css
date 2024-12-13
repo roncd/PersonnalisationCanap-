@@ -16,6 +16,10 @@ h2 {
     margin-bottom: 20px;
 }
 
+a {
+    text-decoration: none; 
+}
+
 /* Responsive table container */
 .tab-container {
     overflow-x: auto; /* Active le défilement horizontal si nécessaire */

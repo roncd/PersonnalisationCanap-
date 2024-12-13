@@ -14,6 +14,12 @@
 </header>
 
 <main>
+<div class="fil-ariane-container" aria-label="fil-ariane">
+  <ul class="fil-ariane">
+    <li><a href="etape1-1.php" class="active">Structure</a></li>
+    <li><a href="etape2.php">Banquette</a></li>
+  </ul>
+</div>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">

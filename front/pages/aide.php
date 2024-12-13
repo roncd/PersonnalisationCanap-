@@ -77,7 +77,6 @@
                     </div>
                     <div class="footer">
                     <div class="buttons">
-                    <button class="btn-retour" onclick="history.go(-1)">Retour</button>
                     <input type="submit" name="envoyer" class="btn-valider" value="Envoyer">
                     </div>
                 </div>
