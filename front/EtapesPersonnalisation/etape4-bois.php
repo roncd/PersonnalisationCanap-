@@ -15,6 +15,18 @@
 </header>
 
 <main>
+<div class="fil-ariane-container" aria-label="fil-ariane">
+  <ul class="fil-ariane">
+    <li><a href="etape1-1.php">Structure</a></li>
+    <li><a href="etape2.php">Banquette</a></li>
+    <li><a href="etape3-bois.php">Couleur</a></li>
+    <li><a href="etape4-bois.php" class="active">Décoration</a></li>
+    <li><a href="etape5-1-bois.php">Accoudoirs</a></li>
+    <li><a href="etape6-bois.php">Dossier</a></li>
+    <li><a href="etape7-bois.php">Mousse</a></li>
+    <li><a href="etape8-1-bois.php">Tissu</a></li>
+  </ul>
+</div>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">

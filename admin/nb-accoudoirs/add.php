@@ -33,7 +33,7 @@
                 <div class="footer">
                     <div class="buttons">
                     <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-                    <button class="btn-valider">Valider</button>
+                    <input type="submit" class="btn-valider" value="Valider"></input>
                     </div>
                 </div>
                 </div>

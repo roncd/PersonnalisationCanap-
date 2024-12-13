@@ -15,6 +15,17 @@
 </header>
 
 <main>
+<div class="fil-ariane-container" aria-label="fil-ariane">
+  <ul class="fil-ariane">
+    <li><a href="etape1-1.php">Structure</a></li>
+    <li><a href="etape2.php">Banquette</a></li>
+    <li><a href="etape3-tissu.php">Modèle</a></li>
+    <li><a href="etape4-1-tissu.php">Tissu</a></li>
+    <li><a href="etape5-tissu.php">Dossier</a></li>
+    <li><a href="etape6-1-tissu.php" class="active">Accoudoir</a></li>
+    <li><a href="etape7-tissu.php">Mousse</a></li>
+  </ul>
+</div>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
@@ -32,7 +43,7 @@
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-retour">Retour</button>
+          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
           <button class="btn-suivant">Suivant</button>
         </div>
       </div>
@@ -42,7 +53,7 @@
     <div class="right-column">
       <section class="main-display">
         <div class="buttons">
-          <button class="btn-aide" onclick="history.go(-1)">Besoin d'aide ?</button>
+          <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
         <img src="../../medias/boisnoir.jpeg" alt="Armoire">

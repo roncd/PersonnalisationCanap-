@@ -15,6 +15,17 @@
 </header>
 
 <main>
+<div class="fil-ariane-container" aria-label="fil-ariane">
+  <ul class="fil-ariane">
+    <li><a href="etape1-1.php">Structure</a></li>
+    <li><a href="etape2.php">Banquette</a></li>
+    <li><a href="etape3-tissu.php">Modèle</a></li>
+    <li><a href="etape4-1-tissu.php">Tissu</a></li>
+    <li><a href="etape5-tissu.php">Dossier</a></li>
+    <li><a href="etape6-1-tissu.php" class="active">Accoudoir</a></li>
+    <li><a href="etape7-tissu.php">Mousse</a></li>
+  </ul>
+</div>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
