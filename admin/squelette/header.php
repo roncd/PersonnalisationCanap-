@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Header</title>
+  
 </head>
 <body>
+
 <style>
  /* Importation de la police */
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&display=swap');
@@ -82,21 +85,25 @@ nav ul li a:hover::after {
 nav {
   margin-right: 90px; /* Décaler le menu vers la gauche */
 }
+
+
+
 </style>
 
 <header>
   <!-- Logo à gauche -->
   <div class="logo">
-    <a href="../pages/index.php"><img src="../../medias/logo_trasparent-decodumonde.png" alt="Logo Decodumonde"></a>
+  <a href="../pages/index.php"><img src="../../medias/logo_trasparent-decodumonde.png" alt="Logo Decodumonde"></a>
   </div>
   
   <!-- Menu à droite -->
   <nav>
     <ul>
-      <li><a href="../pages/index.php">Accueil</a></li>
-      <li><a href="../EtapesPersonnalisation/etape1-1.php">Personalisation</a></li>
-      <li><a href="../pages/commandes.php">Commandes</a></li>
-      <li><a href="../pages/aide.php">Besoin d'aides ?</a></li>
+      <li><a href="../pages/index.php">Base de données</a></li>
+      <li><a href="../pages/commande.php">Commandes</a></li>
+      <li><a href="../pages/ajouter.php">Ajouter</a></li>
+      <li><a href="../pages/utilisateurs.php">Utilisateurs</a></li>
+      
     </ul>
   </nav>
 </header>

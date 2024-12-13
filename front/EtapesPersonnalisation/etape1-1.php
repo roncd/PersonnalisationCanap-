@@ -131,7 +131,7 @@
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-retour">Retour</button>
+          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
           <button class="btn-suivant">Suivant</button>
         </div>
       </div>
@@ -149,8 +149,7 @@
     </div>
   </div>
 </main>
-
-
+<?php require_once '../../squelette/footer.php'?>
 </body>
 
 

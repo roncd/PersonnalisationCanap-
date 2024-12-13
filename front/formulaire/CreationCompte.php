@@ -69,7 +69,7 @@
       <div class="footer">
         <p>Tu as déjà un compte ? <span><a href="Connexion.php" class="link-connect">Connecte-toi</a></span></p>
         <div class="buttons">
-          <button class="btn-retour">Retour</button>
+          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
           <button class="btn-valider">Valider</button>
         </div>
       </div>
@@ -83,7 +83,7 @@
     </div>
   </div>
 </main>
-
+<?php require_once '../../squelette/footer.php'?>
 </body>
 
 

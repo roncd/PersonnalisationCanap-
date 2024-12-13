@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
-  
-  <title>Étape 1 - Choisi ta structure</title>
+
+  <title>Étape 8 - Choisi ton tissu</title>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Étape 1 - Choisi ta structure</h2>
+      <h2>Étape 8 - Choisi ton tissu</h2>
       
       <section class="color-options">
         <div class="option">
@@ -132,8 +132,8 @@
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-retour">Retour</button>
-          <button class="btn-suivant">Suivant</button>
+          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
+          <button href="etape8-2-bois.php" class="btn-suivant">Suivant</button>
         </div>
       </div>
     </div>
@@ -150,8 +150,6 @@
     </div>
   </div>
 </main>
-
+<?php require_once '../../squelette/footer.php'?>
 </body>
-
-
 </html>

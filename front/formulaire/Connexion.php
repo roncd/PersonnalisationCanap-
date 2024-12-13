@@ -35,7 +35,7 @@
       <div class="footer">
         <p>Tu n'as pas de compte ? <span><a href="CreationCompte.php" class="link-connect">Inscris-toi</a></span></p>
         <div class="buttons">
-          <button class="btn-retour">Retour</button>
+          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
           <button class="btn-valider">Valider</button>
         </div>
       </div>
@@ -49,7 +49,7 @@
     </div>
   </div>
 </main>
-
+<?php require_once '../../squelette/footer.php'?>
 </body>
 
 
