@@ -1,0 +1,77 @@
+/* Container principal */
+.container {
+    align-content: center;
+    margin: 50px;
+    width: 90%;
+}
+
+body {
+    font-family: 'Vietnam Pro', sans-serif;
+}
+
+h2 {
+    font-size: 37px;
+    text-align: center;
+    font-family: 'Baloo 2', sans-serif;
+    margin-bottom: 20px;
+}
+
+/* Responsive table container */
+.tab-container {
+    overflow-x: auto; /* Active le défilement horizontal si nécessaire */
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+
+.styled-table {
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 600px;
+    width: 100%; 
+}
+
+.styled-table thead tr {
+    background-color: black;
+    color: white;
+    text-align: left;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.styled-table tbody tr {
+    background-color: #e3d1c8;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f2e9e3;
+}
+
+.styled-table td.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.styled-table .edit {
+    cursor: pointer;
+    color: #4CAF50;
+}
+
+.styled-table .delete {
+    cursor: pointer;
+    color: #F44336;
+}
+
+/* Media query pour les très petits écrans */
+@media screen and (max-width: 600px) {
+    .styled-table th, .styled-table td {
+        font-size: 0.8em; /* Réduit la taille de la police */
+        padding: 8px; /* Réduit les marges */
+    }
+}

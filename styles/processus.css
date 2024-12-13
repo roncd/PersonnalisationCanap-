@@ -158,3 +158,49 @@ h2 {
   transform: scale(1.1);
   transition: transform .2s;
 }
+
+/* Formulaire */
+.formulaire-creation-compte {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+/* Labels */
+label {
+  margin-bottom: 5px;
+}
+
+
+/* Champs d'entrée */
+.input-field {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: rgba(227, 209, 200, 0.71); /* Beige avec opacité */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  background-color: rgba(227, 209, 200, 0.85);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.bold {
+  font-weight: bold;
+}

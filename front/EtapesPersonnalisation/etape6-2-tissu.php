@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
 
-  <title>Étape 2 - Choisi ton type de banquette</title>
+  <title>Étape 6 - Ajoute tes accoudoirs</title>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Étape 2 - Choisi ton type de banquette</h2>
+      <h2>Étape 6 - Ajoute tes accoudoirs</h2>
       
       <section class="color-options">
         <div class="option">
@@ -132,8 +132,8 @@
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button href="etape3-bois.php" class="btn-suivant">Suivant</button>
+          <button class="btn-retour">Retour</button>
+          <button href="etape7-tissu.php" class="btn-suivant">Suivant</button>
         </div>
       </div>
     </div>
@@ -142,7 +142,7 @@
     <div class="right-column">
       <section class="main-display">
         <div class="buttons">
-          <button class="btn-aide">Besoin d'aide ?</button>
+          <button class="btn-aide" onclick="history.go(-1)">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
         <img src="../../medias/boisnoir.jpeg" alt="Armoire">

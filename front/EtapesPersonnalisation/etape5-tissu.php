@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
 
-  <title>Étape 2 - Choisi ton type de banquette</title>
+  <title>Étape 5 - Choisi ton dossier</title>
 </head>
 <body>
 
@@ -18,7 +18,7 @@
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Étape 2 - Choisi ton type de banquette</h2>
+      <h2>Étape 5 - Choisi ton dossier</h2>
       
       <section class="color-options">
         <div class="option">
@@ -133,7 +133,7 @@
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
           <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button href="etape3-bois.php" class="btn-suivant">Suivant</button>
+          <button class="btn-suivant">Suivant</button>
         </div>
       </div>
     </div>
