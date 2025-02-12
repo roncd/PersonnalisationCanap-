@@ -81,6 +81,11 @@ nav ul li a:hover::after {
   width: 100%; /* Le soulignement prend toute la largeur */
 }
 
+ /* Style pour le lien actif */
+ nav ul li a.active::after {
+   width: 100%; /* Le soulignement reste visible sur l'élément actif */
+ }
+
 
 nav {
   margin-right: 90px; /* Décaler le menu vers la gauche */
@@ -99,10 +104,14 @@ nav {
   <!-- Menu à droite -->
   <nav>
     <ul>
-      <li><a href="../pages/index.php">Base de données</a></li>
-      <li><a href="../pages/commande.php">Commandes</a></li>
-      <li><a href="../pages/ajouter.php">Ajouter</a></li>
-      <li><a href="../pages/utilisateurs.php">Utilisateurs</a></li>
+    <?php
+      // Déterminez la page actuelle
+      $currentPage = basename($_SERVER['REQUEST_URI']);
+      ?>
+      <li><a href="../pages/index.php" class="<?= $currentPage == 'index.php' ? 'active' : '' ?>">Base de données</a></li>
+      <li><a href="../pages/ajouter.php" class="<?= $currentPage == 'ajouter.php' ? 'active' : '' ?>">Ajouter</a></li>
+      <li><a href="../pages/commande.php" class="<?= $currentPage == 'commande.php' ? 'active' : '' ?>">Commandes</a></li>
+      <li><a href="../squelette/logout.php" >Déconnexion</a></li>
       
     </ul>
   </nav>

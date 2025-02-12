@@ -45,7 +45,7 @@ a {
 .styled-table th, .styled-table td {
     padding: 12px 15px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: none; /* Désactive toutes les bordures */
 }
 
 .styled-table tbody tr {
@@ -56,21 +56,36 @@ a {
     background-color: #f2e9e3;
 }
 
+/* Ajustement de la colonne ACTION */
 .styled-table td.actions {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 10px;
+    padding: 12px; /* Ajustez au besoin */
+    border: none; /* Supprime toute bordure */
+    background-color: inherit; /* Garde la couleur de fond */
 }
 
-.styled-table .edit {
+/* Styles pour les icônes */
+.actions a, .actions span {
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    color: #000000; /* Couleur des icônes */
+    transition: color 0.3s ease;
     cursor: pointer;
-    color: #4CAF50;
 }
 
-.styled-table .delete {
-    cursor: pointer;
-    color: #F44336;
+.actions .vert:hover {
+    color: #28a745; /* Vert pour Modifier */
 }
+
+.actions .rouge:hover {
+    color: #dc3545; /* Rouge pour Supprimer */
+}
+
 
 /* Media query pour les très petits écrans */
 @media screen and (max-width: 600px) {

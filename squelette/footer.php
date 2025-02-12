@@ -19,7 +19,7 @@
       <nav class="ft-nav">
         <ol>
           <li class="ft-nav-item"><a href="../pages/index.php">Accueil</a></li>
-          <li class="ft-nav-item"><a href="../EtapesPersonnalisation/etape1-1.php">Personnalisation</a></li>
+          <li class="ft-nav-item"><a href="../EtapesPersonnalisation/etape1-1-structure.php">Personnalisation</a></li>
           <li class="ft-nav-item"><a href="../pages/commandes.php">Commande</a></li>
           <li class="ft-nav-item"><a href="../pages/aide.php">Besoin d'aide ?</a></li>
         </ol>
