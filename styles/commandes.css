@@ -84,5 +84,83 @@ body {
     width: 18px;
   }
   
-  
-  
+  /* Styles pour les icônes */
+.actions {
+  font-size: 1.4rem;
+  margin-right: 3px;
+  padding: 0;
+  text-decoration: none;
+  color: #000000; /* Couleur des icônes */
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.actions .vert:hover {
+  color: #28a745; /* Vert pour Modifier */
+}
+
+.actions .rouge:hover {
+  color: #dc3545; /* Rouge pour Supprimer */
+}
+
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: auto;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+}
+
+.nav {
+  border-top: 1px solid #eee;
+  margin-top: 1em;
+  padding-top: 0.5em;
+  font: 1.2em sans-serif;
+
+  display: flex;
+  justify-content: center;
+}
+
+.pagination {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.pagination li {
+  margin: 0 1px;
+}
+
+.pagination li .active {
+  background-color: #000000;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pagination a {
+  display: block;
+  padding: 0.5em 1em;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.pagination a:hover {
+  background-color: #000000;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pagination a::after {
+ content: none;
+}
+
+.pagination a[aria-current="page"] {
+  background-color: #333;
+  color: #fff;
+}

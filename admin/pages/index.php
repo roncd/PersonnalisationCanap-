@@ -1,3 +1,12 @@
+<?php 
+require '../config.php';
+session_start();
+
+if (!isset($_SESSION['id'])){
+    header("Location: ../index.php");
+    exit();
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +36,7 @@
             <div class="tableau">
                 <div class="button-grid-container">
                     <a class="custom-button" href="../client/index.php">Client</a>
-                    <a class="custom-button" href="../commande/index.php">Commande</a>
+                    <a class="custom-button" href="../utilisateur/index.php">Utilisateur</a>
                     <a class="custom-button" href="../commande-detail/index.php">Commande détaillé</a>
                     
                     <a class="custom-button" href="../structure/index.php">Structure</a>
@@ -35,8 +44,6 @@
                     <a class="custom-button" href="../banquette/index.php">Type banquette</a>
                    
                     <a class="custom-button" href="../mousse/index.php">Type mousse</a>
-                    <a class="custom-button" href="../nb-accoudoirs/index.php">Nombre d'accoudoir</a>
-                    <a class="custom-button" href="../relation-tissu-motif/index.php">Compatibilité tissu/motif</a>
                 </div>
 
                 <div class="button-grid-container">
@@ -60,6 +67,9 @@
             </div>         
         </div>        
     </main>
+    <footer>
+        <?php require '../squelette/footer.php'; ?>
+    </footer>
 </body>
 </html>
 
