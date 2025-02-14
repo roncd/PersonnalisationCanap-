@@ -158,3 +158,89 @@ h2 {
   transform: scale(1.1);
   transition: transform .2s;
 }
+
+/* Formulaire */
+.formulaire-creation-compte {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+/* Labels */
+label {
+  margin-bottom: 5px;
+}
+
+
+/* Champs d'entrée */
+.input-field {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: rgba(227, 209, 200, 0.71); /* Beige avec opacité */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  background-color: rgba(227, 209, 200, 0.85);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+
+.fil-ariane-container {
+  font-size: 14px;
+  margin-top: 40px;
+  margin-left: 50px;
+  margin-bottom: -40px;
+}
+
+.fil-ariane {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fil-ariane li {
+  margin-right: 10px;
+  color: #888; /* Gris pour les liens */
+}
+
+.fil-ariane li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.fil-ariane li a:hover {
+  text-decoration: underline;
+}
+
+.fil-ariane li a.active {
+  font-weight: bold;
+  color: black; /* Couleur noire pour l'élément actif */
+}
+
+.fil-ariane li:not(:last-child)::after {
+  content: ">";
+  margin-left: 10px;
+  color: #ccc; /* Gris clair pour la flèche */
+}
