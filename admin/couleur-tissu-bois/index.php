@@ -17,6 +17,7 @@ $search = $_GET['search'] ?? '';
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <style>
         /* Styles pour la barre de recherche et les messages */
         .search-bar {

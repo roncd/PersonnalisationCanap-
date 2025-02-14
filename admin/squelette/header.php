@@ -111,8 +111,8 @@ nav {
       <li><a href="../pages/index.php" class="<?= $currentPage == 'index.php' ? 'active' : '' ?>">Base de données</a></li>
       <li><a href="../pages/ajouter.php" class="<?= $currentPage == 'ajouter.php' ? 'active' : '' ?>">Ajouter</a></li>
       <li><a href="../pages/commande.php" class="<?= $currentPage == 'commande.php' ? 'active' : '' ?>">Commandes</a></li>
+      <li><a href="../../front/pages/index.php" target="_blank">Voir le site</a></li>
       <li><a href="../squelette/logout.php" >Déconnexion</a></li>
-      
     </ul>
   </nav>
 </header>

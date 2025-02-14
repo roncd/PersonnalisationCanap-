@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Modifie une décoration</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/ajout.css">
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <style>
         .message {
             padding: 10px;

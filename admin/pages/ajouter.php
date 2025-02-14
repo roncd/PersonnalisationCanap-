@@ -15,6 +15,7 @@ if (!isset($_SESSION['id'])){
     <title>Ajout d'une donnée</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/bdd.css">
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
 </head>
 <body>
 

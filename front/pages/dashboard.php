@@ -83,6 +83,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body>
 <header>
+<link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <?php require '../../squelette/header.php'; ?>
 </header>
 <main>
