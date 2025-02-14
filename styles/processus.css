@@ -1,0 +1,246 @@
+/* Container principal */
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 50px;
+}
+
+/* Police par défaut pour le corps */
+body {
+  font-family: 'Vietnam Pro', sans-serif;
+}
+
+/* Colonne de gauche */
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Titre */
+h2 {
+  font-size: 32px;
+  font-family: 'Baloo 2', sans-serif;
+  margin-bottom: 20px;
+}
+
+/* Color Options */
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+  gap: 20px;
+  max-height: 400px; /* Hauteur max du conteneur */
+  overflow-y: auto; /* Permet le scroll vertical */
+  padding-right: 20px; /* Espace pour la scrollbar */
+}
+
+.color-options::-webkit-scrollbar {
+  width: 8px; /* Largeur de la scrollbar verticale */
+}
+
+.color-options::-webkit-scrollbar-thumb {
+  background-color: rgba(227, 209, 200, 0.85);
+  border-radius: 4px;
+}
+
+/* Chaque option */
+.color-options .option {
+  text-align: center;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.color-options .option img {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  margin-bottom: -5px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Noms des options */
+.color-options .option p {
+  font-weight: normal;
+  margin-bottom: 3px;
+}
+
+/* Prix en gras */
+.color-options .option span {
+  font-weight: 700;
+  color: #000000;
+}
+
+/* Footer section */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.footer p {
+  font-weight: 700;
+  font-size: 25px;
+}
+
+.footer .buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.footer button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-retour {
+  background-color: #997765;
+  color: #fff;
+}
+
+.btn-suivant {
+  background-color: #000000;
+  color: #fff;
+}
+
+/* Colonne de droite */
+.right-column {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  position: relative;
+  padding-right: 20px;
+}
+
+/* Conteneur de l'image et du bouton */
+.main-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+  margin-top: 60px;
+}
+
+.main-display img {
+  width: 600px;
+  height: 430px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-aide, .btn-abandonner {
+  background-color: #997765;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-abandonner {
+  background-color: #000000;
+  color: #fff;
+  margin-left: 10px;
+}
+
+.btn-aide:hover, .btn-abandonner:hover, .btn-suivant:hover, .btn-retour:hover {
+  transform: scale(1.1);
+  transition: transform .2s;
+}
+
+/* Formulaire */
+.formulaire-creation-compte {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+/* Labels */
+label {
+  margin-bottom: 5px;
+}
+
+
+/* Champs d'entrée */
+.input-field {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: rgba(227, 209, 200, 0.71); /* Beige avec opacité */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  background-color: rgba(227, 209, 200, 0.85);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+
+.fil-ariane-container {
+  font-size: 14px;
+  margin-top: 40px;
+  margin-left: 50px;
+  margin-bottom: -40px;
+}
+
+.fil-ariane {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fil-ariane li {
+  margin-right: 10px;
+  color: #888; /* Gris pour les liens */
+}
+
+.fil-ariane li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.fil-ariane li a:hover {
+  text-decoration: underline;
+}
+
+.fil-ariane li a.active {
+  font-weight: bold;
+  color: black; /* Couleur noire pour l'élément actif */
+}
+
+.fil-ariane li:not(:last-child)::after {
+  content: ">";
+  margin-left: 10px;
+  color: #ccc; /* Gris clair pour la flèche */
+}
