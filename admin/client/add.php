@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prenom = trim($_POST['prenom']);
     $email = trim($_POST['email']);
     $tel = trim($_POST['tel']);
-    $mdp = trim($_POST['mdp']);
+    $mdp = password_hash($_POST['mdp'], PASSWORD_BCRYPT);
     $adresse = trim($_POST['adresse']);
     $info = trim($_POST['info']);
     $codepostal = trim($_POST['codepostal']);
@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Ajoute un client</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/ajout.css">
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <style>
         .message {
             padding: 10px;

@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prenom = trim($_POST['prenom']);
     $mail = trim($_POST['mail']);
     $tel = trim($_POST['tel']);
-    $mdp = trim($_POST['mdp']);
+    $mdp = password_hash($_POST['mdp'], PASSWORD_BCRYPT);
     $adresse = trim($_POST['adresse']);
     $info = trim($_POST['info']);
     $codepostal = trim($_POST['codepostal']);
@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informations</title>
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <style>
