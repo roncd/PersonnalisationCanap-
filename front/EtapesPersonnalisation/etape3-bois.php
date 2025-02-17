@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
+<<<<<<< HEAD
   <link rel="stylesheet" href="../../styles/popup.css">
 
+=======
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
   
   <title>Étape 3 - Choisi ta couleur</title>
 </head>
@@ -19,7 +22,11 @@
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
+<<<<<<< HEAD
     <li><a href="etape1-1-structure.php">Structure</a></li>
+=======
+    <li><a href="etape1-1.php">Structure</a></li>
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
     <li><a href="etape2.php">Banquette</a></li>
     <li><a href="etape3-bois.php" class="active">Couleur</a></li>
     <li><a href="etape4-bois.php">Décoration</a></li>
@@ -151,6 +158,7 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
     <script>
     document.addEventListener('DOMContentLoaded', () => {
     // Sélection des boutons
@@ -163,6 +171,9 @@
     });
     });
     </script>
+=======
+
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
     <!-- Colonne de droite -->
     <div class="right-column">
       <section class="main-display">
@@ -174,6 +185,7 @@
       </section>
     </div>
   </div>
+<<<<<<< HEAD
   <!-- Popup besoin d'aide -->
 <div id="help-popup" class="popup">
   <div class="popup-content">
@@ -261,6 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+=======
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>

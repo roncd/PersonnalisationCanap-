@@ -288,9 +288,13 @@ label {
   content: ">";
   margin-left: 10px;
   color: #ccc; /* Gris clair pour la flèche */
+<<<<<<< HEAD
 }
 .color-options .option img.selected {
   border: 3px solid #997765; /* Couleur marron */
   border-radius: 5px;       /* Coins arrondis */
   box-sizing: border-box;  /* Inclure le padding dans la bordure */
 }
+=======
+}
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129

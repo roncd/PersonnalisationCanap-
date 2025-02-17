@@ -13,4 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById(tab.dataset.tab).classList.add('active');
     });
   });
+<<<<<<< HEAD
 });
+=======
+});
+
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129

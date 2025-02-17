@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
+<<<<<<< HEAD
   <link rel="stylesheet" href="../../styles/popup.css">
 
+=======
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 
   <title>Étape 5 - Choisi ton nombre d'accoudoirs</title>
 </head>
@@ -51,6 +54,7 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
     <script>
     document.addEventListener('DOMContentLoaded', () => {
     // Sélection des boutons
@@ -63,6 +67,9 @@
     });
     });
     </script>
+=======
+
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
     <!-- Colonne de droite -->
     <div class="right-column">
       <section class="main-display">
@@ -74,6 +81,7 @@
       </section>
     </div>
   </div>
+<<<<<<< HEAD
   <!-- Popup besoin d'aide -->
 <div id="help-popup" class="popup">
   <div class="popup-content">
@@ -161,6 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+=======
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>
