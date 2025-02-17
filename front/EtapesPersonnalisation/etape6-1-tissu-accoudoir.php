@@ -24,7 +24,7 @@
     <li><a href="etape3-tissu-modele-banquette.php" class="active">Modèle</a></li>
     <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
     <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
-    <li><a href="etape6-1-tissu-accoudoir.php" class="active">Accoudoir</a></li>
+    <li><a href="etape6-2-tissu.php" class="active">Accoudoir</a></li>
     <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
   </ul>
 </div>

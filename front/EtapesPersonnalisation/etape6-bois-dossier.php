@@ -1,3 +1,18 @@
+<?php
+require '../../admin/config.php';
+session_start();
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../formulaire/Connexion.php");
+    exit;
+}
+
+// Récupérer les types de banquette depuis la base de données
+$stmt = $pdo->query("SELECT * FROM dossier_bois");
+$dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,13 +20,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
-<<<<<<< HEAD
   <link rel="stylesheet" href="../../styles/popup.css">
 
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
-  
-  <title>Étape 4 - Décore ta banquette</title>
+  <title>Étape 6 - Choisi ton dossier</title>
 </head>
 <body>
 
@@ -22,142 +33,44 @@
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-    <li><a href="etape1-1.php">Structure</a></li>
-    <li><a href="etape2.php">Banquette</a></li>
-    <li><a href="etape3-bois.php">Couleur</a></li>
-    <li><a href="etape4-bois.php" class="active">Décoration</a></li>
-    <li><a href="etape5-1-bois.php">Accoudoirs</a></li>
-    <li><a href="etape6-bois.php">Dossier</a></li>
-    <li><a href="etape7-bois.php">Mousse</a></li>
-    <li><a href="etape8-1-bois.php">Tissu</a></li>
+  <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-2-dimension.php">Dimension</a></li>
+    <li><a href="etape2-type-banquette.php">Banquette</a></li>
+    <li><a href="etape3-bois-couleur.php" >Couleur</a></li>
+    <li><a href="etape4-bois-decoration.php">Décoration</a></li>
+    <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
+    <li><a href="etape6-bois-dossier.php" class="active">Dossier</a></li>
+    <li><a href="etape7-bois-mousse.php">Mousse</a></li>
+    <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
   </ul>
 </div>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Étape 4 - Décore ta banquette</h2>
+      <h2>Étape 6 - Choisi ton dossier</h2>
       
       <section class="color-options">
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Armoire">
-          <p>Armoire</p>
-          <span>20 €</span>
+      <?php if (!empty($dossier_bois)): ?>
+    <?php foreach ($dossier_bois as $dossier_bois): ?>
+        <div class="option transition">
+            <img src="../../admin/uploads/dossier_bois/<?php echo htmlspecialchars($dossier_bois['img']); ?>" alt="<?php echo htmlspecialchars($dossier_bois['nom']); ?>">
+            <p><?php echo htmlspecialchars($dossier_bois['nom']); ?></p>
+            <p><strong><?php echo htmlspecialchars($dossier_bois['prix']); ?> €</strong></p>
         </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Tissu">
-          <p>Tissu</p>
-          <span>30 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Torsade">
-          <p>Torsade</p>
-          <span>40 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 4">
-          <p>Option 4</p>
-          <span>50 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 5">
-          <p>Option 5</p>
-          <span>60 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 6">
-          <p>Option 6</p>
-          <span>70 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-<<<<<<< HEAD
-=======
+        <?php endforeach; ?>
+          <?php else: ?>
+    <p>Aucun dossier disponible pour le moment.</p>
+          <?php endif; ?>   
         
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
       </section>
-
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
           <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant">Suivant</button>
+          <button href="etape7-bois.php" class="btn-suivant">Suivant</button>
         </div>
       </div>
     </div>
-<<<<<<< HEAD
     <script>
     document.addEventListener('DOMContentLoaded', () => {
     // Sélection des boutons
@@ -166,13 +79,10 @@
 
     // Action du bouton "Suivant" : rediriger vers la page suivante
     suivantButton.addEventListener('click', () => {
-      window.location.href = 'etape5-1-bois.php'; 
+      window.location.href = 'etape7-bois.php'; 
     });
     });
     </script>
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
-
     <!-- Colonne de droite -->
     <div class="right-column">
       <section class="main-display">
@@ -184,7 +94,6 @@
       </section>
     </div>
   </div>
-<<<<<<< HEAD
   <!-- Popup besoin d'aide -->
 <div id="help-popup" class="popup">
   <div class="popup-content">
@@ -272,8 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>

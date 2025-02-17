@@ -14,11 +14,8 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <title>Dashboard</title>
-<<<<<<< HEAD
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-=======
     
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
     <style>
         /* Styles généraux */
         body {

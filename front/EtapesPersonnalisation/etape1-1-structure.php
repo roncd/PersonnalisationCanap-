@@ -13,6 +13,16 @@ $stmt = $pdo->query("SELECT * FROM structure");
 $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<?php
+require '../../admin/config.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Rediriger vers l'étape suivante
+    header("Location: etape1-2-dimension.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -25,7 +35,6 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <title>Étape 1 - Choisi ta structure</title>
 
   <style>
-    /* Transition pour les éléments de la page */
     .transition {
       opacity: 0;
       transform: translateY(20px);
@@ -37,11 +46,10 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
       transform: translateY(0);
     }
 
-    /* Appliquer les transitions aux images sélectionnées */
     .option img.selected {
-      border: 3px solid #997765; /* Couleur marron */
-      border-radius: 5px; /* Coins légèrement arrondis */
-      box-sizing: border-box; /* Inclure le padding dans les dimensions */
+      border: 3px solid #997765;
+      border-radius: 5px;
+      box-sizing: border-box;
     }
   </style>
 </head>
@@ -60,7 +68,6 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </ul>
   </div>
   <div class="container">
-    <!-- Colonne de gauche -->
     <div class="left-column transition">
       <h2>Étape 1 - Choisi ta structure</h2>
       
@@ -68,8 +75,7 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach ($structures as $structure): ?>
           <div class="option transition">
             <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" 
-                 alt="<?php echo htmlspecialchars($structure['nom']); ?>" 
-                 data-name="<?php echo htmlspecialchars($structure['nom']); ?>">
+     alt="<?php echo htmlspecialchars($structure['nom']); ?>">
             <p><?php echo htmlspecialchars($structure['nom']); ?></p>
           </div>
         <?php endforeach; ?>
@@ -78,12 +84,13 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-suivant transition">Suivant</button>
+        <form method="POST" action="">
+          <button type="submit" class="btn-suivant transition">Suivant</button>
+        </form>
         </div>
       </div>
     </div>
 
-    <!-- Colonne de droite -->
     <div class="right-column transition">
       <section class="main-display">
         <div class="buttons transition">
@@ -95,7 +102,6 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
-  <!-- Popup besoin d'aide -->
   <div id="help-popup" class="popup transition">
     <div class="popup-content">
       <h2>Vous avez une question ?</h2>
@@ -107,7 +113,6 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
-  <!-- Popup abandonner -->
   <div id="abandonner-popup" class="popup transition">
     <div class="popup-content">
       <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
@@ -117,80 +122,62 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
-  <!-- Scripts -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-options .option img'); // Sélectionne toutes les images
-      const mainImage = document.querySelector('.main-display img'); // Image principale
-      const suivantButton = document.querySelector('.btn-suivant');
-      const helpPopup = document.getElementById('help-popup');
-      const abandonnerPopup = document.getElementById('abandonner-popup');
+   document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-options .option img'); 
+  const mainImage = document.querySelector('.main-display img'); 
+  const suivantButton = document.querySelector('.btn-suivant');
+  const helpPopup = document.getElementById('help-popup');
+  const abandonnerPopup = document.getElementById('abandonner-popup');
 
-      // Afficher les éléments avec la classe "transition"
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
-      });
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show'); 
+  });
 
-      // Gestion des options de couleur
-      options.forEach(img => {
-        img.addEventListener('click', () => {
-          // Supprime la classe "selected" de toutes les images
-          options.forEach(opt => opt.classList.remove('selected'));
-
-          // Ajoute la classe "selected" à l'image cliquée
-          img.classList.add('selected');
-
-          // Met à jour l'image principale
-          mainImage.src = img.src;
-          mainImage.alt = img.alt;
-        });
-      });
-
-      // Gestion du bouton Suivant
-      suivantButton.addEventListener('click', () => {
-        document.body.classList.remove('show');
-        setTimeout(() => {
-          window.location.href = 'etape1-2-dimension.php';
-        }, 500);
-      });
-
-      // Gestion du popup "Besoin d'aide"
-      document.querySelector('.btn-aide').addEventListener('click', () => {
-        helpPopup.style.display = 'flex';
-      });
-
-      document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-        helpPopup.style.display = 'none';
-      });
-
-      window.addEventListener('click', (event) => {
-        if (event.target === helpPopup) {
-          helpPopup.style.display = 'none';
-        }
-      });
-
-      // Gestion du popup "Abandonner"
-      document.querySelector('.btn-abandonner').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'flex';
-      });
-
-      document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-        document.body.classList.remove('show');
-        setTimeout(() => {
-          window.location.href = '../pages/';
-        }, 500);
-      });
-
-      document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'none';
-      });
-
-      window.addEventListener('click', (event) => {
-        if (event.target === abandonnerPopup) {
-          abandonnerPopup.style.display = 'none';
-        }
-      });
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      options.forEach(opt => opt.classList.remove('selected'));
+      img.classList.add('selected');
+      mainImage.src = img.src; 
     });
+  });
+
+  suivantButton.addEventListener('click', () => {
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = 'etape1-2-dimension.php';
+    }, 500);
+  });
+
+  document.querySelector('.btn-aide').addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+
+  document.querySelector('.btn-abandonner').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
+  });
+
+  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'none';
+  });
+});
   </script>
 </main>
 

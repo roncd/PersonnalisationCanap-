@@ -16,169 +16,106 @@ if (!isset($_SESSION['user_id'])) {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-
-
   <title>Récapitulatif de la commande</title>
+  <style>
+    .footer p {
+      margin-bottom: 20px; /* Augmente l'espace entre le texte et les boutons */
+    }
+  </style>
 </head>
 <body>
-
 
 <header>
   <?php require '../../squelette/header.php'; ?>
 </header>
 
-
 <main>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Récapitulatif de la commande</h2>
-      
-      <section class="color-options">
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Armoire">
-          <p>Armoire</p>
-          <span>20 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Tissu">
-          <p>Tissu</p>
-          <span>30 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Torsade">
-          <p>Torsade</p>
-          <span>40 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 4">
-          <p>Option 4</p>
-          <span>50 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 5">
-          <p>Option 5</p>
-          <span>60 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 6">
-          <p>Option 6</p>
-          <span>70 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        
-      </section>
+      <h2>Récapitulatif de la commande</h2><section class="color-options">
+  <h3>Étape 1 : Choisi ta structure</h3>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+    <p>Armoire</p>
+    <span>20 €</span>
+  </div>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Tissu">
+    <p>Tissu</p>
+    <span>30 €</span>
+  </div>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Torsade">
+    <p>Torsade</p>
+    <span>40 €</span>
+  </div>
 
-      <div class="footer">
-        <p>Total : <span>899 €</span></p>
-        <div class="buttons">
-          <button class="btn-retour">Retour</button>
-          <button class="btn-suivant">Générer un devis</button>
+  <h3>Étape 1 : Choisi tes dimensions</h3>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Option 4">
+    <p>Option 4</p>
+    <span>50 €</span>
+  </div>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Option 5">
+    <p>Option 5</p>
+    <span>60 €</span>
+  </div>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Option 6">
+    <p>Option 6</p>
+    <span>70 €</span>
+  </div>
+
+  <h3>Étape 2 : Choisi ton type de banquette</h3>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Option 7">
+    <p>Option 7</p>
+    <span>80 €</span>
+  </div>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Option 8">
+    <p>Option 8</p>
+    <span>90 €</span>
+  </div>
+  <div class="option">
+    <img src="../../medias/boisnoir.jpeg" alt="Option 9">
+    <p>Option 9</p>
+    <span>100 €</span>
+  </div>
+</section>
+
+
+      <div class="footer-processus">
+          <p>Total : <span>899 €</span></p>
+          <div class="buttons">
+            <button class="btn-retour">Retour</button>
+            <button class="btn-suivant">Générer un devis</button>
+          </div>
         </div>
-      </div>
     </div>
-
-    <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Sélection des boutons
-    const retourButton = document.querySelector('.btn-retour');
-    const suivantButton = document.querySelector('.btn-suivant');
-
-    // Action du bouton "Retour" : rediriger vers la page précédente
-    retourButton.addEventListener('click', () => {
-      window.history.back(); // Navigue vers la page précédente
-    });
-
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      window.location.href = 'recapitulatif-commande.php'; // Remplacez par le lien de la page suivante
-    });
-  });
-</script>
 
     <!-- Colonne de droite -->
     <div class="right-column">
-      <section class="main-display">
+      <section class="main-display-recap">
         <div class="buttons">
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+        <img src="../../medias/recap.png" alt="Armoire">
+
+        
+      <!-- Section commentaire -->
+      <section class="comment-section">
+      <h3>Ajoute un commentaire à propos de ta commande :                     </h3>
+      <textarea class="textarea-custom" name="comment" rows="5" placeholder="Écris ton commentaire ici..."></textarea>
+      <button class="btn-submit-com">Ajouter</button>
+
       </section>
+       
+      </section>
+      
     </div>
   </div>
   
@@ -191,9 +128,10 @@ if (!isset($_SESSION['user_id'])) {
     <strong>06 58 47 58 56</strong></p>
       <br>
     <button class="close-btn">Merci !</button>
-
   </div>
 </div>
+
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -223,21 +161,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
-<!-- Popup besoin d'aide -->
+<!-- Popup abandonner -->
 <div id="abandonner-popup" class="popup">
   <div class="popup-content">
     <h2>Êtes vous sûr de vouloir abandonner ?</h2>
       <br>
     <button class="yes-btn">Oui ...</button>
     <button class="no-btn">Non !</button>
-
-
   </div>
 </div>
 
-
-<script>document.addEventListener('DOMContentLoaded', () => {
+<script>
+document.addEventListener('DOMContentLoaded', () => {
   const openButton = document.querySelector('.btn-abandonner'); // Bouton pour ouvrir le popup
   const popup = document.getElementById('abandonner-popup');
   const yesButton = document.querySelector('.yes-btn'); // Bouton "Oui ..." pour redirection
@@ -270,7 +205,27 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Sélection des boutons
+    const retourButton = document.querySelector('.btn-retour');
+    const suivantButton = document.querySelector('.btn-suivant');
+
+    // Action du bouton "Retour" : rediriger vers la page précédente
+    retourButton.addEventListener('click', () => {
+      window.history.back(); // Navigue vers la page précédente
+    });
+
+    // Action du bouton "Suivant" : rediriger vers la page suivante
+    suivantButton.addEventListener('click', () => {
+      window.location.href = 'recapitulatif-commande.php'; // Remplacez par le lien de la page suivante
+    });
+  });
+</script>
+
 </main>
-<?php require_once '../../squelette/footer.php'?>
+
+<?php require_once '../../squelette/footer.php'; ?>
 </body>
 </html>
