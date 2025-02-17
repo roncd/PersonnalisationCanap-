@@ -58,7 +58,7 @@ if (!isset($_SESSION['user_id'])) {
     <div class="left-column transition">
       <h2>Étape 1 - Choisi tes mesures</h2>
       
-      <form class="formulaire-creation-compte">
+      <form class="formulaire">
       <p>Largeur banquette : <span class="bold">50cm (par défaut)</span></p>
           <div class="form-row">
            

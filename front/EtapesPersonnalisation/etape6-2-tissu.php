@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 require '../../admin/config.php';
 session_start();
@@ -13,8 +12,6 @@ if (!isset($_SESSION['user_id'])) {
 $stmt = $pdo->query("SELECT * FROM accoudoir_tissu");
 $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -22,7 +19,6 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
-<<<<<<< HEAD
   <link rel="stylesheet" href="../../styles/popup.css">
   <title>Étape 6 - Ajoute tes accoudoirs</title>
   <style>
@@ -45,10 +41,6 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
       box-sizing: border-box;
     }
   </style>
-=======
-
-  <title>Étape 6 - Ajoute tes accoudoirs</title>
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 </head>
 <body>
 
@@ -58,7 +50,6 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
-<<<<<<< HEAD
 <ul class="fil-ariane">
   <li><a href="etape1-1-structure.php">Structure</a></li>
     <li><a href="etape1-2-dimension.php">Dimension</a></li>
@@ -66,23 +57,12 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <li><a href="etape3-tissu-modele-banquette.php" >Modèle</a></li>
     <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
     <li><a href="etape5-tissu-choix-dossier.php" >Dossier</a></li>
-    <li><a href="etape6-1-tissu-accoudoir.php" class="active">Accoudoir</a></li>
+    <li><a href="etape6-2-tissu.php" class="active">Accoudoir</a></li>
     <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
-=======
-  <ul class="fil-ariane">
-    <li><a href="etape1-1.php">Structure</a></li>
-    <li><a href="etape2.php">Banquette</a></li>
-    <li><a href="etape3-tissu.php">Modèle</a></li>
-    <li><a href="etape4-1-tissu.php">Tissu</a></li>
-    <li><a href="etape5-tissu.php">Dossier</a></li>
-    <li><a href="etape6-1-tissu.php" class="active">Accoudoir</a></li>
-    <li><a href="etape7-tissu.php">Mousse</a></li>
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
   </ul>
 </div>
   <div class="container">
     <!-- Colonne de gauche -->
-<<<<<<< HEAD
     <div class="left-column transition">
       <h2>Étape 6 - Ajoute tes accoudoirs</h2>
       
@@ -243,141 +223,3 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </main>
 <?php require_once '../../squelette/footer.php'?>
-=======
-    <div class="left-column">
-      <h2>Étape 6 - Ajoute tes accoudoirs</h2>
-      
-      <section class="color-options">
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Armoire">
-          <p>Armoire</p>
-          <span>20 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Tissu">
-          <p>Tissu</p>
-          <span>30 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Torsade">
-          <p>Torsade</p>
-          <span>40 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 4">
-          <p>Option 4</p>
-          <span>50 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 5">
-          <p>Option 5</p>
-          <span>60 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 6">
-          <p>Option 6</p>
-          <span>70 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 7">
-          <p>Option 7</p>
-          <span>80 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 8">
-          <p>Option 8</p>
-          <span>90 €</span>
-        </div>
-        <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Option 9">
-          <p>Option 9</p>
-          <span>100 €</span>
-        </div>
-        
-      </section>
-
-      <div class="footer">
-        <p>Total : <span>899 €</span></p>
-        <div class="buttons">
-          <button class="btn-retour">Retour</button>
-          <button href="etape7-tissu.php" class="btn-suivant">Suivant</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Colonne de droite -->
-    <div class="right-column">
-      <section class="main-display">
-        <div class="buttons">
-          <button class="btn-aide" onclick="history.go(-1)">Besoin d'aide ?</button>
-          <button class="btn-abandonner">Abandonner</button>
-        </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire">
-      </section>
-    </div>
-  </div>
-</main>
-<?php require_once '../../squelette/footer.php'?>
-</body>
-</html>
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129

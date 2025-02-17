@@ -57,7 +57,7 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <li><a href="etape3-tissu-modele-banquette.php" >Modèle</a></li>
     <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
     <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
-    <li><a href="etape6-1-tissu-accoudoir.php">Accoudoir</a></li>
+    <li><a href="etape6-2-tissu.php">Accoudoir</a></li>
     <li><a href="etape7-tissu-choix-mousse.php" class="active">Mousse</a></li>
   </ul>
 </div>

@@ -65,7 +65,7 @@ $type_banquette = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <section class="color-2options">
         <?php if (!empty($type_banquette)): ?>
           <?php foreach ($type_banquette as $type): ?>
-            <div class="option transition">
+            <div class="option transition" onclick="redirectUser('<?php echo htmlspecialchars($type['nom']); ?>')">
               <img src="../../admin/uploads/banquette/<?php echo htmlspecialchars($type['img']); ?>" 
                    alt="<?php echo htmlspecialchars($type['nom']); ?>"
                    data-name="<?php echo htmlspecialchars($type['nom']); ?>">
@@ -120,79 +120,98 @@ $type_banquette = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
+  <?php
+// Si un choix a été fait dans la session, on le récupère
+$redirectChoice = isset($_SESSION['type_banquette_choice']) ? $_SESSION['type_banquette_choice'] : null;
+?>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
-      const mainImage = document.querySelector('.main-display img'); // Image principale
-      const suivantButton = document.querySelector('.btn-suivant');
-      const helpPopup = document.getElementById('help-popup');
-      const abandonnerPopup = document.getElementById('abandonner-popup');
+  const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
+  const suivantButton = document.querySelector('.btn-suivant');
+  const helpPopup = document.getElementById('help-popup');
+  const abandonnerPopup = document.getElementById('abandonner-popup');
 
-      // Afficher les éléments avec la classe "transition"
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
-      });
+  // Afficher les éléments avec la classe "transition"
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show');
+  });
 
-      // Gestion des options de banquette
-      options.forEach(img => {
-        img.addEventListener('click', () => {
-          // Supprime la classe "selected" de toutes les images
-          options.forEach(opt => opt.classList.remove('selected'));
+  // Gestion des options de banquette
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      // Supprime la classe "selected" de toutes les images
+      options.forEach(opt => opt.classList.remove('selected'));
 
-          // Ajoute la classe "selected" à l'image cliquée
-          img.classList.add('selected');
+      // Ajoute la classe "selected" à l'image cliquée
+      img.classList.add('selected');
 
-          // Met à jour l'image principale
-          mainImage.src = img.src;
-          mainImage.alt = img.alt;
-        });
-      });
-
-      // Gestion du bouton Suivant
-      suivantButton.addEventListener('click', () => {
-        document.body.classList.remove('show');
-        setTimeout(() => {
-          window.location.href = 'etape3-tissu-modele-banquette.php';
-        }, 500);
-      });
-
-      // Gestion du popup "Besoin d'aide"
-      document.querySelector('.btn-aide').addEventListener('click', () => {
-        helpPopup.style.display = 'flex';
-      });
-
-      document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-        helpPopup.style.display = 'none';
-      });
-
-      window.addEventListener('click', (event) => {
-        if (event.target === helpPopup) {
-          helpPopup.style.display = 'none';
-        }
-      });
-
-      // Gestion du popup "Abandonner"
-      document.querySelector('.btn-abandonner').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'flex';
-      });
-
-      document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-        document.body.classList.remove('show');
-        setTimeout(() => {
-          window.location.href = '../pages/';
-        }, 500);
-      });
-
-      document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'none';
-      });
-
-      window.addEventListener('click', (event) => {
-        if (event.target === abandonnerPopup) {
-          abandonnerPopup.style.display = 'none';
-        }
-      });
+      // Stocke le choix dans la session (via sessionStorage)
+      const choice = img.getAttribute('data-name');
+      sessionStorage.setItem('type_banquette_choice', choice);
     });
+  });
+
+  // Gestion du bouton Suivant
+  suivantButton.addEventListener('click', () => {
+    const userChoice = sessionStorage.getItem('type_banquette_choice');
+    if (userChoice) {
+      // Si un choix a été fait, rediriger vers la page en fonction du choix
+      let redirectUrl = '';
+      if (userChoice === 'Bois') {
+        redirectUrl = 'etape3-bois-couleur.php';
+      } else if (userChoice === 'Tissu') {
+        redirectUrl = 'etape3-tissu-modele-banquette.php';
+      }
+      if (redirectUrl) {
+        document.body.classList.remove('show');
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 500);
+      }
+    } else {
+      alert('Veuillez sélectionner un type de banquette avant de continuer.');
+    }
+  });
+
+  // Gestion du popup "Besoin d'aide"
+  document.querySelector('.btn-aide').addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+
+  // Gestion du popup "Abandonner"
+  document.querySelector('.btn-abandonner').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
+  });
+
+  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === abandonnerPopup) {
+      abandonnerPopup.style.display = 'none';
+    }
+  });
+});
+
   </script>
 </main>
 
