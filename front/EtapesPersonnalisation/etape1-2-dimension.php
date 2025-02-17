@@ -1,3 +1,14 @@
+<?php
+require '../../admin/config.php';
+session_start();
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../formulaire/Connexion.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,13 +16,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
-<<<<<<< HEAD
   <link rel="stylesheet" href="../../styles/popup.css">
+  <title>Étape 1 - Choisi tes mesures</title>
+  <style>
+    /* Transition pour les éléments de la page */
+    .transition {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
 
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
+    .transition.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-  <title>Étape 5 - Choisi ton nombre d'accoudoirs</title>
+    /* Appliquer les transitions aux images sélectionnées */
+    .option img.selected {
+      border: 3px solid #997765; /* Couleur marron */
+      border-radius: 5px; /* Coins légèrement arrondis */
+      box-sizing: border-box; /* Inclure le padding dans les dimensions */
+    }
+  </style>
 </head>
 <body>
 
@@ -22,68 +48,77 @@
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-    <li><a href="etape1-1.php">Structure</a></li>
-    <li><a href="etape2.php">Banquette</a></li>
-    <li><a href="etape3-bois.php">Couleur</a></li>
-    <li><a href="etape4-bois.php">Décoration</a></li>
-    <li><a href="etape5-1-bois.php" class="active">Accoudoirs</a></li>
-    <li><a href="etape6-bois.php">Dossier</a></li>
-    <li><a href="etape7-bois.php">Mousse</a></li>
-    <li><a href="etape8-1-bois.php">Tissu</a></li>
+    <li><a href="etape1-1-structure.php" >Structure</a></li>
+    <li><a href="etape1-2-dimension.php" class="active">Dimension</a></li>
+    <li><a href="etape2-type-banquette.php">Banquette</a></li>
   </ul>
 </div>
   <div class="container">
     <!-- Colonne de gauche -->
-    <div class="left-column">
-      <h2>Étape 5 - Choisi ton nombre d'accoudoirs</h2>
+    <div class="left-column transition">
+      <h2>Étape 1 - Choisi tes mesures</h2>
       
       <form class="formulaire-creation-compte">
+      <p>Largeur banquette : <span class="bold">50cm (par défaut)</span></p>
+          <div class="form-row">
+           
+            <div class="form-group">
+              <label for="longueurA">Longueur banquette A (en cm) :</label>
+              <input type="number" id="longueurA"  class="input-field" step="100" required placeholder="Ex: 150">
+            </div>
+          </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="accoudoir">Nombre d'accoudoirs :</label>
-              <input type="number" id="accoudoir"  class="input-field" require>
+              <label for="longueurB">Longueur banquette B (en cm) :</label>
+              <input type="number" id="longueurB"  class="input-field" step="100" required placeholder="Ex: 350">
             </div>
           </div>
       </form>
+      
+
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
           <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant">Suivant</button>
+          <button class="btn-suivant transition">Suivant</button>
         </div>
       </div>
     </div>
-<<<<<<< HEAD
+
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Afficher les éléments avec la classe "transition"
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
+
     // Sélection des boutons
     const suivantButton = document.querySelector('.btn-suivant');
 
-
     // Action du bouton "Suivant" : rediriger vers la page suivante
     suivantButton.addEventListener('click', () => {
-      window.location.href = 'etape5-2-bois.php'; 
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape2-type-banquette.php';
+      }, 500);
     });
-    });
-    </script>
-=======
+  });
+</script>
 
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
     <!-- Colonne de droite -->
-    <div class="right-column">
+    <div class="right-column transition">
       <section class="main-display">
-        <div class="buttons">
+        <div class="buttons transition">
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
       </section>
     </div>
   </div>
-<<<<<<< HEAD
   <!-- Popup besoin d'aide -->
-<div id="help-popup" class="popup">
+<div id="help-popup" class="popup transition">
   <div class="popup-content">
     <h2>Vous avez une question ?</h2>
     <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
@@ -124,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 <!-- Popup besoin d'aide -->
-<div id="abandonner-popup" class="popup">
+<div id="abandonner-popup" class="popup transition">
   <div class="popup-content">
     <h2>Êtes vous sûr de vouloir abandonner ?</h2>
       <br>
@@ -150,8 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Rediriger vers la page d'accueil avec le bouton "Oui ..."
   yesButton.addEventListener('click', () => {
-    console.log('Redirection vers la page d\'accueil');
-    window.location.href = '../pages/'; // Remplace '/' par l'URL de votre page d'accueil
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
   });
 
   // Masquer le popup avec le bouton "Non !"
@@ -169,8 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>

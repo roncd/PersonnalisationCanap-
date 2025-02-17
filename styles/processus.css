@@ -26,6 +26,12 @@ h2 {
   margin-bottom: 20px;
 }
 
+span {
+  font-weight: bold;
+}
+
+
+
 /* Color Options */
 .color-options {
   display: grid;
@@ -58,7 +64,7 @@ h2 {
   height: 130px;
   object-fit: cover;
   margin-bottom: -5px;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -68,11 +74,50 @@ h2 {
   margin-bottom: 3px;
 }
 
-/* Prix en gras */
-.color-options .option span {
-  font-weight: 700;
-  color: #000000;
+
+/* Color Options 2 colonnes*/
+.color-2options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 3 colonnes */
+  gap: 20px;
+  max-height: 400px; /* Hauteur max du conteneur */
+  overflow: hidden; /* Empêcher le défilement du contenu */
+  padding-right: 20px; /* Espace pour la scrollbar */
 }
+
+.color-2options::-webkit-scrollbar {
+  width: 8px; /* Largeur de la scrollbar verticale */
+}
+
+.color-2options::-webkit-scrollbar-thumb {
+  background-color: rgba(227, 209, 200, 0.85);
+  border-radius: 4px;
+}
+
+/* Chaque option */
+.color-2options .option {
+  text-align: center;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.color-2options .option img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: -5px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Noms des options */
+.color-2options .option p {
+  font-weight: normal;
+  margin-bottom: 3px;
+}
+
+
 
 /* Footer section */
 .footer {
@@ -243,4 +288,13 @@ label {
   content: ">";
   margin-left: 10px;
   color: #ccc; /* Gris clair pour la flèche */
+<<<<<<< HEAD
 }
+.color-options .option img.selected {
+  border: 3px solid #997765; /* Couleur marron */
+  border-radius: 5px;       /* Coins arrondis */
+  box-sizing: border-box;  /* Inclure le padding dans la bordure */
+}
+=======
+}
+>>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129

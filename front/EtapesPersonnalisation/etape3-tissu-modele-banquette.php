@@ -1,3 +1,17 @@
+<?php
+require '../../admin/config.php';
+session_start();
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../formulaire/Connexion.php");
+    exit;
+}
+
+// Récupérer les types de banquette depuis la base de données
+$stmt = $pdo->query("SELECT * FROM modele");
+$modele = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,13 +19,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
-<<<<<<< HEAD
   <link rel="stylesheet" href="../../styles/popup.css">
+  <title>Étape 3 - Choisi ton modèle</title>
+  <style>
+    /* Transition pour les éléments de la page */
+    .transition {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
 
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
+    .transition.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-  <title>Étape 5 - Choisi ton nombre d'accoudoirs</title>
+    /* Appliquer les transitions aux images sélectionnées */
+    .option img.selected {
+      border: 3px solid #997765; /* Couleur marron */
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,68 +51,75 @@
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-    <li><a href="etape1-1.php">Structure</a></li>
-    <li><a href="etape2.php">Banquette</a></li>
-    <li><a href="etape3-bois.php">Couleur</a></li>
-    <li><a href="etape4-bois.php">Décoration</a></li>
-    <li><a href="etape5-1-bois.php" class="active">Accoudoirs</a></li>
-    <li><a href="etape6-bois.php">Dossier</a></li>
-    <li><a href="etape7-bois.php">Mousse</a></li>
-    <li><a href="etape8-1-bois.php">Tissu</a></li>
+    <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-2-dimension.php">Dimension</a></li>
+    <li><a href="etape2-type-banquette.php">Banquette</a></li>
+    <li><a href="etape3-tissu-modele-banquette.php" class="active">Modèle</a></li>
+    <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
+    <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
+    <li><a href="etape6-1-tissu-accoudoir.php">Accoudoir</a></li>
+    <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
   </ul>
 </div>
   <div class="container">
     <!-- Colonne de gauche -->
-    <div class="left-column">
-      <h2>Étape 5 - Choisi ton nombre d'accoudoirs</h2>
+    <div class="left-column transition">
+      <h2>Étape 3 - Choisi ton modèle</h2>
       
-      <form class="formulaire-creation-compte">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="accoudoir">Nombre d'accoudoirs :</label>
-              <input type="number" id="accoudoir"  class="input-field" require>
-            </div>
-          </div>
-      </form>
+      <section class="color-2options">
+      <?php if (!empty($modele)): ?>
+    <?php foreach ($modele as $modele): ?>
+        <div class="option transition">
+            <img src="../../admin/uploads/modele/<?php echo htmlspecialchars($modele['img']); ?>" alt="<?php echo htmlspecialchars($modele['nom']); ?>">
+            <p><?php echo htmlspecialchars($modele['nom']); ?></p>
+            <p><strong><?php echo htmlspecialchars($modele['prix']); ?> €</strong></p>
+        </div>
+    <?php endforeach; ?>
+<?php else: ?>
+    <p>Aucun type de banquette disponible pour le moment.</p>
+<?php endif; ?>    
+      </section>
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant">Suivant</button>
+          <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+          <button class="btn-suivant transition">Suivant</button>
         </div>
       </div>
     </div>
-<<<<<<< HEAD
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+    // Afficher les éléments avec la classe "transition"
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
+
     // Sélection des boutons
     const suivantButton = document.querySelector('.btn-suivant');
 
-
     // Action du bouton "Suivant" : rediriger vers la page suivante
     suivantButton.addEventListener('click', () => {
-      window.location.href = 'etape5-2-bois.php'; 
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape4-1-tissu-choix-tissu.php';
+      }, 500);
     });
     });
     </script>
-=======
-
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
     <!-- Colonne de droite -->
-    <div class="right-column">
+    <div class="right-column transition">
       <section class="main-display">
-        <div class="buttons">
+        <div class="buttons transition">
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
       </section>
     </div>
   </div>
-<<<<<<< HEAD
   <!-- Popup besoin d'aide -->
-<div id="help-popup" class="popup">
+<div id="help-popup" class="popup transition">
   <div class="popup-content">
     <h2>Vous avez une question ?</h2>
     <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
@@ -96,10 +132,28 @@
 </div>
   <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
+  const mainImage = document.querySelector('.main-display img');
   const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
   const popup = document.getElementById('help-popup');
   const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
 
+        // Gestion des options de banquette
+        options.forEach(img => {
+        img.addEventListener('click', () => {
+          // Supprime la classe "selected" de toutes les images
+          options.forEach(opt => opt.classList.remove('selected'));
+
+          // Ajoute la classe "selected" à l'image cliquée
+          img.classList.add('selected');
+
+          // Met à jour l'image principale
+          mainImage.src = img.src;
+          mainImage.alt = img.alt;
+        });
+      });
+
+      
   // Afficher le popup
   openButton.addEventListener('click', () => {
     console.log('Bouton Aide cliqué');
@@ -124,14 +178,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 <!-- Popup besoin d'aide -->
-<div id="abandonner-popup" class="popup">
+<div id="abandonner-popup" class="popup transition">
   <div class="popup-content">
     <h2>Êtes vous sûr de vouloir abandonner ?</h2>
       <br>
     <button class="yes-btn">Oui ...</button>
     <button class="no-btn">Non !</button>
-
-
   </div>
 </div>
 
@@ -150,8 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Rediriger vers la page d'accueil avec le bouton "Oui ..."
   yesButton.addEventListener('click', () => {
-    console.log('Redirection vers la page d\'accueil');
-    window.location.href = '../pages/'; // Remplace '/' par l'URL de votre page d'accueil
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
   });
 
   // Masquer le popup avec le bouton "Non !"
@@ -169,9 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-=======
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129
 </main>
 <?php require_once '../../squelette/footer.php'?>
+
 </body>
 </html>
