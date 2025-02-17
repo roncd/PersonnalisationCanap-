@@ -8,11 +8,10 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Récupérer les types de banquette depuis la base de données
+// Récupérer les types de mousse depuis la base de données
 $stmt = $pdo->query("SELECT * FROM mousse");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -21,8 +20,27 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-
   <title>Étape 7 - Choisi ta mousse</title>
+  <style>
+    /* Transition pour les éléments de la page */
+    .transition {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .transition.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Appliquer les transitions aux images sélectionnées */
+    .option img.selected {
+      border: 3px solid #997765; /* Couleur marron */
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
 
@@ -33,10 +51,10 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-  <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-1-structure.php">Structure</a></li>
     <li><a href="etape1-2-dimension.php">Dimension</a></li>
     <li><a href="etape2-type-banquette.php">Banquette</a></li>
-    <li><a href="etape3-bois-couleur.php" >Couleur</a></li>
+    <li><a href="etape3-bois-couleur.php">Couleur</a></li>
     <li><a href="etape4-bois-decoration.php">Décoration</a></li>
     <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
     <li><a href="etape6-bois-dossier.php">Dossier</a></li>
@@ -46,57 +64,63 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
   <div class="container">
     <!-- Colonne de gauche -->
-    <div class="left-column">
+    <div class="left-column transition">
       <h2>Étape 7 - Choisi ta mousse</h2>
       
       <section class="color-options">
       <?php if (!empty($mousse)): ?>
-    <?php foreach ($mousse as $mousse): ?>
+      <?php foreach ($mousse as $mousse): ?>
         <div class="option transition">
             <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($mousse['img']); ?>" alt="<?php echo htmlspecialchars($mousse['nom']); ?>">
             <p><?php echo htmlspecialchars($mousse['nom']); ?></p>
             <p><strong><?php echo htmlspecialchars($mousse['prix']); ?> €</strong></p>
         </div>
-        <?php endforeach; ?>
-          <?php else: ?>
+    <?php endforeach; ?>
+<?php else: ?>
     <p>Aucune mousse disponible pour le moment.</p>
-          <?php endif; ?>   
-        
+<?php endif; ?>          
       </section>
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button href="etape8-1-bois.php" class="btn-suivant">Suivant</button>
+          <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+          <button class="btn-suivant transition">Suivant</button>
         </div>
       </div>
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+    // Afficher les éléments avec la classe "transition"
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
+
     // Sélection des boutons
     const suivantButton = document.querySelector('.btn-suivant');
 
-
     // Action du bouton "Suivant" : rediriger vers la page suivante
     suivantButton.addEventListener('click', () => {
-      window.location.href = 'etape8-1-bois.php'; 
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape8-1-bois-tissu.php'; 
+      }, 500);
     });
     });
     </script>
     <!-- Colonne de droite -->
-    <div class="right-column">
+    <div class="right-column transition">
       <section class="main-display">
-        <div class="buttons">
+        <div class="buttons transition">
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
       </section>
     </div>
   </div>
   <!-- Popup besoin d'aide -->
-<div id="help-popup" class="popup">
+<div id="help-popup" class="popup transition">
   <div class="popup-content">
     <h2>Vous avez une question ?</h2>
     <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
@@ -137,23 +161,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 <!-- Popup besoin d'aide -->
-<div id="abandonner-popup" class="popup">
+<div id="abandonner-popup" class="popup transition">
   <div class="popup-content">
     <h2>Êtes vous sûr de vouloir abandonner ?</h2>
       <br>
     <button class="yes-btn">Oui ...</button>
     <button class="no-btn">Non !</button>
-
-
   </div>
 </div>
 
 
-<script>document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-abandonner'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('abandonner-popup');
-  const yesButton = document.querySelector('.yes-btn'); // Bouton "Oui ..." pour redirection
-  const noButton = document.querySelector('.no-btn'); // Bouton "Non !" pour fermer le popup
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-options .option img'); // Sélectionne toutes les images
+  const mainImage = document.querySelector('.main-display img');
+  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
+  const popup = document.getElementById('help-popup');
+  const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
+
+        // Gestion des options de banquette
+        options.forEach(img => {
+        img.addEventListener('click', () => {
+          // Supprime la classe "selected" de toutes les images
+          options.forEach(opt => opt.classList.remove('selected'));
+
+          // Ajoute la classe "selected" à l'image cliquée
+          img.classList.add('selected');
+
+          // Met à jour l'image principale
+          mainImage.src = img.src;
+          mainImage.alt = img.alt;
+        });
+      });
 
   // Afficher le popup
   openButton.addEventListener('click', () => {
