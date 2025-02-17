@@ -1,3 +1,19 @@
+<?php
+require '../../admin/config.php';
+session_start();
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../formulaire/Connexion.php");
+    exit;
+}
+
+// Récupérer les types de banquette depuis la base de données
+$stmt = $pdo->query("SELECT * FROM couleur_bois");
+$couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,8 +23,10 @@
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
 
+  
+  <title>Étape 3 - Choisi ta couleur</title>
 
-  <title>Étape 5 - Choisi ton nombre d'accoudoirs</title>
+  
 </head>
 <body>
 
@@ -19,29 +37,35 @@
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-    <li><a href="etape1-1.php">Structure</a></li>
-    <li><a href="etape2.php">Banquette</a></li>
-    <li><a href="etape3-bois.php">Couleur</a></li>
-    <li><a href="etape4-bois.php">Décoration</a></li>
-    <li><a href="etape5-1-bois.php" class="active">Accoudoirs</a></li>
-    <li><a href="etape6-bois.php">Dossier</a></li>
-    <li><a href="etape7-bois.php">Mousse</a></li>
-    <li><a href="etape8-1-bois.php">Tissu</a></li>
+    <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-2-dimension.php">Dimension</a></li>
+    <li><a href="etape2-type-banquette.php">Banquette</a></li>
+    <li><a href="etape3-bois-couleur.php" class="active">Couleur</a></li>
+    <li><a href="etape4-bois-decoration.php">Décoration</a></li>
+    <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
+    <li><a href="etape6-bois-dossier.php">Dossier</a></li>
+    <li><a href="etape7-bois-mousse.php">Mousse</a></li>
+    <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
   </ul>
 </div>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Étape 5 - Choisi ton nombre d'accoudoirs</h2>
+      <h2>Étape 3 - Choisi ta couleur</h2>
       
-      <form class="formulaire-creation-compte">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="accoudoir">Nombre d'accoudoirs :</label>
-              <input type="number" id="accoudoir"  class="input-field" require>
-            </div>
-          </div>
-      </form>
+      <section class="color-options">
+      <?php if (!empty($couleur_bois)): ?>
+    <?php foreach ($couleur_bois as $couleur_bois): ?>
+        <div class="option transition">
+            <img src="../../admin/uploads/couleur-banquette-bois/<?php echo htmlspecialchars($couleur_bois['img']); ?>" alt="<?php echo htmlspecialchars($couleur_bois['nom']); ?>">
+            <p><?php echo htmlspecialchars($couleur_bois['nom']); ?></p>
+            <p><strong><?php echo htmlspecialchars($couleur_bois['prix']); ?> €</strong></p>
+        </div>
+        <?php endforeach; ?>
+          <?php else: ?>
+    <p>Aucune couleur disponible pour le moment.</p>
+          <?php endif; ?>         
+      </section>
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
@@ -59,7 +83,7 @@
 
     // Action du bouton "Suivant" : rediriger vers la page suivante
     suivantButton.addEventListener('click', () => {
-      window.location.href = 'etape5-2-bois.php'; 
+      window.location.href = 'etape4-bois.php'; 
     });
     });
     </script>

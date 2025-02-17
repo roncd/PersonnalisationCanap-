@@ -7,8 +7,7 @@
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
 
-
-  <title>Étape 5 - Choisi ton nombre d'accoudoirs</title>
+  <title>Étape 6 - Choisi ton nombre d'accoudoirs</title>
 </head>
 <body>
 
@@ -19,20 +18,20 @@
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-    <li><a href="etape1-1.php">Structure</a></li>
-    <li><a href="etape2.php">Banquette</a></li>
-    <li><a href="etape3-bois.php">Couleur</a></li>
-    <li><a href="etape4-bois.php">Décoration</a></li>
-    <li><a href="etape5-1-bois.php" class="active">Accoudoirs</a></li>
-    <li><a href="etape6-bois.php">Dossier</a></li>
-    <li><a href="etape7-bois.php">Mousse</a></li>
-    <li><a href="etape8-1-bois.php">Tissu</a></li>
+  <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-2-dimension.php">Dimension</a></li>
+    <li><a href="etape2-type-banquette.php">Banquette</a></li>
+    <li><a href="etape3-tissu-modele-banquette.php" class="active">Modèle</a></li>
+    <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
+    <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
+    <li><a href="etape6-2-tissu.php" class="active">Accoudoir</a></li>
+    <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
   </ul>
 </div>
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Étape 5 - Choisi ton nombre d'accoudoirs</h2>
+      <h2>Étape 6 - Choisi ton nombre d'accoudoirs</h2>
       
       <form class="formulaire-creation-compte">
           <div class="form-row">
@@ -59,10 +58,11 @@
 
     // Action du bouton "Suivant" : rediriger vers la page suivante
     suivantButton.addEventListener('click', () => {
-      window.location.href = 'etape5-2-bois.php'; 
+      window.location.href = 'etape7-tissu-choix-mousse.php'; 
     });
     });
     </script>
+
     <!-- Colonne de droite -->
     <div class="right-column">
       <section class="main-display">
