@@ -66,6 +66,17 @@ label {
     transition: all 0.3s ease;
 }
 
+select.input-field{
+    -webkit-appearance: none; /* Supprime l'apparence par défaut */
+    appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5 7l5 5 5-5H5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px;
+}
+
 .input-field:focus {
     background-color: rgba(227, 209, 200, 0.85);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -158,8 +169,4 @@ label {
 .btn-retour:hover, .btn-valider:hover, .btn-connexion:hover {
     transform: scale(1.1);
     transition: transform 0.2s;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 756440a8fbd9349ef14ea7ebc3ee10bb957b4129

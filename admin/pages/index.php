@@ -15,6 +15,7 @@ if (!isset($_SESSION['id'])){
     <title>Base de données</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/bdd.css">
 
 
@@ -62,7 +63,10 @@ if (!isset($_SESSION['id'])){
                     <a class="custom-button" href="../dossier-tissu/index.php">Dossier tissu</a>
                     <a class="custom-button" href="../accoudoirs-tissu/index.php">Accoudoir tissu</a>
                 </div>
-            </div>         
+            </div> 
+            <a href="export_bdd.php" class="export-button">
+                <i class="fa-solid fa-download"></i>  Base de données
+            </a>     
         </div>        
     </main>
     <footer>

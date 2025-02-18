@@ -100,6 +100,7 @@ $search = $_GET['search'] ?? '';
                         <th>NOM</th>
                         <th>PRIX</th>
                         <th>IMAGE</th>
+                        <th>ID_COULEUR_TISSU</th>
                         <th>ACTION</th>
                     </tr>
                 </thead>
@@ -117,6 +118,7 @@ $search = $_GET['search'] ?? '';
                         echo "<td>{$row['nom']}</td>";
                         echo "<td>{$row['prix']}</td>";
                         echo "<td><img src='../uploads/motif-tissu/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                        echo "<td>{$row['id_couleur_tissu']}</td>";
                         echo "<td class='actions'>";
                         echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'><i class='fas fa-edit'></i></a>";
                         echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer ce motif ?\");'><i class='fas fa-trash-alt'></i></a>";

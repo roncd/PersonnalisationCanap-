@@ -38,13 +38,18 @@ if (!isset($_SESSION['id'])){
     header("Location: ../index.php");
     exit();
     }
+   
+$stmt = $pdo->prepare("SELECT id, nom FROM couleur_tissu_bois");
+$stmt->execute();
+$couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $prix = trim($_POST['price']);
     $img = $_FILES['img'];
+    $id_couleur = ($_POST['id_couleur']);
 
-    if (empty($nom) || empty($prix) || empty($img['name'])) {
+    if (empty($nom) || empty($prix) || empty($img['name']) || empty($id_couleur)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {
@@ -63,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
                 try {
-                    $stmt = $pdo->prepare("INSERT INTO motif_bois (nom, prix, img) VALUES (?, ?, ?)");
-                    $stmt->execute([$nom, $prix, $fileName]);
+                    $stmt = $pdo->prepare("INSERT INTO motif_bois (nom, prix, img, id_couleur_tissu) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$nom, $prix, $fileName, $id_couleur]); 
 
                     $_SESSION['message'] = 'Le motif bois a été ajouté avec succès !';
                     $_SESSION['message_type'] = 'success';
@@ -111,6 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label for="img">Image</label>
                     <input type="file" id="img" name="img" class="input-field" accept="image/*" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_couleur">Id couleur tissu bois</label>
+                    <select class="input-field" id="id_couleur" name="id_couleur">
+                    <option value="">-- Sélectionnez une couleur --</option>
+                        <?php foreach ($couleurs as $couleur): ?>
+                            <option value="<?= htmlspecialchars($couleur['id']) ?>">
+                                <?= htmlspecialchars($couleur['nom']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
             <div class="footer">

@@ -16,6 +16,12 @@ if (!$id) {
     exit();
 }
 
+$stmt = $pdo->prepare("SELECT id, nom FROM couleur_tissu");
+$stmt->execute();
+$couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 // Récupérer les données actuelles du motif de tissu
 $stmt = $pdo->prepare("SELECT * FROM motif_tissu WHERE id = ?");
 $stmt->execute([$id]);
@@ -32,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $prix = trim($_POST['prix']);
     $img = $_FILES['img'];
+    $id_couleur = trim($_POST['id_couleur']);
 
     if (empty($nom)) {
         $_SESSION['message'] = 'Le nom est requis.';
@@ -59,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE motif_tissu SET nom = ?, prix = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $prix, $fileName, $id]);
+            $stmt = $pdo->prepare("UPDATE motif_tissu SET nom = ?, prix = ?, img = ?, id_couleur_tissu = ? WHERE id = ?");
+            $stmt->execute([$nom, $prix, $fileName, $id_couleur, $id]);
             $_SESSION['message'] = 'Motif mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
             header("Location: index.php");
@@ -129,6 +136,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="file" id="img" name="img" class="input-field" accept="image/*">
                     </div>
                 </div>
+                <div class="form-row">
+                <div class="form-group">
+                    <label for="id_couleur">Id couleur tissu</label>
+                    <select class="input-field" id="id_couleur" name="id_couleur">
+                        <option value="">-- Sélectionnez une couleur --</option>
+                        <?php foreach ($couleurs as $couleur): ?>
+                            <option value="<?= htmlspecialchars($couleur['id']) ?>" 
+                                <?= ($couleur['id'] == $motif['id_couleur_tissu']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($couleur['nom']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
                 <div class="footer">
                     <div class="buttons">
                     <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
