@@ -8,9 +8,9 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Récupérer les types de bois depuis la base de données
-$stmt = $pdo->query("SELECT * FROM couleur_bois");
-$couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Récupérer les types de banquette depuis la base de données
+$stmt = $pdo->query("SELECT * FROM type_banquette");
+$type_banquette = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +21,7 @@ $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-  <title>Étape 3 - Choisi ta couleur</title>
+  <title>Étape 2 - Choisi ton type de banquette</title>
   <style>
     /* Transition pour les éléments de la page */
     .transition {
@@ -54,32 +54,26 @@ $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <ul class="fil-ariane">
       <li><a href="etape1-1-structure.php">Structure</a></li>
       <li><a href="etape1-2-dimension.php">Dimension</a></li>
-      <li><a href="etape2-type-banquette.php">Banquette</a></li>
-      <li><a href="etape3-bois-couleur.php" class="active">Couleur</a></li>
-      <li><a href="etape4-bois-decoration.php">Décoration</a></li>
-      <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
-      <li><a href="etape6-bois-dossier.php">Dossier</a></li>
-      <li><a href="etape7-bois-mousse.php">Mousse</a></li>
-      <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
+      <li><a href="etape2-type-banquette.php" class="active">Banquette</a></li>
     </ul>
   </div>
-
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column transition">
-      <h2>Étape 3 - Choisi ta couleur</h2>
-
-      <section class="color-options">
-        <?php if (!empty($couleur_bois)): ?>
-          <?php foreach ($couleur_bois as $couleur_bois): ?>
-            <div class="option transition">
-              <img src="../../admin/uploads/couleur-banquette-bois/<?php echo htmlspecialchars($couleur_bois['img']); ?>" alt="<?php echo htmlspecialchars($couleur_bois['nom']); ?>">
-              <p><?php echo htmlspecialchars($couleur_bois['nom']); ?></p>
-              <p><strong><?php echo htmlspecialchars($couleur_bois['prix']); ?> €</strong></p>
+      <h2>Étape 2 - Choisi ton type de banquette</h2>
+      
+      <section class="color-2options">
+        <?php if (!empty($type_banquette)): ?>
+          <?php foreach ($type_banquette as $type): ?>
+            <div class="option transition" onclick="redirectUser('<?php echo htmlspecialchars($type['nom']); ?>')">
+              <img src="../../admin/uploads/banquette/<?php echo htmlspecialchars($type['img']); ?>" 
+                   alt="<?php echo htmlspecialchars($type['nom']); ?>"
+                   data-name="<?php echo htmlspecialchars($type['nom']); ?>">
+              <p><?php echo htmlspecialchars($type['nom']); ?></p>
             </div>
           <?php endforeach; ?>
         <?php else: ?>
-          <p>Aucune couleur disponible pour le moment.</p>
+          <p>Aucun type de banquette disponible pour le moment.</p>
         <?php endif; ?>
       </section>
 
@@ -119,14 +113,14 @@ $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <!-- Popup abandonner -->
   <div id="abandonner-popup" class="popup transition">
     <div class="popup-content">
-      <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+      <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
       <br>
       <button class="yes-btn">Oui ...</button>
       <button class="no-btn">Non !</button>
     </div>
   </div>
 
-  <!-- Popup pour choisir une option avant de continuer -->
+  <!-- Popup "Sélectionnez une option" -->
 <div id="selection-popup" class="popup transition">
   <div class="popup-content">
     <h2>Veuillez choisir une option avant de continuer.</h2>
@@ -136,44 +130,66 @@ $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 
-  
+  <?php
+// Si un choix a été fait dans la session, on le récupère
+$redirectChoice = isset($_SESSION['type_banquette_choice']) ? $_SESSION['type_banquette_choice'] : null;
+?>
 
-
-<script>
-   document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img'); 
-  const mainImage = document.querySelector('.main-display img'); 
+  <script>document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
+  const mainImage = document.querySelector('.main-display img');
   const suivantButton = document.querySelector('.btn-suivant');
   const helpPopup = document.getElementById('help-popup');
   const abandonnerPopup = document.getElementById('abandonner-popup');
-  const selectionPopup = document.getElementById('selection-popup');
-  let selected = false; 
+  const selectionPopup = document.getElementById('selection-popup'); // Pop-up d'erreur
 
+  // Afficher les éléments avec la classe "transition"
   document.querySelectorAll('.transition').forEach(element => {
-    element.classList.add('show'); 
+    element.classList.add('show');
   });
 
+  // Gestion des options de banquette
   options.forEach(img => {
     img.addEventListener('click', () => {
+      // Supprime la classe "selected" de toutes les images
       options.forEach(opt => opt.classList.remove('selected'));
+
+      // Ajoute la classe "selected" à l'image cliquée
       img.classList.add('selected');
+
+      // Met à jour l'image principale
       mainImage.src = img.src;
-      selected = true;  
+      mainImage.alt = img.alt;
+
+      // Met à jour le choix dans sessionStorage
+      sessionStorage.setItem('type_banquette_choice', img.getAttribute('data-name'));
     });
   });
 
-  suivantButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (!selected) {
-      selectionPopup.style.display = 'flex';
+  // Gestion du bouton Suivant
+  suivantButton.addEventListener('click', () => {
+    const userChoice = sessionStorage.getItem('type_banquette_choice');
+    if (userChoice) {
+      // Si un choix a été fait, rediriger vers la page en fonction du choix
+      let redirectUrl = '';
+      if (userChoice === 'Bois') {
+        redirectUrl = 'etape3-bois-couleur.php';
+      } else if (userChoice === 'Tissu') {
+        redirectUrl = 'etape3-tissu-modele-banquette.php';
+      }
+      if (redirectUrl) {
+        document.body.classList.remove('show');
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 500);
+      }
     } else {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'etape4-bois-decoration.php';
-      }, 500);
+      // Afficher le pop-up si aucune option n'est sélectionnée
+      selectionPopup.style.display = 'flex';
     }
   });
 
+  // Gestion du popup "Besoin d'aide"
   document.querySelector('.btn-aide').addEventListener('click', () => {
     helpPopup.style.display = 'flex';
   });
@@ -188,6 +204,7 @@ $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
   });
 
+  // Gestion du popup "Abandonner"
   document.querySelector('.btn-abandonner').addEventListener('click', () => {
     abandonnerPopup.style.display = 'flex';
   });
@@ -203,17 +220,28 @@ $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     abandonnerPopup.style.display = 'none';
   });
 
+  window.addEventListener('click', (event) => {
+    if (event.target === abandonnerPopup) {
+      abandonnerPopup.style.display = 'none';
+    }
+  });
+
+  // Gestion du popup "Sélectionner une option"
   document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
     selectionPopup.style.display = 'none';
   });
 
+  window.addEventListener('click', (event) => {
+    if (event.target === selectionPopup) {
+      selectionPopup.style.display = 'none';
+    }
+  });
 });
+
+
   </script>
-
-
 </main>
 
 <?php require_once '../../squelette/footer.php'; ?>
-
 </body>
 </html>

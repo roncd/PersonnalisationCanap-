@@ -51,14 +51,15 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-  <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-1-structure.php">Structure</a></li>
     <li><a href="etape1-2-dimension.php">Dimension</a></li>
     <li><a href="etape2-type-banquette.php">Banquette</a></li>
-    <li><a href="etape3-tissu-modele-banquette.php" >Modèle</a></li>
-    <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
-    <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
-    <li><a href="etape6-2-tissu.php">Accoudoir</a></li>
-    <li><a href="etape7-tissu-choix-mousse.php" class="active">Mousse</a></li>
+    <li><a href="etape3-bois-couleur.php">Couleur</a></li>
+    <li><a href="etape4-bois-decoration.php">Décoration</a></li>
+    <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
+    <li><a href="etape6-bois-dossier.php">Dossier</a></li>
+    <li><a href="etape7-bois-mousse.php" class="active">Mousse</a></li>
+    <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
   </ul>
 </div>
   <div class="container">
@@ -88,25 +89,7 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
       </div>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-    // Afficher les éléments avec la classe "transition"
-    document.querySelectorAll('.transition').forEach(element => {
-      element.classList.add('show');
-    });
 
-    // Sélection des boutons
-    const suivantButton = document.querySelector('.btn-suivant');
-
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'recapitulatif-commande.php'; 
-      }, 500);
-    });
-    });
-    </script>
     <!-- Colonne de droite -->
     <div class="right-column transition">
       <section class="main-display">
@@ -169,57 +152,84 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 
+<div id="selection-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Veuillez choisir une option avant de continuer.</h2>
+      <br>
+      <button class="close-btn">OK</button>
+      </div>
+  </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img'); // Sélectionne toutes les images
-  const mainImage = document.querySelector('.main-display img');
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('help-popup');
-  const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-options .option img'); 
+  const mainImage = document.querySelector('.main-display img'); 
+  const suivantButton = document.querySelector('.btn-suivant');
+  const helpPopup = document.getElementById('help-popup');
+  const abandonnerPopup = document.getElementById('abandonner-popup');
+  const selectionPopup = document.getElementById('selection-popup');
+  let selected = false; 
 
-        // Gestion des options de banquette
-        options.forEach(img => {
-        img.addEventListener('click', () => {
-          // Supprime la classe "selected" de toutes les images
-          options.forEach(opt => opt.classList.remove('selected'));
-
-          // Ajoute la classe "selected" à l'image cliquée
-          img.classList.add('selected');
-
-          // Met à jour l'image principale
-          mainImage.src = img.src;
-          mainImage.alt = img.alt;
-        });
-      });
-
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Abandonner cliqué');
-    popup.style.display = 'flex';
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show'); 
   });
 
-  // Rediriger vers la page d'accueil avec le bouton "Oui ..."
-  yesButton.addEventListener('click', () => {
-    console.log('Redirection vers la page d\'accueil');
-    window.location.href = '../pages/'; // Remplace '/' par l'URL de votre page d'accueil
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      options.forEach(opt => opt.classList.remove('selected'));
+      img.classList.add('selected');
+      mainImage.src = img.src;
+      selected = true;  
+    });
   });
 
-  // Masquer le popup avec le bouton "Non !"
-  noButton.addEventListener('click', () => {
-    console.log('Popup fermé via le bouton Non !');
-    popup.style.display = 'none';
-  });
-
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
+  suivantButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!selected) {
+      selectionPopup.style.display = 'flex';
+    } else {
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'recapitulatif-commande.php';
+      }, 500);
     }
   });
+
+  document.querySelector('.btn-aide').addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+
+  document.querySelector('.btn-abandonner').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
+  });
+
+  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'none';
+  });
+
+  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+    selectionPopup.style.display = 'none';
+  });
+
 });
-</script>
+  </script>
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>
