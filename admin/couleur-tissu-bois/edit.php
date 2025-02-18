@@ -29,6 +29,7 @@ if (!$couleurTissubois) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
+    $price = ($_POST['price']);
     $img = $_FILES['img'];
 
     if (empty($nom)) {
@@ -56,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE couleur_tissu_bois SET nom = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $fileName, $id]);
+            $stmt = $pdo->prepare("UPDATE couleur_tissu_bois SET nom = ?, prix = ?, img = ? WHERE id = ?");
+            $stmt->execute([$nom, $price, $fileName, $id]);
             $_SESSION['message'] = 'La couleur du tissu en bois a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: index.php");
@@ -115,6 +116,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="name">Nom</label>
                             <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($couleurTissubois['nom']); ?>" required>
                         </div>
+                    </div>
+                    <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Prix (en €)</label>
+                        <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($couleurTissubois['prix']); ?>" required>
+                    </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">

@@ -93,6 +93,7 @@ $search = $_GET['search'] ?? '';
                 <tr>
                     <th>ID</th>
                     <th>NOM</th>
+                    <th>PRIX</th>
                     <th>IMAGE</th>
                     <th>ACTION</th>
                 </tr>
@@ -109,6 +110,7 @@ $search = $_GET['search'] ?? '';
                         echo "<tr>";
                         echo "<td>{$row['id']}</td>";
                         echo "<td>{$row['nom']}</td>";
+                        echo "<td>{$row['prix']}</td>";
                         echo "<td><img src='../uploads/couleur-tissu-bois/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                         echo "<td class='actions'>";
                         echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'><i class='fas fa-edit'></i></a>";

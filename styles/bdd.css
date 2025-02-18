@@ -27,6 +27,8 @@ body {
   .tableau {
     max-width: 800px;
     margin: 20px auto;
+    margin-bottom: 40px;
+
   }
 
   .button-grid-container {
@@ -35,8 +37,6 @@ body {
     gap: 20px;
     padding-top: 30px;
     padding-bottom: 30px;
-
-  
   }
   
   
@@ -55,13 +55,32 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease, background-color 0.3s ease;
     text-decoration: none;
+    
   }
   
   /* Effet au survol */
   .custom-button:hover {
     transform: scale(1.05);
-   
   }
+
+ 
+.export-button {
+  background-color: rgba(227, 209, 200, 0.85);
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px 20px;
+  text-align: center;
+  vertical-align:bottom;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  text-decoration: none;
+  margin-left: 65%;
+}
+
 
   
   /* Boutons responsives */
@@ -69,11 +88,17 @@ body {
     .button-grid-container {
       grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur les écrans plus petits */
     }
+    .export-button {
+      margin-left: 60%;
+    }
   }
   
   @media screen and (max-width: 480px) {
     .button-grid-container {
       grid-template-columns: 1fr; /* 1 colonne sur les très petits écrans */
+    }
+    .export-button {
+      margin-left: 50%;
     }
   }
 

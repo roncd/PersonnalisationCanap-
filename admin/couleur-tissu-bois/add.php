@@ -9,9 +9,10 @@ if (!isset($_SESSION['id'])){
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
+    $price = ($_POST['price']);
     $img = $_FILES['img'];
 
-    if (empty($nom) || empty($img['name'])) {
+    if (empty($nom) || empty($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     }
@@ -102,11 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                     <div class="form-group">
+                        <label for="price">Prix (en €)</label>
+                        <input type="number" id="price" name="price" class="input-field" required>
+                    </div>
+                    </div>
+                    <div class="form-row">
+                    <div class="form-group">
                         <label for="img">Image</label>
                         <input type="file" id="img" name="img" class="input-field" required accept="image/*">
                     </div>
                     </div>
-                
                     <div class="footer">
                         <div class="buttons">
                         <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
