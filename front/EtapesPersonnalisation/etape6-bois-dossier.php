@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Récupérer les types de banquette depuis la base de données
+// Récupérer les types de dossier bois depuis la base de données
 $stmt = $pdo->query("SELECT * FROM dossier_bois");
 $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -21,8 +21,27 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-
   <title>Étape 6 - Choisi ton dossier</title>
+  <style>
+    /* Transition pour les éléments de la page */
+    .transition {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .transition.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Appliquer les transitions aux images sélectionnées */
+    .option img.selected {
+      border: 3px solid #997765; /* Couleur marron */
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
 
@@ -33,10 +52,10 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
   <ul class="fil-ariane">
-  <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-1-structure.php">Structure</a></li>
     <li><a href="etape1-2-dimension.php">Dimension</a></li>
     <li><a href="etape2-type-banquette.php">Banquette</a></li>
-    <li><a href="etape3-bois-couleur.php" >Couleur</a></li>
+    <li><a href="etape3-bois-couleur.php">Couleur</a></li>
     <li><a href="etape4-bois-decoration.php">Décoration</a></li>
     <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
     <li><a href="etape6-bois-dossier.php" class="active">Dossier</a></li>
@@ -44,144 +63,152 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
   </ul>
 </div>
+
   <div class="container">
     <!-- Colonne de gauche -->
-    <div class="left-column">
+    <div class="left-column transition">
       <h2>Étape 6 - Choisi ton dossier</h2>
       
       <section class="color-options">
       <?php if (!empty($dossier_bois)): ?>
-    <?php foreach ($dossier_bois as $dossier_bois): ?>
-        <div class="option transition">
+        <?php foreach ($dossier_bois as $dossier_bois): ?>
+          <div class="option transition">
             <img src="../../admin/uploads/dossier_bois/<?php echo htmlspecialchars($dossier_bois['img']); ?>" alt="<?php echo htmlspecialchars($dossier_bois['nom']); ?>">
             <p><?php echo htmlspecialchars($dossier_bois['nom']); ?></p>
             <p><strong><?php echo htmlspecialchars($dossier_bois['prix']); ?> €</strong></p>
-        </div>
+          </div>
         <?php endforeach; ?>
-          <?php else: ?>
-    <p>Aucun dossier disponible pour le moment.</p>
-          <?php endif; ?>   
-        
+      <?php else: ?>
+        <p>Aucun dossier disponible pour le moment.</p>
+      <?php endif; ?>
       </section>
+
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
-          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button href="etape7-bois.php" class="btn-suivant">Suivant</button>
+          <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+          <button class="btn-suivant transition">Suivant</button>
         </div>
       </div>
     </div>
+
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-    // Sélection des boutons
-    const suivantButton = document.querySelector('.btn-suivant');
+      // Afficher les éléments avec la classe "transition"
+      document.querySelectorAll('.transition').forEach(element => {
+        element.classList.add('show');
+      });
 
+      const options = document.querySelectorAll('.color-options .option img'); // Sélectionne toutes les images
+      const mainImage = document.querySelector('.main-display img');
 
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      window.location.href = 'etape7-bois.php'; 
-    });
+      // Gestion des options de dossier
+      options.forEach(img => {
+        img.addEventListener('click', () => {
+          options.forEach(opt => opt.classList.remove('selected'));
+          img.classList.add('selected');
+          mainImage.src = img.src;
+          mainImage.alt = img.alt;
+        });
+      });
+
+      // Sélection du bouton suivant
+      const suivantButton = document.querySelector('.btn-suivant');
+
+      // Action du bouton "Suivant"
+      suivantButton.addEventListener('click', () => {
+        document.body.classList.remove('show');
+        setTimeout(() => {
+          window.location.href = 'etape7-bois-mousse.php'; 
+        }, 500);
+      });
     });
     </script>
+
     <!-- Colonne de droite -->
-    <div class="right-column">
+    <div class="right-column transition">
       <section class="main-display">
-        <div class="buttons">
+        <div class="buttons transition">
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
       </section>
     </div>
   </div>
+
   <!-- Popup besoin d'aide -->
-<div id="help-popup" class="popup">
-  <div class="popup-content">
-    <h2>Vous avez une question ?</h2>
-    <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
-      <br><br>
-    <strong>06 58 47 58 56</strong></p>
+  <div id="help-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Vous avez une question ?</h2>
+      <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
+        <br><br>
+      <strong>06 58 47 58 56</strong></p>
       <br>
-    <button class="close-btn">Merci !</button>
-
+      <button class="close-btn">Merci !</button>
+    </div>
   </div>
-</div>
+
   <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('help-popup');
-  const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
+  document.addEventListener('DOMContentLoaded', () => {
+    const openButton = document.querySelector('.btn-aide'); 
+    const popup = document.getElementById('help-popup');
+    const closeButton = document.querySelector('.close-btn'); 
 
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Aide cliqué');
-    popup.style.display = 'flex';
-  });
+    openButton.addEventListener('click', () => {
+      popup.style.display = 'flex';
+    });
 
-  // Masquer le popup avec le bouton "Merci !"
-  closeButton.addEventListener('click', () => {
-    console.log('Bouton Merci cliqué');
-    popup.style.display = 'none';
-  });
-
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
+    closeButton.addEventListener('click', () => {
       popup.style.display = 'none';
-    }
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
   });
-});
-</script>
+  </script>
 
-
-<!-- Popup besoin d'aide -->
-<div id="abandonner-popup" class="popup">
-  <div class="popup-content">
-    <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+  <!-- Popup abandon -->
+  <div id="abandonner-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Êtes vous sûr de vouloir abandonner ?</h2>
       <br>
-    <button class="yes-btn">Oui ...</button>
-    <button class="no-btn">Non !</button>
-
-
+      <button class="yes-btn">Oui ...</button>
+      <button class="no-btn">Non !</button>
+    </div>
   </div>
-</div>
 
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const openButton = document.querySelector('.btn-abandonner');
+    const popup = document.getElementById('abandonner-popup');
+    const yesButton = document.querySelector('.yes-btn'); 
+    const noButton = document.querySelector('.no-btn'); 
 
-<script>document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-abandonner'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('abandonner-popup');
-  const yesButton = document.querySelector('.yes-btn'); // Bouton "Oui ..." pour redirection
-  const noButton = document.querySelector('.no-btn'); // Bouton "Non !" pour fermer le popup
+    openButton.addEventListener('click', () => {
+      popup.style.display = 'flex';
+    });
 
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Abandonner cliqué');
-    popup.style.display = 'flex';
-  });
+    yesButton.addEventListener('click', () => {
+      window.location.href = '../pages/';
+    });
 
-  // Rediriger vers la page d'accueil avec le bouton "Oui ..."
-  yesButton.addEventListener('click', () => {
-    console.log('Redirection vers la page d\'accueil');
-    window.location.href = '../pages/'; // Remplace '/' par l'URL de votre page d'accueil
-  });
-
-  // Masquer le popup avec le bouton "Non !"
-  noButton.addEventListener('click', () => {
-    console.log('Popup fermé via le bouton Non !');
-    popup.style.display = 'none';
-  });
-
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
+    noButton.addEventListener('click', () => {
       popup.style.display = 'none';
-    }
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
   });
-});
-</script>
+  </script>
 </main>
+
 <?php require_once '../../squelette/footer.php'?>
 </body>
 </html>
