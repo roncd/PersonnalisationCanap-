@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Change 'mot_de_passe' to 'mdp'
         if (password_verify($password, $user['mdp'])) {
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['nom'];
+            $_SESSION['user_name'] = $user['prenom'];
             if (!empty($_SESSION['redirect_to'])) {
                 $redirect_to = $_SESSION['redirect_to'];
                 unset($_SESSION['redirect_to']); 

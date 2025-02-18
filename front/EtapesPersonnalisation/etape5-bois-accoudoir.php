@@ -91,22 +91,6 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
     
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Afficher les éléments avec la classe "transition"
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
-      });
-
-      // Sélection des boutons
-      const suivantButton = document.querySelector('.btn-suivant');
-
-      // Action du bouton "Suivant" : rediriger vers la page suivante
-      suivantButton.addEventListener('click', () => {
-        window.location.href = 'etape6-bois-dossier.php'; 
-      });
-    });
-    </script>
 
     <!-- Colonne de droite -->
     <div class="right-column transition">
@@ -166,54 +150,86 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <button class="no-btn">Non !</button>
     </div>
   </div>
+  
+  
+
+  <div id="selection-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Veuillez choisir une option avant de continuer.</h2>
+      <br>
+      <button class="close-btn">OK</button>
+      </div>
+  </div>
 
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const options = document.querySelectorAll('.color-options .option img'); // Sélectionne toutes les images
-    const mainImage = document.querySelector('.main-display img');
-    const openButton = document.querySelector('.btn-abandonner');
-    const popup = document.getElementById('abandonner-popup');
-    const yesButton = document.querySelector('.yes-btn');
-    const noButton = document.querySelector('.no-btn');
+   document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-options .option img'); 
+  const mainImage = document.querySelector('.main-display img'); 
+  const suivantButton = document.querySelector('.btn-suivant');
+  const helpPopup = document.getElementById('help-popup');
+  const abandonnerPopup = document.getElementById('abandonner-popup');
+  const selectionPopup = document.getElementById('selection-popup');
+  let selected = false; 
 
-    
-        // Gestion des options de banquette
-        options.forEach(img => {
-        img.addEventListener('click', () => {
-          // Supprime la classe "selected" de toutes les images
-          options.forEach(opt => opt.classList.remove('selected'));
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show'); 
+  });
 
-          // Ajoute la classe "selected" à l'image cliquée
-          img.classList.add('selected');
-
-          // Met à jour l'image principale
-          mainImage.src = img.src;
-          mainImage.alt = img.alt;
-        });
-      });
-
-    // Afficher le popup
-    openButton.addEventListener('click', () => {
-      popup.style.display = 'flex';
-    });
-
-    // Rediriger vers la page d'accueil avec le bouton "Oui ..."
-    yesButton.addEventListener('click', () => {
-      window.location.href = '../pages/';
-    });
-
-    // Masquer le popup avec le bouton "Non !"
-    noButton.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
-    // Fermer le popup si clic à l'extérieur
-    window.addEventListener('click', (event) => {
-      if (event.target === popup) {
-        popup.style.display = 'none';
-      }
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      options.forEach(opt => opt.classList.remove('selected'));
+      img.classList.add('selected');
+      mainImage.src = img.src;
+      selected = true;  
     });
   });
+
+  suivantButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!selected) {
+      selectionPopup.style.display = 'flex';
+    } else {
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape6-bois-dossier.php';
+      }, 500);
+    }
+  });
+
+  document.querySelector('.btn-aide').addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+
+  document.querySelector('.btn-abandonner').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
+  });
+
+  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'none';
+  });
+
+  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+    selectionPopup.style.display = 'none';
+  });
+
+});
   </script>
 </main>
 
