@@ -92,39 +92,6 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Afficher les éléments avec la classe "transition"
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
-      });
-
-      const options = document.querySelectorAll('.color-options .option img'); // Sélectionne toutes les images
-      const mainImage = document.querySelector('.main-display img');
-
-      // Gestion des options de dossier
-      options.forEach(img => {
-        img.addEventListener('click', () => {
-          options.forEach(opt => opt.classList.remove('selected'));
-          img.classList.add('selected');
-          mainImage.src = img.src;
-          mainImage.alt = img.alt;
-        });
-      });
-
-      // Sélection du bouton suivant
-      const suivantButton = document.querySelector('.btn-suivant');
-
-      // Action du bouton "Suivant"
-      suivantButton.addEventListener('click', () => {
-        document.body.classList.remove('show');
-        setTimeout(() => {
-          window.location.href = 'etape7-bois-mousse.php'; 
-        }, 500);
-      });
-    });
-    </script>
-
     <!-- Colonne de droite -->
     <div class="right-column transition">
       <section class="main-display">
@@ -181,31 +148,83 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
+  <div id="selection-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Veuillez choisir une option avant de continuer.</h2>
+      <br>
+      <button class="close-btn">OK</button>
+      </div>
+  </div>
+
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const openButton = document.querySelector('.btn-abandonner');
-    const popup = document.getElementById('abandonner-popup');
-    const yesButton = document.querySelector('.yes-btn'); 
-    const noButton = document.querySelector('.no-btn'); 
+   document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-options .option img'); 
+  const mainImage = document.querySelector('.main-display img'); 
+  const suivantButton = document.querySelector('.btn-suivant');
+  const helpPopup = document.getElementById('help-popup');
+  const abandonnerPopup = document.getElementById('abandonner-popup');
+  const selectionPopup = document.getElementById('selection-popup');
+  let selected = false; 
 
-    openButton.addEventListener('click', () => {
-      popup.style.display = 'flex';
-    });
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show'); 
+  });
 
-    yesButton.addEventListener('click', () => {
-      window.location.href = '../pages/';
-    });
-
-    noButton.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === popup) {
-        popup.style.display = 'none';
-      }
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      options.forEach(opt => opt.classList.remove('selected'));
+      img.classList.add('selected');
+      mainImage.src = img.src;
+      selected = true;  
     });
   });
+
+  suivantButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!selected) {
+      selectionPopup.style.display = 'flex';
+    } else {
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape7-bois-mousse.php';
+      }, 500);
+    }
+  });
+
+  document.querySelector('.btn-aide').addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+
+  document.querySelector('.btn-abandonner').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
+  });
+
+  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'none';
+  });
+
+  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+    selectionPopup.style.display = 'none';
+  });
+
+});
   </script>
 </main>
 

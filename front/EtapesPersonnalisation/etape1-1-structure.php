@@ -122,6 +122,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
+  <div id="selection-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Veuillez une option avant de continuer.</h2>
+      <br>
+      <button class="close-btn">OK</button>
+      </div>
+  </div>
+
   <script>
    document.addEventListener('DOMContentLoaded', () => {
   const options = document.querySelectorAll('.color-options .option img'); 
@@ -129,6 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   const suivantButton = document.querySelector('.btn-suivant');
   const helpPopup = document.getElementById('help-popup');
   const abandonnerPopup = document.getElementById('abandonner-popup');
+  const selectionPopup = document.getElementById('selection-popup');
+  let selected = false; 
 
   document.querySelectorAll('.transition').forEach(element => {
     element.classList.add('show'); 
@@ -138,15 +148,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     img.addEventListener('click', () => {
       options.forEach(opt => opt.classList.remove('selected'));
       img.classList.add('selected');
-      mainImage.src = img.src; 
+      mainImage.src = img.src;
+      selected = true;  
     });
   });
 
-  suivantButton.addEventListener('click', () => {
-    document.body.classList.remove('show');
-    setTimeout(() => {
-      window.location.href = 'etape1-2-dimension.php';
-    }, 500);
+  suivantButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!selected) {
+      selectionPopup.style.display = 'flex';
+    } else {
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape1-2-dimension.php';
+      }, 500);
+    }
   });
 
   document.querySelector('.btn-aide').addEventListener('click', () => {
@@ -177,6 +193,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
     abandonnerPopup.style.display = 'none';
   });
+
+  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+    selectionPopup.style.display = 'none';
+  });
+
 });
   </script>
 </main>

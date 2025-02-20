@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Récupérer les types de banquette depuis la base de données
+// Récupérer les types de dossier tissu depuis la base de données
 $stmt = $pdo->query("SELECT * FROM dossier_tissu");
 $dossier_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -50,35 +50,36 @@ $dossier_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </header>
 
 <main>
-<div class="fil-ariane-container" aria-label="fil-ariane">
-  <ul class="fil-ariane">
-  <li><a href="etape1-1-structure.php">Structure</a></li>
-    <li><a href="etape1-2-dimension.php">Dimension</a></li>
-    <li><a href="etape2-type-banquette.php">Banquette</a></li>
-    <li><a href="etape3-tissu-modele-banquette.php" >Modèle</a></li>
-    <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
-    <li><a href="etape5-tissu-choix-dossier.php" class="active">Dossier</a></li>
-    <li><a href="etape6-2-tissu.php">Accoudoir</a></li>
-    <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
-  </ul>
-</div>
+  <div class="fil-ariane-container" aria-label="fil-ariane">
+    <ul class="fil-ariane">
+      <li><a href="etape1-1-structure.php">Structure</a></li>
+      <li><a href="etape1-2-dimension.php">Dimension</a></li>
+      <li><a href="etape2-type-banquette.php">Banquette</a></li>
+      <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
+      <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
+      <li><a href="etape5-tissu-choix-dossier.php" class="active">Dossier</a></li>
+      <li><a href="etape6-2-tissu.php">Accoudoir</a></li>
+      <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
+    </ul>
+  </div>
+  
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column transition">
       <h2>Étape 5 - Choisi ton dossier</h2>
-      
+
       <section class="color-2options">
-      <?php if (!empty($dossier_tissu)): ?>
-    <?php foreach ($dossier_tissu as $dossier_tissu): ?>
-        <div class="option transition">
-            <img src="../../admin/uploads/dossier-tissu/<?php echo htmlspecialchars($dossier_tissu['img']); ?>" alt="<?php echo htmlspecialchars($dossier_tissu['nom']); ?>">
-            <p><?php echo htmlspecialchars($dossier_tissu['nom']); ?></p>
-            <p><strong><?php echo htmlspecialchars($dossier_tissu['prix']); ?> €</strong></p>
-        </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>Aucun dossier disponible pour le moment.</p>
-<?php endif; ?>         
+        <?php if (!empty($dossier_tissu)): ?>
+          <?php foreach ($dossier_tissu as $dossier_tissu): ?>
+            <div class="option transition">
+              <img src="../../admin/uploads/dossier-tissu/<?php echo htmlspecialchars($dossier_tissu['img']); ?>" alt="<?php echo htmlspecialchars($dossier_tissu['nom']); ?>">
+              <p><?php echo htmlspecialchars($dossier_tissu['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($dossier_tissu['prix']); ?> €</strong></p>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p>Aucun dossier disponible pour le moment.</p>
+        <?php endif; ?>         
       </section>
 
       <div class="footer">
@@ -89,25 +90,6 @@ $dossier_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
       </div>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-    // Afficher les éléments avec la classe "transition"
-    document.querySelectorAll('.transition').forEach(element => {
-      element.classList.add('show');
-    });
-
-    // Sélection des boutons
-    const suivantButton = document.querySelector('.btn-suivant');
-
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'etape6-2-tissu.php'; 
-      }, 500);
-    });
-    });
-    </script>
 
     <!-- Colonne de droite -->
     <div class="right-column transition">
@@ -120,111 +102,120 @@ $dossier_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </section>
     </div>
   </div>
+
   <!-- Popup besoin d'aide -->
-<div id="help-popup" class="popup transition">
-  <div class="popup-content">
-    <h2>Vous avez une question ?</h2>
-    <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
-      <br><br>
-    <strong>06 58 47 58 56</strong></p>
+  <div id="help-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Vous avez une question ?</h2>
+      <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
+        <br><br>
+      <strong>06 58 47 58 56</strong></p>
       <br>
-    <button class="close-btn">Merci !</button>
-
+      <button class="close-btn">Merci !</button>
+    </div>
   </div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
-  const mainImage = document.querySelector('.main-display img');
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('help-popup');
-  const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
 
-        // Gestion des options de banquette
-        options.forEach(img => {
+  <!-- Popup abandonner -->
+  <div id="abandonner-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+        <br>
+      <button class="yes-btn">Oui ...</button>
+      <button class="no-btn">Non !</button>
+    </div>
+  </div>
+
+  <!-- Popup de sélection d'option -->
+  <div id="selection-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Veuillez choisir une option avant de continuer.</h2>
+      <br>
+      <button class="close-btn">OK</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
+      const mainImage = document.querySelector('.main-display img');
+      const suivantButton = document.querySelector('.btn-suivant');
+      const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
+      const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
+      const selectionPopup = document.getElementById('selection-popup'); // Popup de sélection
+      let selected = false; // Variable pour savoir si une option est sélectionnée
+
+      // Affichage des éléments avec la classe "transition"
+      document.querySelectorAll('.transition').forEach(element => {
+        element.classList.add('show');
+      });
+
+      // Gestion de la sélection des images
+      options.forEach(img => {
         img.addEventListener('click', () => {
-          // Supprime la classe "selected" de toutes les images
+          // Retirer la classe "selected" de toutes les images
           options.forEach(opt => opt.classList.remove('selected'));
 
-          // Ajoute la classe "selected" à l'image cliquée
+          // Ajouter la classe "selected" à l'image cliquée
           img.classList.add('selected');
 
-          // Met à jour l'image principale
+          // Mettre à jour l'image principale
           mainImage.src = img.src;
           mainImage.alt = img.alt;
+          selected = true; // Marquer comme sélectionné
         });
       });
 
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Aide cliqué');
-    popup.style.display = 'flex';
-  });
+      // Action sur le bouton "Suivant"
+      suivantButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Empêcher la redirection immédiate
+        if (!selected) {
+          // Si aucune option n'est sélectionnée, afficher le popup
+          selectionPopup.style.display = 'flex';
+        } else {
+          // Si une option est sélectionnée, rediriger vers la page suivante
+          document.body.classList.remove('show');
+          setTimeout(() => {
+            window.location.href = 'etape6-2-tissu.php'; // Redirection vers l'étape suivante
+          }, 500);
+        }
+      });
 
-  // Masquer le popup avec le bouton "Merci !"
-  closeButton.addEventListener('click', () => {
-    console.log('Bouton Merci cliqué');
-    popup.style.display = 'none';
-  });
+      // Fermeture du popup de sélection
+      document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+        selectionPopup.style.display = 'none';
+      });
 
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
-    }
-  });
-});
-</script>
+      // Fermer le popup de sélection si clic à l'extérieur
+      window.addEventListener('click', (event) => {
+        if (event.target === selectionPopup) {
+          selectionPopup.style.display = 'none';
+        }
+      });
 
+      // Gestion du popup "Besoin d'aide"
+      document.querySelector('.btn-aide').addEventListener('click', () => {
+        helpPopup.style.display = 'flex';
+      });
 
-<!-- Popup besoin d'aide -->
-<div id="abandonner-popup" class="popup transition">
-  <div class="popup-content">
-    <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-      <br>
-    <button class="yes-btn">Oui ...</button>
-    <button class="no-btn">Non !</button>
-  </div>
-</div>
+      document.querySelector('.close-btn').addEventListener('click', () => {
+        helpPopup.style.display = 'none';
+      });
 
+      // Gestion du popup "Abandonner"
+      document.querySelector('.btn-abandonner').addEventListener('click', () => {
+        abandonnerPopup.style.display = 'flex';
+      });
 
-<script>document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-abandonner'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('abandonner-popup');
-  const yesButton = document.querySelector('.yes-btn'); // Bouton "Oui ..." pour redirection
-  const noButton = document.querySelector('.no-btn'); // Bouton "Non !" pour fermer le popup
+      document.querySelector('.no-btn').addEventListener('click', () => {
+        abandonnerPopup.style.display = 'none';
+      });
 
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Abandonner cliqué');
-    popup.style.display = 'flex';
-  });
+      document.querySelector('.yes-btn').addEventListener('click', () => {
+        window.location.href = '../pages/'; // Redirection vers la page d'accueil
+      });
+    });
+  </script>
 
-  // Rediriger vers la page d'accueil avec le bouton "Oui ..."
-  yesButton.addEventListener('click', () => {
-    document.body.classList.remove('show');
-    setTimeout(() => {
-      window.location.href = '../pages/';
-    }, 500);
-  });
-
-  // Masquer le popup avec le bouton "Non !"
-  noButton.addEventListener('click', () => {
-    console.log('Popup fermé via le bouton Non !');
-    popup.style.display = 'none';
-  });
-
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
-    }
-  });
-});
-</script>
 </main>
-<?php require_once '../../squelette/footer.php'?>
 </body>
 </html>

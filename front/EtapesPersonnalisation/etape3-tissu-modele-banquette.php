@@ -88,25 +88,7 @@ $modele = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
       </div>
     </div>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-    // Afficher les éléments avec la classe "transition"
-    document.querySelectorAll('.transition').forEach(element => {
-      element.classList.add('show');
-    });
-
-    // Sélection des boutons
-    const suivantButton = document.querySelector('.btn-suivant');
-
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'etape4-1-tissu-choix-tissu.php';
-      }, 500);
-    });
-    });
-    </script>
+    
     <!-- Colonne de droite -->
     <div class="right-column transition">
       <section class="main-display">
@@ -127,54 +109,35 @@ $modele = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <strong>06 58 47 58 56</strong></p>
       <br>
     <button class="close-btn">Merci !</button>
-
   </div>
 </div>
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
-  const mainImage = document.querySelector('.main-display img');
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('help-popup');
-  const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
 
-        // Gestion des options de banquette
-        options.forEach(img => {
-        img.addEventListener('click', () => {
-          // Supprime la classe "selected" de toutes les images
-          options.forEach(opt => opt.classList.remove('selected'));
 
-          // Ajoute la classe "selected" à l'image cliquée
-          img.classList.add('selected');
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
+    const popup = document.getElementById('help-popup');
+    const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
 
-          // Met à jour l'image principale
-          mainImage.src = img.src;
-          mainImage.alt = img.alt;
-        });
-      });
+    // Afficher le popup
+    openButton.addEventListener('click', () => {
+      popup.style.display = 'flex';
+    });
 
-      
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Aide cliqué');
-    popup.style.display = 'flex';
-  });
-
-  // Masquer le popup avec le bouton "Merci !"
-  closeButton.addEventListener('click', () => {
-    console.log('Bouton Merci cliqué');
-    popup.style.display = 'none';
-  });
-
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
+    // Masquer le popup avec le bouton "Merci !"
+    closeButton.addEventListener('click', () => {
       popup.style.display = 'none';
-    }
+    });
+
+    // Fermer le popup si clic à l'extérieur
+    window.addEventListener('click', (event) => {
+      if (event.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
   });
-});
-</script>
+  </script>
+  
 
 
 <!-- Popup besoin d'aide -->
@@ -187,42 +150,117 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 
+<!-- Pop-up de sélection d'option -->
+<div id="selection-popup" class="popup transition">
+  <div class="popup-content">
+    <h2>Veuillez choisir une option avant de continuer.</h2>
+    <br>
+    <button class="close-btn">OK</button>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Sélectionner les éléments nécessaires
+  const options = document.querySelectorAll('.color-2options .option img'); // Les images des options
+  const mainImage = document.querySelector('.main-display img'); // L'image affichée en grand
+  const suivantButton = document.querySelector('.btn-suivant'); // Le bouton "Suivant"
+  const helpPopup = document.getElementById('help-popup'); // Pop-up besoin d'aide
+  const abandonnerPopup = document.getElementById('abandonner-popup'); // Pop-up abandonner
+  const selectionPopup = document.getElementById('selection-popup'); // Pop-up de sélection
+  let selected = false; // Marque si une option a été sélectionnée
 
-<script>document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-abandonner'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('abandonner-popup');
-  const yesButton = document.querySelector('.yes-btn'); // Bouton "Oui ..." pour redirection
-  const noButton = document.querySelector('.no-btn'); // Bouton "Non !" pour fermer le popup
-
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Abandonner cliqué');
-    popup.style.display = 'flex';
+  // Appliquer les transitions aux éléments
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show');
   });
 
-  // Rediriger vers la page d'accueil avec le bouton "Oui ..."
-  yesButton.addEventListener('click', () => {
+  // Gestion de la sélection des images
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      // Retirer la classe "selected" de toutes les images
+      options.forEach(opt => opt.classList.remove('selected'));
+      // Ajouter la classe "selected" à l'image cliquée
+      img.classList.add('selected');
+      
+      // Mettre à jour l'image principale
+      mainImage.src = img.src;
+      mainImage.alt = img.alt; // Ajouter l'attribut alt pour la description de l'image
+      selected = true; // Marquer comme sélectionné
+    });
+  });
+
+  // Action sur le bouton "Suivant"
+  suivantButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Empêcher la redirection immédiate
+    if (!selected) {
+      // Si aucune option n'est sélectionnée, afficher le pop-up
+      selectionPopup.style.display = 'flex';
+    } else {
+      // Si une option est sélectionnée, rediriger vers la page suivante
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape4-1-tissu-choix-tissu.php'; // Redirection vers l'étape suivante
+      }, 500);
+    }
+  });
+
+  // Fermeture du pop-up de sélection
+  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+    selectionPopup.style.display = 'none'; // Fermer le pop-up
+  });
+
+  // Option supplémentaire : fermer le pop-up de sélection si clic à l'extérieur
+  window.addEventListener('click', (event) => {
+    if (event.target === selectionPopup) {
+      selectionPopup.style.display = 'none';
+    }
+  });
+
+  // Gestion du pop-up "Besoin d'aide"
+  document.querySelector('.btn-aide').addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+
+  // Gestion du pop-up "Abandonner"
+  document.querySelector('.btn-abandonner').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
+  // Si l'utilisateur clique sur "Oui" pour abandonner
+  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
     document.body.classList.remove('show');
     setTimeout(() => {
-      window.location.href = '../pages/';
+      window.location.href = '../pages/'; // Redirection en cas d'abandon
     }, 500);
   });
 
-  // Masquer le popup avec le bouton "Non !"
-  noButton.addEventListener('click', () => {
-    console.log('Popup fermé via le bouton Non !');
-    popup.style.display = 'none';
+  // Si l'utilisateur clique sur "Non" pour annuler l'abandon
+  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'none'; // Fermer le pop-up d'abandon
   });
 
-  // Fermer le popup si clic à l'extérieur
+  // Fermer le pop-up d'abandon si clic à l'extérieur
   window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
+    if (event.target === abandonnerPopup) {
+      abandonnerPopup.style.display = 'none';
     }
   });
 });
 </script>
+
+
+
+
 </main>
 <?php require_once '../../squelette/footer.php'?>
 

@@ -97,41 +97,6 @@ $decoration = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Afficher les éléments avec la classe "transition"
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
-      });
-
-      // Sélection des images
-      const images = document.querySelectorAll('.color-options .option img');
-      const mainImage = document.querySelector('.main-display img');
-      
-      images.forEach(img => {
-        img.addEventListener('click', () => {
-          // Supprimer la classe "selected" de toutes les images
-          images.forEach(opt => opt.classList.remove('selected'));
-          
-          // Ajouter la classe "selected" à l'image cliquée
-          img.classList.add('selected');
-          
-          // Mettre à jour l'image principale affichée à droite
-          mainImage.src = img.src;
-          mainImage.alt = img.alt;
-        });
-      });
-
-      // Sélection du bouton "Suivant"
-      const suivantButton = document.querySelector('.btn-suivant');
-      
-      // Action du bouton "Suivant" : rediriger vers la page suivante
-      suivantButton.addEventListener('click', () => {
-        window.location.href = 'etape5-bois-accoudoir.php'; 
-      });
-    });
-    </script>
-
     <!-- Colonne de droite -->
     <div class="right-column transition">
       <section class="main-display">
@@ -166,51 +131,83 @@ $decoration = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
+  <div id="selection-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Veuillez choisir une option avant de continuer.</h2>
+      <br>
+      <button class="close-btn">OK</button>
+      </div>
+  </div>
+
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-    const popup = document.getElementById('help-popup');
-    const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
+   document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-options .option img'); 
+  const mainImage = document.querySelector('.main-display img'); 
+  const suivantButton = document.querySelector('.btn-suivant');
+  const helpPopup = document.getElementById('help-popup');
+  const abandonnerPopup = document.getElementById('abandonner-popup');
+  const selectionPopup = document.getElementById('selection-popup');
+  let selected = false; 
 
-    // Afficher le popup
-    openButton.addEventListener('click', () => {
-      popup.style.display = 'flex';
-    });
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show'); 
+  });
 
-    // Masquer le popup avec le bouton "Merci !"
-    closeButton.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
-    // Fermer le popup si clic à l'extérieur
-    window.addEventListener('click', (event) => {
-      if (event.target === popup) {
-        popup.style.display = 'none';
-      }
-    });
-
-    // Afficher le popup d'abandon
-    document.querySelector('.btn-abandonner').addEventListener('click', () => {
-      document.getElementById('abandonner-popup').style.display = 'flex';
-    });
-
-    // Rediriger vers la page d'accueil avec le bouton "Oui ..."
-    document.querySelector('.yes-btn').addEventListener('click', () => {
-      window.location.href = '../pages/';
-    });
-
-    // Masquer le popup d'abandon avec le bouton "Non !"
-    document.querySelector('.no-btn').addEventListener('click', () => {
-      document.getElementById('abandonner-popup').style.display = 'none';
-    });
-
-    // Fermer le popup d'abandon si clic à l'extérieur
-    window.addEventListener('click', (event) => {
-      if (event.target === document.getElementById('abandonner-popup')) {
-        document.getElementById('abandonner-popup').style.display = 'none';
-      }
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      options.forEach(opt => opt.classList.remove('selected'));
+      img.classList.add('selected');
+      mainImage.src = img.src;
+      selected = true;  
     });
   });
+
+  suivantButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (!selected) {
+      selectionPopup.style.display = 'flex';
+    } else {
+      document.body.classList.remove('show');
+      setTimeout(() => {
+        window.location.href = 'etape5-bois-accoudoir.php';
+      }, 500);
+    }
+  });
+
+  document.querySelector('.btn-aide').addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+
+  document.querySelector('.btn-abandonner').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
+  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+    document.body.classList.remove('show');
+    setTimeout(() => {
+      window.location.href = '../pages/';
+    }, 500);
+  });
+
+  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+    abandonnerPopup.style.display = 'none';
+  });
+
+  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+    selectionPopup.style.display = 'none';
+  });
+
+});
   </script>
 
 </main>

@@ -86,6 +86,8 @@ if (!isset($_SESSION['user_id'])) {
       </div>
     </div>
 
+
+
     <script>
   document.addEventListener('DOMContentLoaded', () => {
     // Afficher les éléments avec la classe "transition"
@@ -93,16 +95,7 @@ if (!isset($_SESSION['user_id'])) {
       element.classList.add('show');
     });
 
-    // Sélection des boutons
-    const suivantButton = document.querySelector('.btn-suivant');
-
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'etape2-type-banquette.php';
-      }, 500);
-    });
+   
   });
 </script>
 
@@ -128,62 +121,119 @@ if (!isset($_SESSION['user_id'])) {
     <button class="close-btn">Merci !</button>
 
   </div>
+</div><!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
+  <div class="popup-content">
+    <h2>Veuillez choisir une option avant de continuer.</h2>
+    <button class="close-btn">OK</button>
+  </div>
 </div>
-  <script>
+
+<script>
 document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('help-popup');
-  const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
+  // Sélection des éléments
+  const suivantButton = document.querySelector('.btn-suivant');
+  const erreurPopup = document.getElementById('erreur-popup');
+  const closeErreurBtn = erreurPopup.querySelector('.close-btn'); // Sélection spécifique du bouton de fermeture
+  const longueurAInput = document.getElementById('longueurA');
+  const longueurBInput = document.getElementById('longueurB');
 
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Aide cliqué');
-    popup.style.display = 'flex';
+  suivantButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Empêche la redirection immédiate
+
+    const longueurA = longueurAInput.value.trim();
+    const longueurB = longueurBInput.value.trim();
+
+    if (!longueurA || !longueurB) {
+      // Afficher le popup d'erreur si les dimensions ne sont pas remplies
+      erreurPopup.style.display = 'flex';
+    } else {
+      // Redirection vers la page suivante si toutes les dimensions sont remplies
+      window.location.href = 'etape2-type-banquette.php';
+    }
   });
 
-  // Masquer le popup avec le bouton "Merci !"
-  closeButton.addEventListener('click', () => {
-    console.log('Bouton Merci cliqué');
-    popup.style.display = 'none';
+  // Fermer le popup d'erreur lorsque le bouton "OK" est cliqué
+  closeErreurBtn.addEventListener('click', () => {
+    erreurPopup.style.display = 'none';
   });
 
-  // Fermer le popup si clic à l'extérieur
+  // Fermer le popup d'erreur si l'utilisateur clique à l'extérieur du pop-up
   window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
+    if (event.target === erreurPopup) {
+      erreurPopup.style.display = 'none';
     }
   });
 });
 </script>
 
 
+
+<!-- Colonne de droite -->
+<div class="right-column transition">
+  <section class="main-display">
+    <div class="buttons transition">
+      <button class="btn-aide">Besoin d'aide ?</button>
+      <button class="btn-abandonner">Abandonner</button>
+    </div>
+    <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
+  </section>
+</div>
+
 <!-- Popup besoin d'aide -->
-<div id="abandonner-popup" class="popup transition">
+<div id="help-popup" class="popup transition">
   <div class="popup-content">
-    <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-      <br>
-    <button class="yes-btn">Oui ...</button>
-    <button class="no-btn">Non !</button>
-
-
+    <h2>Vous avez une question ?</h2>
+    <p>Contactez-nous au numéro suivant et un vendeur vous assistera :</p>
+    <strong>06 58 47 58 56</strong>
+    <br><br>
+    <button class="close-btn">Merci !</button>
   </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const openHelpButton = document.querySelector('.btn-aide');
+  const helpPopup = document.getElementById('help-popup');
+  const closeHelpButton = document.querySelector('.close-btn');
 
-<script>document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-abandonner'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('abandonner-popup');
-  const yesButton = document.querySelector('.yes-btn'); // Bouton "Oui ..." pour redirection
-  const noButton = document.querySelector('.no-btn'); // Bouton "Non !" pour fermer le popup
-
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Abandonner cliqué');
-    popup.style.display = 'flex';
+  openHelpButton.addEventListener('click', () => {
+    helpPopup.style.display = 'flex';
   });
 
-  // Rediriger vers la page d'accueil avec le bouton "Oui ..."
+  closeHelpButton.addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === helpPopup) {
+      helpPopup.style.display = 'none';
+    }
+  });
+});
+</script>
+
+<!-- Popup abandon -->
+<div id="abandonner-popup" class="popup transition">
+  <div class="popup-content">
+    <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
+    <br>
+    <button class="yes-btn">Oui ...</button>
+    <button class="no-btn">Non !</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const openAbandonnerButton = document.querySelector('.btn-abandonner');
+  const abandonnerPopup = document.getElementById('abandonner-popup');
+  const yesButton = document.querySelector('.yes-btn');
+  const noButton = document.querySelector('.no-btn');
+
+  openAbandonnerButton.addEventListener('click', () => {
+    abandonnerPopup.style.display = 'flex';
+  });
+
   yesButton.addEventListener('click', () => {
     document.body.classList.remove('show');
     setTimeout(() => {
@@ -191,21 +241,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
   });
 
-  // Masquer le popup avec le bouton "Non !"
   noButton.addEventListener('click', () => {
-    console.log('Popup fermé via le bouton Non !');
-    popup.style.display = 'none';
+    abandonnerPopup.style.display = 'none';
   });
 
-  // Fermer le popup si clic à l'extérieur
   window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
+    if (event.target === abandonnerPopup) {
+      abandonnerPopup.style.display = 'none';
     }
   });
 });
 </script>
+
+
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>
