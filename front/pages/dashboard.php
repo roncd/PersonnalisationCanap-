@@ -89,7 +89,7 @@ if (!isset($_SESSION['user_id'])) {
 </header>
 <main>
     <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>
-    <img class="img" src="../../medias/IMG_8107.JPG" alt="Image d'illustration">
+    <img class="img" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png" alt="Image d'illustration">
     <div class="buttons">
         <a href="../EtapesPersonnalisation/etape1-1-structure.php" class="btn-valider">Commencer la personnalisation</a>
     </div>

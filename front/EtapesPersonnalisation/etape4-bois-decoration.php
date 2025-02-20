@@ -104,7 +104,7 @@ $decoration = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
+        <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
       </section>
     </div>
   </div>
