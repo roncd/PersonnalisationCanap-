@@ -73,7 +73,7 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <?php if (!empty($dossier_bois)): ?>
         <?php foreach ($dossier_bois as $dossier_bois): ?>
           <div class="option transition">
-            <img src="../../admin/uploads/dossier_bois/<?php echo htmlspecialchars($dossier_bois['img']); ?>" alt="<?php echo htmlspecialchars($dossier_bois['nom']); ?>">
+            <img src="../../admin/uploads/dossier-bois/<?php echo htmlspecialchars($dossier_bois['img']); ?>" alt="<?php echo htmlspecialchars($dossier_bois['nom']); ?>">
             <p><?php echo htmlspecialchars($dossier_bois['nom']); ?></p>
             <p><strong><?php echo htmlspecialchars($dossier_bois['prix']); ?> €</strong></p>
           </div>
@@ -99,7 +99,7 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
+        <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
       </section>
     </div>
   </div>

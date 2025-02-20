@@ -36,51 +36,51 @@ if (!isset($_SESSION['user_id'])) {
       <h2>Récapitulatif de la commande</h2><section class="color-options">
   <h3>Étape 1 : Choisi ta structure</h3>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+    <img src="../../medias/canape.jpg" alt="Armoire">
     <p>Armoire</p>
     <span>20 €</span>
   </div>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Tissu">
+    <img src="../../medias/canape.jpg" alt="Tissu">
     <p>Tissu</p>
     <span>30 €</span>
   </div>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Torsade">
+    <img src="../../medias/canape.jpg" alt="Torsade">
     <p>Torsade</p>
     <span>40 €</span>
   </div>
 
   <h3>Étape 1 : Choisi tes dimensions</h3>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Option 4">
+    <img src="../../medias/canape.jpg" alt="Option 4">
     <p>Option 4</p>
     <span>50 €</span>
   </div>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Option 5">
+    <img src="../../medias/canape.jpg" alt="Option 5">
     <p>Option 5</p>
     <span>60 €</span>
   </div>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Option 6">
+    <img src="../../medias/canape.jpg" alt="Option 6">
     <p>Option 6</p>
     <span>70 €</span>
   </div>
 
   <h3>Étape 2 : Choisi ton type de banquette</h3>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Option 7">
+    <img src="../../medias/canape.jpg" alt="Option 7">
     <p>Option 7</p>
     <span>80 €</span>
   </div>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Option 8">
+    <img src="../../medias/canape.jpg" alt="Option 8">
     <p>Option 8</p>
     <span>90 €</span>
   </div>
   <div class="option">
-    <img src="../../medias/boisnoir.jpeg" alt="Option 9">
+    <img src="../../medias/canape.jpg" alt="Option 9">
     <p>Option 9</p>
     <span>100 €</span>
   </div>
@@ -103,7 +103,7 @@ if (!isset($_SESSION['user_id'])) {
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/recap.png" alt="Armoire">
+        <img src="../../medias/canapekenitra.png" alt="Armoire">
 
         
       <!-- Section commentaire -->
