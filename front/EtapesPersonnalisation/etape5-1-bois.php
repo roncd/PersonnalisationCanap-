@@ -70,7 +70,7 @@
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire">
+        <img src="../../medias/process-main-image.png" alt="Armoire">
       </section>
     </div>
   </div>

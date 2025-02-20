@@ -59,7 +59,6 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
     <li><a href="etape6-bois-dossier.php">Dossier</a></li>
     <li><a href="etape7-bois-mousse.php" class="active">Mousse</a></li>
-    <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
   </ul>
 </div>
   <div class="container">
@@ -97,7 +96,7 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
+        <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
       </section>
     </div>
   </div>

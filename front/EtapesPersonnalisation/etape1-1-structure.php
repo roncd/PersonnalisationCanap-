@@ -90,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
     </div>
+    
 
     <div class="right-column transition">
       <section class="main-display">
@@ -97,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <button class="btn-aide">Besoin d'aide ?</button>
           <button class="btn-abandonner">Abandonner</button>
         </div>
-        <img src="../../medias/boisnoir.jpeg" alt="Armoire" class="transition">
+        <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
       </section>
     </div>
   </div>
