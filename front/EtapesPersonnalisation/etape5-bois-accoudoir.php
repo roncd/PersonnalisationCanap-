@@ -18,6 +18,7 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
@@ -62,47 +63,54 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <li><a href="etape7-bois-mousse.php">Mousse</a></li>
     <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
   </ul>
-</div>
-  <div class="container">
-    <!-- Colonne de gauche -->
-    <div class="left-column transition">
-      <h2>Étape 5 - Ajoute tes accoudoirs</h2>
-      
-      <section class="color-options">
+</div><div class="container">
+  <!-- Colonne de gauche -->
+  <div class="left-column transition">
+    <h2>Étape 5 - Ajoute tes accoudoirs</h2>
+    
+    <section class="color-options">
       <?php if (!empty($accoudoir_bois)): ?>
         <?php foreach ($accoudoir_bois as $accoudoir): ?>
           <div class="option transition">
-              <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($accoudoir['img']); ?>" alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>">
-              <p><?php echo htmlspecialchars($accoudoir['nom']); ?></p>
-              <p><strong><?php echo htmlspecialchars($accoudoir['prix']); ?> €</strong></p>
+            <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($accoudoir['img']); ?>" alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>">
+            <p><?php echo htmlspecialchars($accoudoir['nom']); ?></p>
+            <p><strong><?php echo htmlspecialchars($accoudoir['prix']); ?> €</strong></p>
+
+            <!-- Compteur de quantité -->
+            <div class="quantity-selector1">
+              <button class="btn-decrease" onclick="updateQuantity(this, -1)">-</button>
+              <input type="text" class="quantity-input1" value="0" readonly>
+              <button class="btn-increase" onclick="updateQuantity(this, 1)">+</button>
+            </div>
           </div>
         <?php endforeach; ?>
       <?php else: ?>
         <p>Aucun accoudoir disponible pour le moment.</p>
-      <?php endif; ?>   
-      </section>
+      <?php endif; ?>
+    </section>
 
-      <div class="footer">
-        <p>Total : <span>899 €</span></p>
-        <div class="buttons">
-          <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant transition">Suivant</button>
-        </div>
+    <!-- Footer -->
+    <div class="footer">
+      <p>Total : <span>899 €</span></p>
+      <div class="buttons">
+        <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+        <button class="btn-suivant transition">Suivant</button>
       </div>
     </div>
-    
-
-    <!-- Colonne de droite -->
-    <div class="right-column transition">
-      <section class="main-display">
-        <div class="buttons transition">
-          <button class="btn-aide">Besoin d'aide ?</button>
-          <button class="btn-abandonner">Abandonner</button>
-        </div>
-        <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
-      </section>
-    </div>
   </div>
+  
+  <!-- Colonne de droite -->
+  <div class="right-column transition">
+    <section class="main-display">
+      <div class="buttons transition">
+        <button class="btn-aide">Besoin d'aide ?</button>
+        <button class="btn-abandonner">Abandonner</button>
+      </div>
+      <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
+    </section>
+  </div>
+</div>
+
 
   <!-- Popup besoin d'aide -->
   <div id="help-popup" class="popup transition">
@@ -230,6 +238,17 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
   });
 
 });
+
+function updateQuantity(button, change) {
+  let input = button.parentElement.querySelector('.quantity-input1');
+  let currentValue = parseInt(input.value, 10);
+  let newValue = currentValue + change;
+  
+  // Empêcher d'aller en dessous de 0
+  if (newValue < 0) newValue = 0;
+
+  input.value = newValue;
+}
   </script>
 </main>
 

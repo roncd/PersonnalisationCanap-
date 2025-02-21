@@ -18,13 +18,12 @@ if (!isset($_SESSION['user_id'])) {
     
     <style>
         /* Styles généraux */
-        body {
+        .body {
             font-family: 'Be Vietnam Pro', sans-serif;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            background-color: #f4f4f4;
         }
 
         h1 {
@@ -88,14 +87,17 @@ if (!isset($_SESSION['user_id'])) {
   <?php require '../../squelette/header.php'; ?>
 </header>
 <main>
+    <div class="body">
     <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>
     <img class="img" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png" alt="Image d'illustration">
     <div class="buttons">
         <a href="../EtapesPersonnalisation/etape1-1-structure.php" class="btn-valider">Commencer la personnalisation</a>
     </div>
+    </div>
 </main>
+</body>
+
 <footer>
   <?php require '../../squelette/footer.php'; ?>
 </footer>
-</body>
 </html>
