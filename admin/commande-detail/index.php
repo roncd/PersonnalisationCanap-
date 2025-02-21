@@ -8,7 +8,41 @@ if (!isset($_SESSION['id'])){
     }
 
 $search = $_GET['search'] ?? '';
-?>
+
+$tables = [
+    'client', 'structure', 'type_banquette', 'mousse', 'couleur_bois', 'accoudoir_bois',
+    'dossier_bois', 'couleur_tissu_bois', 'motif_bois', 'modele', 'couleur_tissu',
+    'motif_tissu', 'accoudoir_tissu', 'dossier_tissu', 'decoration'
+];
+
+function fetchData($pdo, $table) {
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$data = [];
+$assocData = [];
+
+foreach ($tables as $table) {
+    $data[$table] = fetchData($pdo, $table);
+
+    // Convertir en tableau associatif clé=id, valeur=nom
+    $assocData[$table] = array_column($data[$table], 'nom', 'id');
+}
+
+$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM dimension");
+$stmt->execute();
+$data['dimension'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$assocData['dimension'] = [];
+
+foreach ($data['dimension'] as $dim) {
+    $assocData['dimension'][$dim['id']] = "{$dim['longueurA']} x {$dim['longueurB']} x {$dim['longueurC']}";
+}
+
+
+?> 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,13 +127,11 @@ $search = $_GET['search'] ?? '';
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>NOM</th>
-                    <th>PRÉNOM</th>
+                    <th>CLIENT_ID</th>
                     <th>TOTAL</th>
                     <th>COMMENTAIRE</th>
                     <th>DATE</th>
                     <th>STATUT</th>
-                    <th>CLIENT_ID</th>
                     <th>STRUCTUR_ID</th>
                     <th>DIMENSION_ID</th>
                     <th>TYPE_BANQUETTE_ID</th>
@@ -125,32 +157,31 @@ $search = $_GET['search'] ?? '';
                         $stmt->execute(['%' . $search . '%']);
                     } else {
                         $stmt = $pdo->query("SELECT * FROM commande_detail");
+                        
                     } 
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "<tr>";
                         echo "<td>{$row['id']}</td>";
-                        echo "<td>{$row['nom']}</td>";
-                        echo "<td>{$row['prenom']}</td>";
+                        echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? 'Inconnu') . "</td>";
                         echo "<td>{$row['prix']}</td>";
                         echo "<td>{$row['commentaire']}</td>";
                         echo "<td>{$row['date']}</td>";
                         echo "<td>{$row['statut']}</td>";
-                        echo "<td>{$row['id_client']}</td>";
-                        echo "<td>{$row['id_structure']}</td>";
-                        echo "<td>{$row['id_dimension']}</td>";
-                        echo "<td>{$row['id_banquette']}</td>";
-                        echo "<td>{$row['id_mousse']}</td>";
-                        echo "<td>{$row['id_couleur_bois']}</td>";
-                        echo "<td>{$row['id_decoration']}</td>";
-                        echo "<td>{$row['id_accoudoir_bois']}</td>";
-                        echo "<td>{$row['id_dossier_bois']}</td>";
-                        echo "<td>{$row['id_couleur_tissu_bois']}</td>";
-                        echo "<td>{$row['id_motif_bois']}</td>";
-                        echo "<td>{$row['id_modele']}</td>";
-                        echo "<td>{$row['id_couleur_tissu']}</td>";
-                        echo "<td>{$row['id_motif_tissu']}</td>";
-                        echo "<td>{$row['id_dossier_tissu']}</td>";
-                        echo "<td>{$row['id_accoudoir_tissu']}</td>";
+                        echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dimension'][$row['id_dimension']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? 'Inconnu') . "</td>";
                         echo "<td class='actions'>";
                         echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'><i class='fas fa-edit'></i></a>";
                         echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette commande détaillé ?\");'><i class='fas fa-trash-alt'></i></a>";
