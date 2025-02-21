@@ -17,6 +17,7 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
@@ -62,18 +63,26 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </ul>
 </div>
 
+
+
 <div class="container">
   <!-- Colonne de gauche -->
   <div class="left-column transition">
     <h2>Étape 6 - Ajoute tes accoudoirs</h2>
-
     <section class="color-2options">
       <?php if (!empty($accoudoir_tissu)): ?>
-        <?php foreach ($accoudoir_tissu as $accoudoir_tissu): ?>
+        <?php foreach ($accoudoir_tissu as $accoudoir): ?>
           <div class="option transition">
-            <img src="../../admin/uploads/accoudoirs-tissu/<?php echo htmlspecialchars($accoudoir_tissu['img']); ?>" alt="<?php echo htmlspecialchars($accoudoir_tissu['nom']); ?>">
-            <p><?php echo htmlspecialchars($accoudoir_tissu['nom']); ?></p>
-            <p><strong><?php echo htmlspecialchars($accoudoir_tissu['prix']); ?> €</strong></p>
+            <img src="../../admin/uploads/accoudoirs-tissu/<?php echo htmlspecialchars($accoudoir['img']); ?>" alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>">
+            <p><?php echo htmlspecialchars($accoudoir['nom']); ?></p>
+            <p><strong><?php echo htmlspecialchars($accoudoir['prix']); ?> €</strong></p>
+
+            <!-- Compteur de quantité (maintenant à l'intérieur de .option) -->
+            <div class="quantity-selector">
+              <button class="btn-decrease" onclick="updateQuantity(this, -1)">-</button>
+              <input type="text" class="quantity-input" value="0" readonly>
+              <button class="btn-increase" onclick="updateQuantity(this, 1)">+</button>
+            </div>
           </div>
         <?php endforeach; ?>
       <?php else: ?>
@@ -81,6 +90,7 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <?php endif; ?>
     </section>
 
+    <!-- Footer -->
     <div class="footer">
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
@@ -101,6 +111,7 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </section>
   </div>
 </div>
+
 
 <!-- Popup de sélection (si aucune option choisie) -->
 <div id="selection-popup" class="popup transition">
@@ -215,9 +226,22 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
       window.location.href = '../pages/'; // Rediriger vers la page d'accueil
     });
   });
+
+  function updateQuantity(button, change) {
+  let input = button.parentElement.querySelector('.quantity-input');
+  let currentValue = parseInt(input.value, 10);
+  let newValue = currentValue + change;
+  
+  // Empêcher d'aller en dessous de 0
+  if (newValue < 0) newValue = 0;
+
+  input.value = newValue;
+}
+
 </script>
 
-<?php require_once '../../squelette/footer.php'?>
 </main>
+<?php require_once '../../squelette/footer.php'?>
+
 </body>
 </html>

@@ -14,6 +14,7 @@ if (!isset($_SESSION['user_id'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
@@ -167,18 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
-
-<!-- Colonne de droite -->
-<div class="right-column transition">
-  <section class="main-display">
-    <div class="buttons transition">
-      <button class="btn-aide">Besoin d'aide ?</button>
-      <button class="btn-abandonner">Abandonner</button>
-    </div>
-    <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
-  </section>
-</div>
 
 <!-- Popup besoin d'aide -->
 <div id="help-popup" class="popup transition">
