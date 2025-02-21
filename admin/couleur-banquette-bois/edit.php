@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
         $fileName = $couleurbois['img'];
         if (!empty($img['name'])) {
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
             if (!in_array($img['type'], $allowedTypes)) {
                 $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
                 $_SESSION['message_type'] = 'error';

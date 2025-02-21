@@ -18,15 +18,17 @@ $statut = isset($_GET['statut']) && in_array($_GET['statut'], ['validation', 'co
     : 'validation'; 
 
 // Récupérer les commandes pour le statut et la page actuels
-$stmt = $pdo->prepare("SELECT * FROM commande_detail WHERE statut = :statut ORDER BY id DESC LIMIT :limit OFFSET :offset");
+$stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id 
+    AS id_client, cl.nom, cl.prenom 
+    FROM commande_detail cd
+    JOIN client cl 
+    ON cd.id_client = cl.id 
+    WHERE statut = :statut ORDER BY id DESC LIMIT :limit OFFSET :offset");
 $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
 $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
 
 // Compter le nombre total de commandes pour ce statut
 $stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM commande_detail WHERE statut = :statut");
@@ -64,7 +66,6 @@ $totalPages = ceil($totalCommandes / $limit);
                 <button onclick="location.href='?statut=construction'" class="tab <?= ($statut === 'construction') ? 'active' : '' ?>">En cours de construction</button>
                 <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
             </div>
-
                     <script>
                         function updateStatus(button) {
                         const commandDiv = button.closest('.commande'); // Récupère la commande liée

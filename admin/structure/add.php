@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mkdir($uploadDir, 0777, true); // Crée le dossier s'il n'existe pas
     }
 
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
     if (!in_array($img['type'], $allowedTypes)) {
         $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
         $_SESSION['message_type'] = 'error';
