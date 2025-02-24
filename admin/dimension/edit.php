@@ -28,20 +28,28 @@ if (!$dimension) {
     exit();
 }
 
+function fetchData($pdo, $table) {
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$structures = fetchData($pdo, 'structure');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer et valider les données
     $longueurA = trim($_POST['longueurA']);
     $longueurB = trim($_POST['longueurB']);
     $longueurC = trim($_POST['longueurC']);
-    $id_strucutre = trim($_POST['id_strucutre']);
+    $idStructure = trim($_POST['structure']);
 
-    if (empty($longueurA) || empty($longueurB) || empty($longueurC) || empty($id_strucutre)) {
+    if (empty($longueurA) || empty($longueurB) || empty($longueurC) ||  empty($idStructure)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
         // Mettre à jour de la dimension dans la base de données
         $stmt = $pdo->prepare("UPDATE dimension SET longueurA = ?, longueurB = ?, longueurC = ?, id_strucutre = ? WHERE id = ?");
-        $stmt->execute([$longueurA, $longueurB, $longueurC, $id_strucutre, $id ]);
+        $stmt->execute([$longueurA, $longueurB, $longueurC, $idStructure, $id ]);
 
         $_SESSION['message'] = 'Dimension mise à jour avec succès!';
         $_SESSION['message_type'] = 'success';
@@ -110,8 +118,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                     <div class="form-group">
-                        <label for="id">Id Structure</label>
-                        <input type="number" id="id" class="input-field" name="id_structure" value="<?php echo htmlspecialchars($dimension['id_structure']); ?>">
+                        <label for="structure">Id Structure</label>
+                        <select class="input-field" id="structure" name="structure">
+                        <option value="">-- Sélectionnez une structure --</option>
+                        <?php foreach ($structures as $structure): ?>
+                            <option value="<?= htmlspecialchars($structure['id']) ?>" 
+                                <?= ($structure['id'] == $dimension['id_structure']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($structure['nom']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                     </div>
                     </div>
                 

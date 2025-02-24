@@ -69,24 +69,30 @@ a {
 
 /* Styles pour les icônes */
 .actions a, .actions span {
-    font-size: 1.2rem;
-    margin: 0;
-    padding: 0;
-    text-decoration: none;
-    color: #000000; /* Couleur des icônes */
-    transition: color 0.3s ease;
+    background-color: black;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 10px;
+    text-align: center;
+    vertical-align:bottom;
+    border: none;
+    border-radius: 10px;
     cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    text-decoration: none;
 }
 
 .actions .vert:hover {
-    color: #28a745; /* Vert pour Modifier */
+    background-color: #28a745; /* Vert pour Modifier */
 }
 
 .actions .rouge:hover {
-    color: #dc3545; /* Rouge pour Supprimer */
+    background-color: #dc3545; /* Rouge pour Supprimer */
 }
 
-
+ 
+ 
 /* Media query pour les très petits écrans */
 @media screen and (max-width: 600px) {
     .styled-table th, .styled-table td {

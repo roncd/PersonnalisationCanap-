@@ -44,17 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idDimension = trim($_POST['dimension']);
     $idBanquette = trim($_POST['banquette']);
     $idMousse = trim($_POST['mousse']);
-    $idCouleurBois = trim($_POST['couleurbois']);
-    $idDecoration = trim($_POST['decoration']);
-    $idAccoudoirBois = trim($_POST['accoudoirbois']);
-    $idDossierBois = trim($_POST['dossierbois']);
-    $idTissuBois = trim($_POST['couleurtissubois']);
-    $idMotifBois = trim($_POST['motifbois']);
-    $idModele = trim($_POST['modele']);
-    $idCouleurTissu = trim($_POST['couleurtissu']);
-    $idMotifTissu = trim($_POST['motiftissu']);
-    $idAccoudoirTissu = trim($_POST['accoudoirtissu']);
-    $idDossierTissu = trim($_POST['dossiertissu']);
+    $idCouleurBois = trim($_POST['couleurbois']) ? $_POST['couleurbois'] : NULL;
+    $idDecoration = trim($_POST['decoration']) ? $_POST['decoration'] : NULL;
+    $idAccoudoirBois = trim($_POST['accoudoirbois']) ? $_POST['accoudoirbois'] : NULL;
+    $idDossierBois = trim($_POST['dossierbois']) ? $_POST['dossierbois'] : NULL;
+    $idTissuBois = trim($_POST['couleurtissubois']) ? $_POST['couleurtissubois'] : NULL;
+    $idMotifBois = trim($_POST['motifbois']) ? $_POST['motifbois'] : NULL;
+    $idModele = trim($_POST['modele']) ? $_POST['modele'] : NULL;
+    $idCouleurTissu = trim($_POST['couleurtissu']) ? $_POST['couleurtissu'] : NULL;
+    $idMotifTissu = trim($_POST['motiftissu']) ? $_POST['motiftissu'] : NULL;
+    $idAccoudoirTissu = trim($_POST['accoudoirtissu']) ? $_POST['accoudoirtissu'] : NULL;
+    $idDossierTissu = trim($_POST['dossiertissu']) ? $_POST['dossiertissu'] : NULL;
 
 
     // Validation des champs obligatoires
