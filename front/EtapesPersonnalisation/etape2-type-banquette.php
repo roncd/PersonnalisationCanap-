@@ -88,16 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main>
   <div class="fil-ariane-container" aria-label="fil-ariane">
     <ul class="fil-ariane">
-      <li><a href="etape1-1-structure.php" class="active">Structure</a></li>
+      <li><a href="etape1-1-structure.php">Structure</a></li>
       <li><a href="etape1-2-dimension.php">Dimension</a></li>
-      <li><a href="etape2-type-banquette.php">Banquette</a></li>
+      <li><a href="etape2-type-banquette.php" class="active">Banquette</a></li>
     </ul>
   </div>
   <div class="container">
     <div class="left-column transition">
       <h2>Étape 2 - Choisi ton type de banquette</h2>
 
-      <section class="color-options">
+      <section class="color-2options">
         <?php foreach ($banquettes as $banquette): ?>
           <div class="option transition">
             <img src="../../admin/uploads/banquette/<?php echo htmlspecialchars($banquette['img']); ?>" 
@@ -112,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
+        <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="banquette_id" id="selected-banquette">
             <input type="hidden" name="banquette_type" id="selected-banquette-type">
@@ -142,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-options .option img'); 
+      const options = document.querySelectorAll('.color-2options .option img'); 
       const selectedBanquetteInput = document.getElementById('selected-banquette');
       const selectedBanquetteTypeInput = document.getElementById('selected-banquette-type');
       const suivantButton = document.querySelector('.btn-suivant');
