@@ -9,13 +9,30 @@ if (!isset($_SESSION['id'])){
 
 // Traitement de la recherche
 $search = $_GET['search'] ?? '';
+
+$tables = ['couleur_tissu_bois'];
+
+function fetchData($pdo, $table) {
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$data = [];
+$assocData = [];
+
+foreach ($tables as $table) {
+    $data[$table] = fetchData($pdo, $table);
+    $assocData[$table] = array_column($data[$table], 'nom', 'id');
+
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motifs de Tissu</title>
+    <title>Motifs de coussins - Bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -74,7 +91,7 @@ $search = $_GET['search'] ?? '';
 
 <main>
     <div class="container">
-        <h2>Motifs des coussins bois</h2>
+        <h2>Motifs des coussins - bois</h2>
         <?php
         if (isset($_SESSION['message'])) {
             echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
@@ -118,11 +135,10 @@ $search = $_GET['search'] ?? '';
                         echo "<td>{$row['nom']}</td>";
                         echo "<td>{$row['prix']}</td>";
                         echo "<td><img src='../uploads/motif-bois/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
-                        echo "<td>{$row['id_couleur_tissu']}</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu']] ?? 'N/A') . "</td>";
                         echo "<td class='actions'>";
-                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'><i class='fas fa-edit'></i></a>";
-                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer ce motif ?\");'><i class='fas fa-trash-alt'></i></a>";
-                        echo "</td>";
+                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";                        echo "</td>";
                         echo "</tr>";
                     }
                     ?>
@@ -131,10 +147,8 @@ $search = $_GET['search'] ?? '';
         </div>
     </div>
 </main>
-
 <footer>
         <?php require '../squelette/footer.php'; ?>
 </footer>
-
 </body>
 </html>

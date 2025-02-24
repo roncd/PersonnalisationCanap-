@@ -26,7 +26,6 @@ $assocData = [];
 
 foreach ($tables as $table) {
     $data[$table] = fetchData($pdo, $table);
-
     // Convertir en tableau associatif clé=id, valeur=nom
     $assocData[$table] = array_column($data[$table], 'nom', 'id');
 }
@@ -153,7 +152,7 @@ foreach ($data['dimension'] as $dim) {
                 <tbody>
                 <?php
                     if ($search) {
-                        $stmt = $pdo->prepare("SELECT * FROM commande_detail WHERE nom LIKE ?");
+                        $stmt = $pdo->prepare("SELECT * FROM commande_detail INNER JOIN client ON commande_detail.id_client = client.id WHERE client.nom LIKE ?");
                         $stmt->execute(['%' . $search . '%']);
                     } else {
                         $stmt = $pdo->query("SELECT * FROM commande_detail");
@@ -162,30 +161,29 @@ foreach ($data['dimension'] as $dim) {
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "<tr>";
                         echo "<td>{$row['id']}</td>";
-                        echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? 'N/A') . "</td>";
                         echo "<td>{$row['prix']}</td>";
                         echo "<td>{$row['commentaire']}</td>";
                         echo "<td>{$row['date']}</td>";
                         echo "<td>{$row['statut']}</td>";
-                        echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['dimension'][$row['id_dimension']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? 'Inconnu') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? 'Inconnu') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dimension'][$row['id_dimension']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? 'N/A') . "</td>";
                         echo "<td class='actions'>";
-                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'><i class='fas fa-edit'></i></a>";
-                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette commande détaillé ?\");'><i class='fas fa-trash-alt'></i></a>";
-                        echo "</td>";
+                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";                        echo "</td>";
                         echo "</tr>";
                     }
                     ?>

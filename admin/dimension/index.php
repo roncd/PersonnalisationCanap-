@@ -7,6 +7,23 @@ if (!isset($_SESSION['id'])){
     exit();
     }
 $search = $_GET['search'] ?? '';
+
+$tables = ['structure'];
+
+function fetchData($pdo, $table) {
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$data = [];
+$assocData = [];
+
+foreach ($tables as $table) {
+    $data[$table] = fetchData($pdo, $table);
+    $assocData[$table] = array_column($data[$table], 'nom', 'id');
+
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +33,6 @@ $search = $_GET['search'] ?? '';
     <title>Dimension</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/tab.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
 </head>
 <body>
@@ -60,14 +76,15 @@ $search = $_GET['search'] ?? '';
                     }
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "<tr>";
+                        echo "<td>{$row['id']}</td>";
                         echo "<td>{$row['longueurA']}</td>";
                         echo "<td>{$row['longueurB']}</td>";
                         echo "<td>{$row['longueurC']}</td>";
                         echo "<td>{$row['prix']}</td>";
-                        echo "<td>{$row['id_structure']}</td>";
+                        echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? ' N/A') . "</td>";
                         echo "<td class='actions'>";
-                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'><i class='fas fa-edit'></i></a>";
-                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'><i class='fas fa-trash-alt'></i></a>";
+                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";
                         echo "</td>";
                         echo "</tr>";
                     }
