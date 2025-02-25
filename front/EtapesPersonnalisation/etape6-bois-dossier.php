@@ -11,6 +11,39 @@ if (!isset($_SESSION['user_id'])) {
 // Récupérer les types de dossier bois depuis la base de données
 $stmt = $pdo->query("SELECT * FROM dossier_bois");
 $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (!isset($_POST['dossier_bois_id']) || empty($_POST['dossier_bois_id'])) {
+    echo "Erreur : Aucun type de bois sélectionné.";
+    exit;
+}
+
+
+$id_client = $_SESSION['user_id'];
+$id_dossier_bois = $_POST['dossier_bois_id'];
+
+
+// Vérifier si une commande temporaire existe déjà pour cet utilisateur
+$stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+$stmt->execute([$id_client]);
+$existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+if ($existing_order) {
+    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_dossier_bois = ? WHERE id_client = ?");
+    $stmt->execute([$id_dossier_bois, $id_client]);
+} else {
+    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_dossier_bois) VALUES (?, ?)");
+    $stmt->execute([$id_client, $id_dossier_bois]);
+}
+
+
+// Rediriger vers l'étape suivante
+header("Location: etape7-bois-mousse.php");
+exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -71,27 +104,34 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <h2>Étape 6 - Choisi ton dossier</h2>
       
       <section class="color-options">
-      <?php if (!empty($dossier_bois)): ?>
-        <?php foreach ($dossier_bois as $dossier_bois): ?>
-          <div class="option transition">
-            <img src="../../admin/uploads/dossier-bois/<?php echo htmlspecialchars($dossier_bois['img']); ?>" alt="<?php echo htmlspecialchars($dossier_bois['nom']); ?>">
-            <p><?php echo htmlspecialchars($dossier_bois['nom']); ?></p>
-            <p><strong><?php echo htmlspecialchars($dossier_bois['prix']); ?> €</strong></p>
-          </div>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p>Aucun dossier disponible pour le moment.</p>
-      <?php endif; ?>
+        <?php if (!empty($dossier_bois)): ?>
+          <?php foreach ($dossier_bois as $bois): ?>
+            <div class="option transition">
+              <img src="../../admin/uploads/dossier-bois/<?php echo htmlspecialchars($bois['img']); ?>"
+                   alt="<?php echo htmlspecialchars($bois['nom']); ?>"
+                   data-bois-id="<?php echo $bois['id']; ?>"
+                   data-bois-prix="<?php echo $bois['prix']; ?>">
+              <p><?php echo htmlspecialchars($bois['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p>Aucune couleur disponible pour le moment.</p>
+        <?php endif; ?>
       </section>
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
           <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant transition">Suivant</button>
+          <form method="POST" action="">
+            <input type="hidden" name="dossier_bois_id" id="selected-dossier_bois">
+            <button type="submit" class="btn-suivant transition">Suivant</button>
+          </form>
         </div>
       </div>
     </div>
+
 
     <!-- Colonne de droite -->
     <div class="right-column transition">
@@ -105,6 +145,7 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
+
   <!-- Popup besoin d'aide -->
   <div id="help-popup" class="popup transition">
     <div class="popup-content">
@@ -117,27 +158,6 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const openButton = document.querySelector('.btn-aide'); 
-    const popup = document.getElementById('help-popup');
-    const closeButton = document.querySelector('.close-btn'); 
-
-    openButton.addEventListener('click', () => {
-      popup.style.display = 'flex';
-    });
-
-    closeButton.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === popup) {
-        popup.style.display = 'none';
-      }
-    });
-  });
-  </script>
 
   <!-- Popup abandon -->
   <div id="abandonner-popup" class="popup transition">
@@ -158,75 +178,85 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 
   <script>
-   document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img'); 
-  const mainImage = document.querySelector('.main-display img'); 
-  const suivantButton = document.querySelector('.btn-suivant');
-  const helpPopup = document.getElementById('help-popup');
-  const abandonnerPopup = document.getElementById('abandonner-popup');
-  const selectionPopup = document.getElementById('selection-popup');
-  let selected = false; 
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
+        const suivantButton = document.querySelector('.btn-suivant');
+        const helpPopup = document.getElementById('help-popup');
+        const abandonnerPopup = document.getElementById('abandonner-popup');
+        const selectionPopup = document.getElementById('selection-popup');
+        const selectedCouleurBoisInput = document.getElementById('selected-dossier_bois'); // Input caché
+        let selected = false;
 
-  document.querySelectorAll('.transition').forEach(element => {
-    element.classList.add('show'); 
-  });
 
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      options.forEach(opt => opt.classList.remove('selected'));
-      img.classList.add('selected');
-      mainImage.src = img.src;
-      selected = true;  
-    });
-  });
+        document.querySelectorAll('.transition').forEach(element => {
+          element.classList.add('show');
+        });
 
-  suivantButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (!selected) {
-      selectionPopup.style.display = 'flex';
-    } else {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'etape7-bois-mousse.php';
-      }, 500);
-    }
-  });
 
-  document.querySelector('.btn-aide').addEventListener('click', () => {
-    helpPopup.style.display = 'flex';
-  });
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedCouleurBoisInput.value = img.getAttribute('data-bois-id'); // Mettre à jour l'input caché
+            selected = true;  
+          });
+        });
 
-  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-    helpPopup.style.display = 'none';
-  });
 
-  window.addEventListener('click', (event) => {
-    if (event.target === helpPopup) {
-      helpPopup.style.display = 'none';
-    }
-  });
+        suivantButton.addEventListener('click', (event) => {
+          if (!selected) {
+            event.preventDefault();
+            selectionPopup.style.display = 'flex';
+          }
+        });
 
-  document.querySelector('.btn-abandonner').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'flex';
-  });
 
-  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-    document.body.classList.remove('show');
-    setTimeout(() => {
-      window.location.href = '../pages/';
-    }, 500);
-  });
+        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+          selectionPopup.style.display = 'none';
+        });
 
-  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'none';
-  });
 
-  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-    selectionPopup.style.display = 'none';
-  });
+        window.addEventListener('click', (event) => {
+          if (event.target === selectionPopup) {
+            selectionPopup.style.display = 'none';
+          }
+        });
 
-});
-  </script>
+
+        document.querySelector('.btn-aide').addEventListener('click', () => {
+          helpPopup.style.display = 'flex';
+        });
+
+
+        document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+          helpPopup.style.display = 'none';
+        });
+
+
+        window.addEventListener('click', (event) => {
+          if (event.target === helpPopup) {
+            helpPopup.style.display = 'none';
+          }
+        });
+
+
+        document.querySelector('.btn-abandonner').addEventListener('click', () => {
+          abandonnerPopup.style.display = 'flex';
+        });
+
+
+        document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+          window.location.href = '../pages/';
+        });
+
+
+        document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+          abandonnerPopup.style.display = 'none';
+        });
+      });
+    </script>
 </main>
 
 <?php require_once '../../squelette/footer.php'?>

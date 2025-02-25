@@ -2,15 +2,18 @@
 require '../../admin/config.php';
 session_start();
 
+
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../formulaire/Connexion.php");
     exit;
 }
 
+
 // Récupérer les modèles disponibles depuis la base de données
 $stmt = $pdo->query("SELECT * FROM modele");
 $modele = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,13 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+
     $id_client = $_SESSION['user_id'];
     $id_modele = $_POST['modele_id'];
+
 
     // Vérifier si une commande temporaire existe déjà pour cet utilisateur
     $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
     $stmt->execute([$id_client]);
     $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
     if ($existing_order) {
         $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_modele = ? WHERE id_client = ?");
@@ -35,11 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$id_client, $id_modele]);
     }
 
+
     // Rediriger vers l'étape suivante
     header("Location: etape4-1-tissu-choix-tissu.php");
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -52,7 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <title>Étape 3 - Choisi ton modèle</title>
 
-  
+
+ 
   <style>
     .transition {
       opacity: 0;
@@ -60,10 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
+
     .transition.show {
       opacity: 1;
       transform: translateY(0);
     }
+
 
     .option img.selected {
       border: 3px solid #997765;
@@ -71,36 +82,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       box-sizing: border-box;
     }
   </style>
-  
+ 
 </head>
 <body>
+
 
 <header>
   <?php require '../../squelette/header.php'; ?>
 </header>
 
+
 <main>
-
-<div class="fil-ariane-container" aria-label="fil-ariane">
-        <ul class="fil-ariane">
-            <li><a href="etape1-1-structure.php">Structure</a></li>
-            <li><a href="etape1-2-dimension.php">Dimension</a></li>
-            <li><a href="etape2-type-banquette.php">Banquette</a></li>
-            <li><a href="etape3-tissu-modele-banquette.php" class="active">Modèle</a></li>
-            <li><a href="etape4-1-tissu-choix-tissu.php" >Tissu</a></li>
-            <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
-            <li><a href="etape6-2-tissu.php">Accoudoir</a></li>
-            <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
-        </ul>
-    </div>
-
   <div class="container">
     <div class="left-column transition">
       <h2>Étape 3 - Choisis ton modèle</h2>
       <section class="color-2options">
         <?php foreach ($modele as $item): ?>
           <div class="option transition">
-            <img src="../../admin/uploads/modele/<?php echo htmlspecialchars($item['img']); ?>" 
+            <img src="../../admin/uploads/modele/<?php echo htmlspecialchars($item['img']); ?>"
                  alt="<?php echo htmlspecialchars($item['nom']); ?>"
                  data-modele-id="<?php echo $item['id']; ?>"
                  data-modele-type="<?php echo htmlspecialchars($item['nom']); ?>">
@@ -121,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
+
     <div class="right-column transition">
       <section class="main-display">
         <div class="buttons transition">
@@ -132,30 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
-  
-    <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup transition">
-        <div class="popup-content">
-            <h2>Vous avez une question ?</h2>
-            <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
-                <br><br>
-            <strong>06 58 47 58 56</strong></p>
-            <br>
-            <button class="close-btn">Merci !</button>
-        </div>
-    </div>
-
-    <!-- Popup abandonner -->
-    <div id="abandonner-popup" class="popup transition">
-        <div class="popup-content">
-            <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-            <br>
-            <button class="yes-btn">Oui ...</button>
-            <button class="no-btn">Non !</button>
-        </div>
-    </div>
-
-    <!-- Pop-up de sélection d'option -->
 
   <div id="selection-popup" class="popup transition">
     <div class="popup-content">
@@ -165,21 +141,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-2options .option img'); 
+      const options = document.querySelectorAll('.color-2options .option img');
       const selectedModeleInput = document.getElementById('selected-modele');
       const selectedModeleTypeInput = document.getElementById('selected-modele-type');
       const suivantButton = document.querySelector('.btn-suivant');
-      const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
-      const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
       const selectionPopup = document.getElementById('selection-popup');
-      const mainImage = document.getElementById('main-image'); 
+      const mainImage = document.getElementById('main-image');
       let selected = false;
+
 
       document.querySelectorAll('.transition').forEach(element => {
         element.classList.add('show');
       });
+
 
       options.forEach(img => {
         img.addEventListener('click', () => {
@@ -188,13 +165,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           selectedModeleInput.value = img.getAttribute('data-modele-id');
           selectedModeleTypeInput.value = img.getAttribute('data-modele-type');
 
+
           // Mise à jour de l'image principale
           mainImage.src = img.src;
           mainImage.alt = img.alt;
 
+
           selected = true;
         });
       });
+
 
       suivantButton.addEventListener('click', (event) => {
         if (!selected) {
@@ -203,36 +183,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       });
 
+
       document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
         selectionPopup.style.display = 'none';
       });
-
-      // Gestion du popup "Besoin d'aide"
-      document.querySelector('.btn-aide').addEventListener('click', () => {
-                helpPopup.style.display = 'flex';
-            });
-
-            document.querySelector('.close-btn').addEventListener('click', () => {
-                helpPopup.style.display = 'none';
-            });
-
-            // Gestion du popup "Abandonner"
-            document.querySelector('.btn-abandonner').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'flex';
-            });
-
-            document.querySelector('.no-btn').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'none';
-            });
-
-            document.querySelector('.yes-btn').addEventListener('click', () => {
-                window.location.href = 'index.php'; // Redirection vers la page d'accueil
-            });
-
-      
     });
   </script>
 </main>
+
 
 <?php require '../../squelette/footer.php'; ?>
 </body>

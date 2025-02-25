@@ -11,6 +11,38 @@ if (!isset($_SESSION['user_id'])) {
 // Récupérer les types d'accoudoirs depuis la base de données
 $stmt = $pdo->query("SELECT * FROM accoudoir_bois");
 $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!isset($_POST['accoudoir_bois_id']) || empty($_POST['accoudoir_bois_id'])) {
+      echo "Erreur : Aucun type de bois sélectionné.";
+      exit;
+  }
+
+
+  $id_client = $_SESSION['user_id'];
+  $id_accoudoir_bois = $_POST['accoudoir_bois_id'];
+
+
+  // Vérifier si une commande temporaire existe déjà pour cet utilisateur
+  $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+  $stmt->execute([$id_client]);
+  $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+  if ($existing_order) {
+      $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_accoudoir_bois = ? WHERE id_client = ?");
+      $stmt->execute([$id_accoudoir_bois, $id_client]);
+  } else {
+      $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_accoudoir_bois) VALUES (?, ?)");
+      $stmt->execute([$id_client, $id_accoudoir_bois]);
+  }
+
+
+  // Rediriger vers l'étape suivante
+  header("Location: etape6-bois-dossier.php");
+  exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -69,47 +101,47 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h2>Étape 5 - Ajoute tes accoudoirs</h2>
     
     <section class="color-options">
-      <?php if (!empty($accoudoir_bois)): ?>
-        <?php foreach ($accoudoir_bois as $accoudoir): ?>
-          <div class="option transition">
-            <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($accoudoir['img']); ?>" alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>">
-            <p><?php echo htmlspecialchars($accoudoir['nom']); ?></p>
-            <p><strong><?php echo htmlspecialchars($accoudoir['prix']); ?> €</strong></p>
-
-            <!-- Compteur de quantité -->
-            <div class="quantity-selector1">
-              <button class="btn-decrease" onclick="updateQuantity(this, -1)">-</button>
-              <input type="text" class="quantity-input1" value="0" readonly>
-              <button class="btn-increase" onclick="updateQuantity(this, 1)">+</button>
+        <?php if (!empty($accoudoir_bois)): ?>
+          <?php foreach ($accoudoir_bois as $bois): ?>
+            <div class="option transition">
+              <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($bois['img']); ?>"
+                   alt="<?php echo htmlspecialchars($bois['nom']); ?>"
+                   data-bois-id="<?php echo $bois['id']; ?>"
+                   data-bois-prix="<?php echo $bois['prix']; ?>">
+              <p><?php echo htmlspecialchars($bois['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
             </div>
-          </div>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p>Aucun accoudoir disponible pour le moment.</p>
-      <?php endif; ?>
-    </section>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p>Aucune couleur disponible pour le moment.</p>
+        <?php endif; ?>
+      </section>
 
-    <!-- Footer -->
-    <div class="footer">
-      <p>Total : <span>899 €</span></p>
-      <div class="buttons">
-        <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
-        <button class="btn-suivant transition">Suivant</button>
+      <div class="footer">
+        <p>Total : <span>899 €</span></p>
+        <div class="buttons">
+          <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+          <form method="POST" action="">
+            <input type="hidden" name="accoudoir_bois_id" id="selected-accoudoir_bois">
+            <button type="submit" class="btn-suivant transition">Suivant</button>
+          </form>
+        </div>
       </div>
     </div>
+
+
+    <!-- Colonne de droite -->
+    <div class="right-column transition">
+      <section class="main-display">
+        <div class="buttons transition">
+          <button class="btn-aide">Besoin d'aide ?</button>
+          <button class="btn-abandonner">Abandonner</button>
+        </div>
+        <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
+      </section>
+    </div>
   </div>
-  
-  <!-- Colonne de droite -->
-  <div class="right-column transition">
-    <section class="main-display">
-      <div class="buttons transition">
-        <button class="btn-aide">Besoin d'aide ?</button>
-        <button class="btn-abandonner">Abandonner</button>
-      </div>
-      <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
-    </section>
-  </div>
-</div>
+
 
 
   <!-- Popup besoin d'aide -->
@@ -124,30 +156,6 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-    const popup = document.getElementById('help-popup');
-    const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
-
-    // Afficher le popup
-    openButton.addEventListener('click', () => {
-      popup.style.display = 'flex';
-    });
-
-    // Masquer le popup avec le bouton "Merci !"
-    closeButton.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
-    // Fermer le popup si clic à l'extérieur
-    window.addEventListener('click', (event) => {
-      if (event.target === popup) {
-        popup.style.display = 'none';
-      }
-    });
-  });
-  </script>
 
   <!-- Popup abandonner -->
   <div id="abandonner-popup" class="popup transition">
@@ -170,86 +178,85 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 
   <script>
-   document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img'); 
-  const mainImage = document.querySelector('.main-display img'); 
-  const suivantButton = document.querySelector('.btn-suivant');
-  const helpPopup = document.getElementById('help-popup');
-  const abandonnerPopup = document.getElementById('abandonner-popup');
-  const selectionPopup = document.getElementById('selection-popup');
-  let selected = false; 
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
+        const suivantButton = document.querySelector('.btn-suivant');
+        const helpPopup = document.getElementById('help-popup');
+        const abandonnerPopup = document.getElementById('abandonner-popup');
+        const selectionPopup = document.getElementById('selection-popup');
+        const selectedCouleurBoisInput = document.getElementById('selected-accoudoir_bois'); // Input caché
+        let selected = false;
 
-  document.querySelectorAll('.transition').forEach(element => {
-    element.classList.add('show'); 
-  });
 
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      options.forEach(opt => opt.classList.remove('selected'));
-      img.classList.add('selected');
-      mainImage.src = img.src;
-      selected = true;  
-    });
-  });
+        document.querySelectorAll('.transition').forEach(element => {
+          element.classList.add('show');
+        });
 
-  suivantButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (!selected) {
-      selectionPopup.style.display = 'flex';
-    } else {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'etape6-bois-dossier.php';
-      }, 500);
-    }
-  });
 
-  document.querySelector('.btn-aide').addEventListener('click', () => {
-    helpPopup.style.display = 'flex';
-  });
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedCouleurBoisInput.value = img.getAttribute('data-bois-id'); // Mettre à jour l'input caché
+            selected = true;  
+          });
+        });
 
-  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-    helpPopup.style.display = 'none';
-  });
 
-  window.addEventListener('click', (event) => {
-    if (event.target === helpPopup) {
-      helpPopup.style.display = 'none';
-    }
-  });
+        suivantButton.addEventListener('click', (event) => {
+          if (!selected) {
+            event.preventDefault();
+            selectionPopup.style.display = 'flex';
+          }
+        });
 
-  document.querySelector('.btn-abandonner').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'flex';
-  });
 
-  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-    document.body.classList.remove('show');
-    setTimeout(() => {
-      window.location.href = '../pages/';
-    }, 500);
-  });
+        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+          selectionPopup.style.display = 'none';
+        });
 
-  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'none';
-  });
 
-  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-    selectionPopup.style.display = 'none';
-  });
+        window.addEventListener('click', (event) => {
+          if (event.target === selectionPopup) {
+            selectionPopup.style.display = 'none';
+          }
+        });
 
-});
 
-function updateQuantity(button, change) {
-  let input = button.parentElement.querySelector('.quantity-input1');
-  let currentValue = parseInt(input.value, 10);
-  let newValue = currentValue + change;
-  
-  // Empêcher d'aller en dessous de 0
-  if (newValue < 0) newValue = 0;
+        document.querySelector('.btn-aide').addEventListener('click', () => {
+          helpPopup.style.display = 'flex';
+        });
 
-  input.value = newValue;
-}
-  </script>
+
+        document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+          helpPopup.style.display = 'none';
+        });
+
+
+        window.addEventListener('click', (event) => {
+          if (event.target === helpPopup) {
+            helpPopup.style.display = 'none';
+          }
+        });
+
+
+        document.querySelector('.btn-abandonner').addEventListener('click', () => {
+          abandonnerPopup.style.display = 'flex';
+        });
+
+
+        document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+          window.location.href = '../pages/';
+        });
+
+
+        document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+          abandonnerPopup.style.display = 'none';
+        });
+      });
+    </script>
 </main>
 
 <?php require_once '../../squelette/footer.php' ?>
