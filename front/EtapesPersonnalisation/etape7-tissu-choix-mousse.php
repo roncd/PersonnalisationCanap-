@@ -11,7 +11,36 @@ if (!isset($_SESSION['user_id'])) {
 // Récupérer les types de mousse depuis la base de données
 $stmt = $pdo->query("SELECT * FROM mousse");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['mousse_id']) || empty($_POST['mousse_id'])) {
+        echo "Erreur : Aucun type de mousse sélectionné.";
+        exit;
+    }
+
+    $id_client = $_SESSION['user_id'];
+    $id_mousse = $_POST['mousse_id'];
+
+    // Vérifier si une commande temporaire existe déjà pour cet utilisateur
+    $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+    $stmt->execute([$id_client]);
+    $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($existing_order) {
+        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ? WHERE id_client = ?");
+        $stmt->execute([$id_mousse, $id_client]);
+    } else {
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse) VALUES (?, ?)");
+        $stmt->execute([$id_client, $id_mousse]);
+    }
+
+    // Rediriger vers l'étape suivante
+    header("Location: recapitulatif-commande.php");
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -51,41 +80,49 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <main>
 <div class="fil-ariane-container" aria-label="fil-ariane">
-  <ul class="fil-ariane">
-    <li><a href="etape1-1-structure.php">Structure</a></li>
-    <li><a href="etape1-2-dimension.php">Dimension</a></li>
-    <li><a href="etape2-type-banquette.php">Banquette</a></li>
-    <li><a href="etape3-bois-couleur.php">Couleur</a></li>
-    <li><a href="etape4-bois-decoration.php">Décoration</a></li>
-    <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
-    <li><a href="etape6-bois-dossier.php">Dossier</a></li>
-    <li><a href="etape7-bois-mousse.php" class="active">Mousse</a></li>
-  </ul>
-</div>
+        <ul class="fil-ariane">
+            <li><a href="etape1-1-structure.php">Structure</a></li>
+            <li><a href="etape1-2-dimension.php">Dimension</a></li>
+            <li><a href="etape2-type-banquette.php">Banquette</a></li>
+            <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
+            <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
+            <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
+            <li><a href="etape6-2-tissu.php">Accoudoir</a></li>
+            <li><a href="etape7-tissu-choix-mousse.php"  class="active">Mousse</a></li>
+        </ul>
+    </div>
+
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column transition">
-      <h2>Étape 7 - Choisi ta mousse</h2>
+
+    <h2>Étape 7 - Choisi ta mousse</h2>
       
       <section class="color-options">
-      <?php if (!empty($mousse)): ?>
-      <?php foreach ($mousse as $mousse): ?>
-        <div class="option transition">
-            <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($mousse['img']); ?>" alt="<?php echo htmlspecialchars($mousse['nom']); ?>">
-            <p><?php echo htmlspecialchars($mousse['nom']); ?></p>
-            <p><strong><?php echo htmlspecialchars($mousse['prix']); ?> €</strong></p>
-        </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>Aucune mousse disponible pour le moment.</p>
-<?php endif; ?>          
+        <?php if (!empty($mousse)): ?>
+          <?php foreach ($mousse as $tissu): ?>
+            <div class="option transition">
+              <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($tissu['img']); ?>" 
+                   alt="<?php echo htmlspecialchars($tissu['nom']); ?>" 
+                   data-mousse-id="<?php echo $tissu['id']; ?>" 
+                   data-mousse-prix="<?php echo $tissu['prix']; ?>"> 
+              <p><?php echo htmlspecialchars($tissu['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($tissu['prix']); ?> €</strong></p>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p>Aucune mousse disponible pour le moment.</p>
+        <?php endif; ?>          
       </section>
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
           <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant transition">Suivant</button>
+          <form method="POST" action="">
+            <input type="hidden" name="mousse_id" id="selected-mousse">
+            <button type="submit" class="btn-suivant transition">Suivant</button>
+          </form>
         </div>
       </div>
     </div>
@@ -102,135 +139,106 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
   <!-- Popup besoin d'aide -->
-<div id="help-popup" class="popup transition">
-  <div class="popup-content">
-    <h2>Vous avez une question ?</h2>
-    <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
-      <br><br>
-    <strong>06 58 47 58 56</strong></p>
-      <br>
-    <button class="close-btn">Merci !</button>
-
+  <div id="help-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Vous avez une question ?</h2>
+      <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
+        <br><br>
+      <strong>06 58 47 58 56</strong></p>
+        <br>
+      <button class="close-btn">Merci !</button>
+    </div>
   </div>
-</div>
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('help-popup');
-  const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
 
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Aide cliqué');
-    popup.style.display = 'flex';
-  });
-
-  // Masquer le popup avec le bouton "Merci !"
-  closeButton.addEventListener('click', () => {
-    console.log('Bouton Merci cliqué');
-    popup.style.display = 'none';
-  });
-
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
-    }
-  });
-});
-</script>
-
-
-<!-- Popup besoin d'aide -->
-<div id="abandonner-popup" class="popup transition">
-  <div class="popup-content">
-    <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-      <br>
-    <button class="yes-btn">Oui ...</button>
-    <button class="no-btn">Non !</button>
+  <!-- Popup abandonner -->
+  <div id="abandonner-popup" class="popup transition">
+    <div class="popup-content">
+      <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+        <br>
+      <button class="yes-btn">Oui ...</button>
+      <button class="no-btn">Non !</button>
+    </div>
   </div>
-</div>
 
-<div id="selection-popup" class="popup transition">
+  <div id="selection-popup" class="popup transition">
     <div class="popup-content">
       <h2>Veuillez choisir une option avant de continuer.</h2>
       <br>
       <button class="close-btn">OK</button>
-      </div>
+    </div>
   </div>
 
   <script>
-   document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img'); 
-  const mainImage = document.querySelector('.main-display img'); 
-  const suivantButton = document.querySelector('.btn-suivant');
-  const helpPopup = document.getElementById('help-popup');
-  const abandonnerPopup = document.getElementById('abandonner-popup');
-  const selectionPopup = document.getElementById('selection-popup');
-  let selected = false; 
+    document.addEventListener('DOMContentLoaded', () => {
+      const options = document.querySelectorAll('.color-options .option img'); 
+      const mainImage = document.querySelector('.main-display img'); 
+      const suivantButton = document.querySelector('.btn-suivant');
+      const helpPopup = document.getElementById('help-popup');
+      const abandonnerPopup = document.getElementById('abandonner-popup');
+      const selectionPopup = document.getElementById('selection-popup');
+      const selectedMousseInput = document.getElementById('selected-mousse'); // Input caché
+      let selected = false; 
 
-  document.querySelectorAll('.transition').forEach(element => {
-    element.classList.add('show'); 
-  });
+      document.querySelectorAll('.transition').forEach(element => {
+        element.classList.add('show'); 
+      });
 
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      options.forEach(opt => opt.classList.remove('selected'));
-      img.classList.add('selected');
-      mainImage.src = img.src;
-      selected = true;  
+      options.forEach(img => {
+        img.addEventListener('click', () => {
+          options.forEach(opt => opt.classList.remove('selected'));
+          img.classList.add('selected');
+          mainImage.src = img.src;
+          selectedMousseInput.value = img.getAttribute('data-mousse-id'); // Mettre à jour l'input caché
+          selected = true;  
+        });
+      });
+
+      suivantButton.addEventListener('click', (event) => {
+        if (!selected) {
+          event.preventDefault();
+          selectionPopup.style.display = 'flex';
+        }
+      });
+
+      document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+        selectionPopup.style.display = 'none';
+      });
+
+      window.addEventListener('click', (event) => {
+        if (event.target === selectionPopup) {
+          selectionPopup.style.display = 'none';
+        }
+      });
+
+      document.querySelector('.btn-aide').addEventListener('click', () => {
+        helpPopup.style.display = 'flex';
+      });
+
+      document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+        helpPopup.style.display = 'none';
+      });
+
+      window.addEventListener('click', (event) => {
+        if (event.target === helpPopup) {
+          helpPopup.style.display = 'none';
+        }
+      });
+
+      document.querySelector('.btn-abandonner').addEventListener('click', () => {
+        abandonnerPopup.style.display = 'flex';
+      });
+
+      document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+        window.location.href = '../pages/';
+      });
+
+      document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+        abandonnerPopup.style.display = 'none';
+      });
     });
-  });
-
-  suivantButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (!selected) {
-      selectionPopup.style.display = 'flex';
-    } else {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'recapitulatif-commande.php';
-      }, 500);
-    }
-  });
-
-  document.querySelector('.btn-aide').addEventListener('click', () => {
-    helpPopup.style.display = 'flex';
-  });
-
-  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-    helpPopup.style.display = 'none';
-  });
-
-  window.addEventListener('click', (event) => {
-    if (event.target === helpPopup) {
-      helpPopup.style.display = 'none';
-    }
-  });
-
-  document.querySelector('.btn-abandonner').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'flex';
-  });
-
-  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-    document.body.classList.remove('show');
-    setTimeout(() => {
-      window.location.href = '../pages/';
-    }, 500);
-  });
-
-  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'none';
-  });
-
-  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-    selectionPopup.style.display = 'none';
-  });
-
-});
   </script>
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>
 </html>
+
