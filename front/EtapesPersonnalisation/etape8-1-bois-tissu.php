@@ -11,7 +11,39 @@ if (!isset($_SESSION['user_id'])) {
 // Récupérer les types de tissu bois depuis la base de données
 $stmt = $pdo->query("SELECT * FROM couleur_tissu_bois");
 $couleur_tissu_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!isset($_POST['couleur_tissu_bois_id']) || empty($_POST['couleur_tissu_bois_id'])) {
+      echo "Erreur : Aucun type de bois sélectionné.";
+      exit;
+  }
+  
+  
+  $id_client = $_SESSION['user_id'];
+  $id_couleur_tissu_bois = $_POST['couleur_tissu_bois_id'];
+  
+  
+  // Vérifier si une commande temporaire existe déjà pour cet utilisateur
+  $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+  $stmt->execute([$id_client]);
+  $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+  
+  if ($existing_order) {
+      $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_couleur_tissu_bois = ? WHERE id_client = ?");
+      $stmt->execute([$id_couleur_tissu_bois, $id_client]);
+  } else {
+      $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_couleur_tissu_bois) VALUES (?, ?)");
+      $stmt->execute([$id_client, $id_couleur_tissu_bois]);
+  }
+  
+  
+  // Rediriger vers l'étape suivante
+  header("Location: etape8-2-bois-tissu-coussin.php");
+  exit;
+  }
+  ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -66,23 +98,29 @@ $couleur_tissu_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <h2>Étape 8 - Choisi ton tissu</h2>
       <section class="color-options">
         <?php if (!empty($couleur_tissu_bois)): ?>
-          <?php foreach ($couleur_tissu_bois as $couleur_tissu_bois): ?>
+          <?php foreach ($couleur_tissu_bois as $bois): ?>
             <div class="option transition">
-              <img src="../../admin/uploads/couleur-tissu-bois/<?php echo htmlspecialchars($couleur_tissu_bois['img']); ?>" alt="<?php echo htmlspecialchars($couleur_tissu_bois['nom']); ?>">
-              <p><?php echo htmlspecialchars($couleur_tissu_bois['nom']); ?></p>
-              <p><strong><?php echo htmlspecialchars($couleur_tissu_bois['prix']); ?> €</strong></p>
+              <img src="../../admin/uploads/couleur-tissu-bois/<?php echo htmlspecialchars($bois['img']); ?>"
+                   alt="<?php echo htmlspecialchars($bois['nom']); ?>"
+                   data-bois-id="<?php echo $bois['id']; ?>"
+                   data-bois-prix="<?php echo $bois['prix']; ?>">
+              <p><?php echo htmlspecialchars($bois['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
             </div>
           <?php endforeach; ?>
         <?php else: ?>
-          <p>Aucun tissu disponible pour le moment.</p>
-        <?php endif; ?>   
+          <p>Aucune couleur disponible pour le moment.</p>
+        <?php endif; ?>
       </section>
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
         <div class="buttons">
           <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant transition">Suivant</button>
+          <form method="POST" action="">
+            <input type="hidden" name="couleur_tissu_bois_id" id="selected-couleur_tissu_bois">
+            <button type="submit" class="btn-suivant transition">Suivant</button>
+          </form>
         </div>
       </div>
     </div>
@@ -129,77 +167,86 @@ $couleur_tissu_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
   </div>
 
-  <script>
-   document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img'); 
-  const mainImage = document.querySelector('.main-display img'); 
-  const suivantButton = document.querySelector('.btn-suivant');
-  const helpPopup = document.getElementById('help-popup');
-  const abandonnerPopup = document.getElementById('abandonner-popup');
-  const selectionPopup = document.getElementById('selection-popup');
-  let selected = false; 
+  <<script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
+        const suivantButton = document.querySelector('.btn-suivant');
+        const helpPopup = document.getElementById('help-popup');
+        const abandonnerPopup = document.getElementById('abandonner-popup');
+        const selectionPopup = document.getElementById('selection-popup');
+        const selectedCouleurBoisInput = document.getElementById('selected-couleur_tissu_bois'); // Input caché
+        let selected = false;
 
-  document.querySelectorAll('.transition').forEach(element => {
-    element.classList.add('show'); 
-  });
 
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      options.forEach(opt => opt.classList.remove('selected'));
-      img.classList.add('selected');
-      mainImage.src = img.src;
-      selected = true;  
-    });
-  });
+        document.querySelectorAll('.transition').forEach(element => {
+          element.classList.add('show');
+        });
 
-  suivantButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (!selected) {
-      selectionPopup.style.display = 'flex';
-    } else {
-      document.body.classList.remove('show');
-      setTimeout(() => {
-        window.location.href = 'etape8-2-bois-tissu-coussin.php';
-      }, 500);
-    }
-  });
 
-  document.querySelector('.btn-aide').addEventListener('click', () => {
-    helpPopup.style.display = 'flex';
-  });
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedCouleurBoisInput.value = img.getAttribute('data-bois-id'); // Mettre à jour l'input caché
+            selected = true;  
+          });
+        });
 
-  document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-    helpPopup.style.display = 'none';
-  });
 
-  window.addEventListener('click', (event) => {
-    if (event.target === helpPopup) {
-      helpPopup.style.display = 'none';
-    }
-  });
+        suivantButton.addEventListener('click', (event) => {
+          if (!selected) {
+            event.preventDefault();
+            selectionPopup.style.display = 'flex';
+          }
+        });
 
-  document.querySelector('.btn-abandonner').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'flex';
-  });
 
-  document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-    document.body.classList.remove('show');
-    setTimeout(() => {
-      window.location.href = '../pages/';
-    }, 500);
-  });
+        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+          selectionPopup.style.display = 'none';
+        });
 
-  document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-    abandonnerPopup.style.display = 'none';
-  });
 
-  document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-    selectionPopup.style.display = 'none';
-  });
+        window.addEventListener('click', (event) => {
+          if (event.target === selectionPopup) {
+            selectionPopup.style.display = 'none';
+          }
+        });
 
-});
-  </script>
 
+        document.querySelector('.btn-aide').addEventListener('click', () => {
+          helpPopup.style.display = 'flex';
+        });
+
+
+        document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+          helpPopup.style.display = 'none';
+        });
+
+
+        window.addEventListener('click', (event) => {
+          if (event.target === helpPopup) {
+            helpPopup.style.display = 'none';
+          }
+        });
+
+
+        document.querySelector('.btn-abandonner').addEventListener('click', () => {
+          abandonnerPopup.style.display = 'flex';
+        });
+
+
+        document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+          window.location.href = '../pages/';
+        });
+
+
+        document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+          abandonnerPopup.style.display = 'none';
+        });
+      });
+    </script>
 </main>
 
 <?php require_once '../../squelette/footer.php'?>

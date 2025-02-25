@@ -2,15 +2,18 @@
 require '../../admin/config.php';
 session_start();
 
+
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../formulaire/Connexion.php");
     exit;
 }
 
+
 // Récupérer les types de bois depuis la base de données
 $stmt = $pdo->query("SELECT * FROM couleur_bois");
 $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,13 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+
     $id_client = $_SESSION['user_id'];
     $id_couleur_bois = $_POST['couleur_bois_id'];
+
 
     // Vérifier si une commande temporaire existe déjà pour cet utilisateur
     $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
     $stmt->execute([$id_client]);
     $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
     if ($existing_order) {
         $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_couleur_bois = ? WHERE id_client = ?");
@@ -35,11 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$id_client, $id_couleur_bois]);
     }
 
+
     // Rediriger vers l'étape suivante
     header("Location: etape4-bois-decoration.php");
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -59,10 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
+
     .transition.show {
       opacity: 1;
       transform: translateY(0);
     }
+
 
     /* Appliquer les transitions aux images sélectionnées */
     .option img.selected {
@@ -74,9 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
+
 <header>
   <?php require '../../squelette/header.php'; ?>
 </header>
+
 
 <main>
   <div class="fil-ariane-container" aria-label="fil-ariane">
@@ -93,19 +105,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </ul>
   </div>
 
+
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column transition">
       <h2>Étape 3 - Choisi ta couleur</h2>
 
+
       <section class="color-options">
-        <?php         if (!empty($couleur_bois)): ?>
+        <?php if (!empty($couleur_bois)): ?>
           <?php foreach ($couleur_bois as $bois): ?>
             <div class="option transition">
-              <img src="../../admin/uploads/couleur-banquette-bois/<?php echo htmlspecialchars($bois['img']); ?>" 
-                   alt="<?php echo htmlspecialchars($bois['nom']); ?>" 
-                   data-bois-id="<?php echo $bois['id']; ?>" 
-                   data-bois-prix="<?php echo $bois['prix']; ?>"> 
+              <img src="../../admin/uploads/couleur-banquette-bois/<?php echo htmlspecialchars($bois['img']); ?>"
+                   alt="<?php echo htmlspecialchars($bois['nom']); ?>"
+                   data-bois-id="<?php echo $bois['id']; ?>"
+                   data-bois-prix="<?php echo $bois['prix']; ?>">
               <p><?php echo htmlspecialchars($bois['nom']); ?></p>
               <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
             </div>
@@ -114,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <p>Aucune couleur disponible pour le moment.</p>
         <?php endif; ?>
       </section>
+
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
@@ -127,6 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
+
     <!-- Colonne de droite -->
     <div class="right-column transition">
       <section class="main-display">
@@ -139,17 +155,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
+
   <!-- Popup besoin d'aide -->
   <div id="help-popup" class="popup transition">
     <div class="popup-content">
       <h2>Vous avez une question ?</h2>
-      <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
+      <p>Contactez nous au numéro suivant et un vendeur vous assistera :
         <br><br>
       <strong>06 58 47 58 56</strong></p>
         <br>
       <button class="close-btn">Merci !</button>
     </div>
   </div>
+
 
   <!-- Popup abandonner -->
   <div id="abandonner-popup" class="popup transition">
@@ -161,6 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
+
   <div id="selection-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
@@ -169,20 +188,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
+
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const options = document.querySelectorAll('.color-options .option img'); 
-        const mainImage = document.querySelector('.main-display img'); 
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
         const suivantButton = document.querySelector('.btn-suivant');
         const helpPopup = document.getElementById('help-popup');
         const abandonnerPopup = document.getElementById('abandonner-popup');
         const selectionPopup = document.getElementById('selection-popup');
         const selectedCouleurBoisInput = document.getElementById('selected-couleur_bois'); // Input caché
-        let selected = false; 
+        let selected = false;
+
 
         document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show'); 
+          element.classList.add('show');
         });
+
 
         options.forEach(img => {
           img.addEventListener('click', () => {
@@ -194,6 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         });
 
+
         suivantButton.addEventListener('click', (event) => {
           if (!selected) {
             event.preventDefault();
@@ -201,9 +224,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         });
 
+
         document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
           selectionPopup.style.display = 'none';
         });
+
 
         window.addEventListener('click', (event) => {
           if (event.target === selectionPopup) {
@@ -211,13 +236,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         });
 
+
         document.querySelector('.btn-aide').addEventListener('click', () => {
           helpPopup.style.display = 'flex';
         });
 
+
         document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
           helpPopup.style.display = 'none';
         });
+
 
         window.addEventListener('click', (event) => {
           if (event.target === helpPopup) {
@@ -225,13 +253,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         });
 
+
         document.querySelector('.btn-abandonner').addEventListener('click', () => {
           abandonnerPopup.style.display = 'flex';
         });
 
+
         document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
           window.location.href = '../pages/';
         });
+
 
         document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
           abandonnerPopup.style.display = 'none';
@@ -240,7 +271,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
   </main>
 
+
   <?php require_once '../../squelette/footer.php'; ?>
+
 
 </body>
 </html>

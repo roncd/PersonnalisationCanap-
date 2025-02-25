@@ -7,6 +7,38 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: ../formulaire/Connexion.php");
     exit;
 }
+
+$id_client = $_SESSION['user_id'];
+
+// Vérifier si une commande temporaire existe déjà pour cet utilisateur
+$stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
+$stmt->execute([$id_client]);
+$commande = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$tables = ['structure', 'type_banquette', 'mousse', 'couleur_bois', 'accoudoir_bois',
+  'dossier_bois', 'couleur_tissu_bois', 'motif_bois', 'decoration'
+];
+
+function fetchData($pdo, $table) {
+  $stmt = $pdo->prepare("SELECT * FROM $table");
+  $stmt->execute();
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$data = [];
+$assocData = [];
+
+foreach ($tables as $table) {
+  $data[$table] = fetchData($pdo, $table);
+  // Convertir en tableau associatif clé=id, valeur=nom
+  foreach ($data[$table] as $item) {
+    $assocData[$table][$item['id']] = [
+        'nom' => $item['nom'],
+        'img' => $item['img'],
+    ];
+}
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -35,56 +67,89 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Colonne de gauche -->
     <div class="left-column">
       <h2>Récapitulatif de la commande</h2><section class="color-options">
+        
   <h3>Étape 1 : Choisi ta structure</h3>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Armoire">
-    <p>Armoire</p>
-    <span>20 €</span>
-  </div>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Tissu">
-    <p>Tissu</p>
-    <span>30 €</span>
-  </div>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Torsade">
-    <p>Torsade</p>
-    <span>40 €</span>
-  </div>
-
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/structure/'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+ 
   <h3>Étape 1 : Choisi tes dimensions</h3>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Option 4">
-    <p>Option 4</p>
-    <span>50 €</span>
-  </div>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Option 5">
-    <p>Option 5</p>
-    <span>60 €</span>
-  </div>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Option 6">
-    <p>Option 6</p>
-    <span>70 €</span>
-  </div>
+
 
   <h3>Étape 2 : Choisi ton type de banquette</h3>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Option 7">
-    <p>Option 7</p>
-    <span>80 €</span>
-  </div>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Option 8">
-    <p>Option 8</p>
-    <span>90 €</span>
-  </div>
-  <div class="option">
-    <img src="../../medias/canape.jpg" alt="Option 9">
-    <p>Option 9</p>
-    <span>100 €</span>
-  </div>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/banquette/'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 3 : Choisi ta couleur de bois</h3>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/couleur-banquette-bois/'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+  <h3>Étape 4 : Choisi ta decoration</h3>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/decoration/'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 5 : Choisi tes accoudoirs</h3>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/accoudoirs-bois/'.htmlspecialchars($assocData['accoudoir_bois'][$commande['id_accoudoir_bois']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['accoudoir_bois'][$commande['id_accoudoir_bois']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['accoudoir_bois'][$commande['id_accoudoir_bois']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 6 : Choisi ton dossier</h3>
+   <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/dossier-bois/'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 7 : Choisi ta mousse</h3>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/mousse/'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 8 : Choisi ton tissu</h3>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/couleur-tissu-bois/'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 8 : Choisi ton motif de coussin</h3>
+   <?php
+   echo '<div class="option">
+          <img src="../../admin/uploads/motif-bois/'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
 </section>
 
 
