@@ -113,9 +113,8 @@ $search = $_GET['search'] ?? '';
                         echo "<td>{$row['prix']}</td>";
                         echo "<td><img src='../uploads/couleur-tissu-bois/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                         echo "<td class='actions'>";
-                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'><i class='fas fa-edit'></i></a>";
-                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette couleur de tissu - bois ?\");'><i class='fas fa-trash-alt'></i></a>";
-                        echo "</td>";
+                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";                        echo "</td>";
                         echo "</tr>";
                     }
                     ?>
