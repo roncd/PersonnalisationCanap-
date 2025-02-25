@@ -125,6 +125,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
+  <!-- Popup besoin d'aide -->
+  <div id="help-popup" class="popup transition">
+        <div class="popup-content">
+            <h2>Vous avez une question ?</h2>
+            <p>Contactez nous au numéro suivant et un vendeur vous assistera : 
+                <br><br>
+            <strong>06 58 47 58 56</strong></p>
+            <br>
+            <button class="close-btn">Merci !</button>
+        </div>
+    </div>
+
+    <!-- Popup abandonner -->
+    <div id="abandonner-popup" class="popup transition">
+        <div class="popup-content">
+            <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+            <br>
+            <button class="yes-btn">Oui ...</button>
+            <button class="no-btn">Non !</button>
+        </div>
+    </div>
+
   <div id="selection-popup" class="popup transition">
     <div class="popup-content">
       <h2>Veuillez sélectionner une option avant de continuer.</h2>
@@ -138,6 +160,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       const options = document.querySelectorAll('.color-options .option img'); 
       const selectedStructureInput = document.getElementById('selected-structure');
       const suivantButton = document.querySelector('.btn-suivant');
+      const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
+      const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
       const selectionPopup = document.getElementById('selection-popup');
       const mainImage = document.getElementById('main-image'); 
       let selected = false;
@@ -171,6 +195,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
         selectionPopup.style.display = 'none';
       });
+
+      
+            // Gestion du popup "Besoin d'aide"
+            document.querySelector('.btn-aide').addEventListener('click', () => {
+                helpPopup.style.display = 'flex';
+            });
+
+            document.querySelector('.close-btn').addEventListener('click', () => {
+                helpPopup.style.display = 'none';
+            });
+
+            // Gestion du popup "Abandonner"
+            document.querySelector('.btn-abandonner').addEventListener('click', () => {
+                abandonnerPopup.style.display = 'flex';
+            });
+
+            document.querySelector('.no-btn').addEventListener('click', () => {
+                abandonnerPopup.style.display = 'none';
+            });
+
+            document.querySelector('.yes-btn').addEventListener('click', () => {
+                window.location.href = 'index.php'; // Redirection vers la page d'accueil
+            });
 
     });
   </script>

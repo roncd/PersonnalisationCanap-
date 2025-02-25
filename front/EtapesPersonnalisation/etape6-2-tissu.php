@@ -11,7 +11,37 @@ if (!isset($_SESSION['user_id'])) {
 // Récupérer les types d'accoudoirs depuis la base de données
 $stmt = $pdo->query("SELECT * FROM accoudoir_tissu");
 $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['accoudoir_tissu_id']) || empty($_POST['accoudoir_tissu_id']) || !isset($_POST['nb_accoudoir']) || empty($_POST['nb_accoudoir'])) {
+        echo "Erreur : Aucun accoudoir ou quantité sélectionné.";
+        exit;
+    }
+
+    $id_client = $_SESSION['user_id'];
+    $id_accoudoir_tissu = $_POST['accoudoir_tissu_id'];
+    $nb_accoudoir = $_POST['nb_accoudoir'];
+
+    // Vérifier si une commande temporaire existe déjà pour cet utilisateur
+    $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+    $stmt->execute([$id_client]);
+    $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($existing_order) {
+        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_accoudoir_tissu = ?, id_nb_accoudoir = ? WHERE id_client = ?");
+        $stmt->execute([$id_accoudoir_tissu, $nb_accoudoir, $id_client]);
+    } else {
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_accoudoir_tissu, id_nb_accoudoir) VALUES (?, ?, ?)");
+        $stmt->execute([$id_client, $id_accoudoir_tissu, $nb_accoudoir]);
+    }
+
+    // Rediriger vers l'étape suivante
+    header("Location: etape7-tissu-choix-mousse.php");
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -55,15 +85,13 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <li><a href="etape1-1-structure.php">Structure</a></li>
     <li><a href="etape1-2-dimension.php">Dimension</a></li>
     <li><a href="etape2-type-banquette.php">Banquette</a></li>
-    <li><a href="etape3-tissu-modele-banquette.php" >Modèle</a></li>
+    <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
     <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
-    <li><a href="etape5-tissu-choix-dossier.php" >Dossier</a></li>
+    <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
     <li><a href="etape6-2-tissu.php" class="active">Accoudoir</a></li>
     <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
   </ul>
 </div>
-
-
 
 <div class="container">
   <!-- Colonne de gauche -->
@@ -73,7 +101,10 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <?php if (!empty($accoudoir_tissu)): ?>
         <?php foreach ($accoudoir_tissu as $accoudoir): ?>
           <div class="option transition">
-            <img src="../../admin/uploads/accoudoirs-tissu/<?php echo htmlspecialchars($accoudoir['img']); ?>" alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>">
+            <img src="../../admin/uploads/accoudoirs-tissu/<?php echo htmlspecialchars($accoudoir['img']); ?>" 
+                 alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>" 
+                 data-accoudoir-id="<?php echo $accoudoir['id']; ?>" 
+                 data-accoudoir-prix="<?php echo $accoudoir['prix']; ?>"> 
             <p><?php echo htmlspecialchars($accoudoir['nom']); ?></p>
             <p><strong><?php echo htmlspecialchars($accoudoir['prix']); ?> €</strong></p>
 
@@ -87,7 +118,7 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
       <?php else: ?>
         <p>Aucun accoudoir disponible pour le moment.</p>
-      <?php endif; ?>
+        <?php endif; ?>
     </section>
 
     <!-- Footer -->
@@ -95,7 +126,12 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
         <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
-        <button class="btn-suivant transition">Suivant</button>
+        <form method="POST" action="">
+        <input type="hidden" name="accoudoir_tissu_id" id="selected-accoudoir_tissu" required>
+<input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
+
+          <button type="submit" class="btn-suivant transition">Suivant</button>
+        </form>
       </div>
     </div>
   </div>
@@ -111,7 +147,6 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </section>
   </div>
 </div>
-
 
 <!-- Popup de sélection (si aucune option choisie) -->
 <div id="selection-popup" class="popup transition">
@@ -142,7 +177,6 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button class="no-btn">Non !</button>
   </div>
 </div>
-
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
@@ -154,6 +188,8 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
     const closeSelectionBtn = document.querySelector('#selection-popup .close-btn');
     const openButton = document.querySelector('.btn-aide');
     const closeButton = document.querySelector('.close-btn');
+    const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
+    const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
     let selected = false; // Variable pour savoir si une option est sélectionnée
 
     // Affichage des éléments avec la classe "transition"
@@ -173,24 +209,32 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // Mettre à jour l'image principale
         mainImage.src = img.src;
         mainImage.alt = img.alt;
+
+        // Mettre à jour l'input caché avec l'ID du tissu sélectionné
+        selectedAccoudoirTissuInput.value = img.getAttribute('data-accoudoir-id');
         selected = true; // Marquer comme sélectionné
       });
     });
 
-    // Action sur le bouton "Suivant"
     suivantButton.addEventListener('click', (event) => {
-      event.preventDefault(); // Empêcher la redirection immédiate
-      if (!selected) {
-        // Si aucune option n'est sélectionnée, afficher le popup
-        selectionPopup.style.display = 'flex';
+  event.preventDefault(); // Empêcher la redirection immédiate
+  if (!selected) {
+    selectionPopup.style.display = 'flex';
+  } else {
+    const selectedOption = document.querySelector('.option img.selected');
+    if (selectedOption) {
+      const quantityInput = selectedOption.closest('.option').querySelector('.quantity-input');
+      selectedNbAccoudoirInput.value = quantityInput.value;
+
+      if (quantityInput.value > 0) {
+        document.forms[0].submit(); // Soumettre le formulaire si une quantité est choisie
       } else {
-        // Si une option est sélectionnée, rediriger vers la page suivante
-        document.body.classList.remove('show');
-        setTimeout(() => {
-          window.location.href = 'etape7-tissu-choix-mousse.php'; // Redirection vers l'étape suivante
-        }, 500);
+        alert("Veuillez choisir une quantité avant de continuer.");
       }
-    });
+    }
+  }
+});
+
 
     // Fermeture du popup de sélection
     closeSelectionBtn.addEventListener('click', () => {
@@ -204,14 +248,15 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
       }
     });
 
-    // Gestion du popup "Besoin d'aide"
-    openButton.addEventListener('click', () => {
-      helpPopup.style.display = 'flex';
-    });
+            // Gestion du popup "Besoin d'aide"
+            document.querySelector('.btn-aide').addEventListener('click', () => {
+                helpPopup.style.display = 'flex';
+            });
 
-    closeButton.addEventListener('click', () => {
-      helpPopup.style.display = 'none';
-    });
+            document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+    helpPopup.style.display = 'none';
+});
+
 
     // Gestion du popup "Abandonner"
     document.querySelector('.btn-abandonner').addEventListener('click', () => {
@@ -228,20 +273,20 @@ $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
   });
 
   function updateQuantity(button, change) {
-  let input = button.parentElement.querySelector('.quantity-input');
-  let currentValue = parseInt(input.value, 10);
-  let newValue = currentValue + change;
-  
-  // Empêcher d'aller en dessous de 0
-  if (newValue < 0) newValue = 0;
+    let input = button.parentElement.querySelector('.quantity-input');
+    let currentValue = parseInt(input.value, 10);
+    let newValue = currentValue + change;
 
-  input.value = newValue;
-}
+    // Empêcher d'aller en dessous de 0
+    if (newValue < 0) newValue = 0;
 
+    input.value = newValue;
+  }
 </script>
 
+
 </main>
-<?php require_once '../../squelette/footer.php'?>
+<?php require_once '../../squelette/footer.php'; ?>
 
 </body>
 </html>
