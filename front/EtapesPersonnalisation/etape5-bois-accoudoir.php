@@ -14,36 +14,53 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['accoudoir_bois_id']) || empty($_POST['accoudoir_bois_id'])) {
-      echo "Erreur : Aucun type de bois sélectionné.";
+  if (!isset($_POST['accoudoir_bois_id']) || empty($_POST['accoudoir_bois_id']) || !isset($_POST['nb_accoudoir']) || empty($_POST['nb_accoudoir'])) {
+      echo "Erreur : Aucun accoudoir ou quantité sélectionné.";
       exit;
   }
 
-
   $id_client = $_SESSION['user_id'];
-  $id_accoudoir_bois = $_POST['accoudoir_bois_id'];
+  $id_accoudoirs = explode(',', $_POST['accoudoir_bois_id']);
+  $nb_accoudoirs = explode(',', $_POST['nb_accoudoir']);
 
-
-  // Vérifier si une commande temporaire existe déjà pour cet utilisateur
+  // Vérifier si une commande temporaire existe
   $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
   $stmt->execute([$id_client]);
-  $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+  $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-  if ($existing_order) {
-      $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_accoudoir_bois = ? WHERE id_client = ?");
-      $stmt->execute([$id_accoudoir_bois, $id_client]);
+  if (!$commande) {
+      // Créer une nouvelle commande temporaire
+      $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client) VALUES (?)");
+      $stmt->execute([$id_client]);
+      $commande_id = $pdo->lastInsertId();
   } else {
-      $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_accoudoir_bois) VALUES (?, ?)");
-      $stmt->execute([$id_client, $id_accoudoir_bois]);
+      $commande_id = $commande['id'];
+      
+      // Supprimer les anciennes entrées de la table pivot
+      $stmt = $pdo->prepare("DELETE FROM commande_temp_accoudoir WHERE id_commande_temporaire = ?");
+      $stmt->execute([$commande_id]);
   }
 
+  // Insérer les nouveaux accoudoirs sélectionnés
+  $stmt = $pdo->prepare("INSERT INTO commande_temp_accoudoir (id_commande_temporaire, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, ?)");
+  
+  foreach ($id_accoudoirs as $index => $id_accoudoir) {
+      $nb = (int) $nb_accoudoirs[$index];
+      if ($nb > 0) {
+          $stmt->execute([$commande_id, $id_accoudoir, $nb]);
+      }
+  }
 
   // Rediriger vers l'étape suivante
   header("Location: etape6-bois-dossier.php");
   exit;
 }
+
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -128,8 +145,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="buttons">
           <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
           <form method="POST" action="">
-            <input type="hidden" name="accoudoir_bois_id" id="selected-accoudoir_bois">
-            <button type="submit" class="btn-suivant transition">Suivant</button>
+          <input type="hidden" name="accoudoir_bois_id" id="selected-accoudoir_bois"> 
+          <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
+          <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
         </div>
       </div>
@@ -182,102 +200,127 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
       </div>
   </div>
-
   <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const options = document.querySelectorAll('.color-options .option img');
-        const mainImage = document.querySelector('.main-display img');
-        const suivantButton = document.querySelector('.btn-suivant');
-        const helpPopup = document.getElementById('help-popup');
-        const abandonnerPopup = document.getElementById('abandonner-popup');
-        const selectionPopup = document.getElementById('selection-popup');
-        const selectedCouleurBoisInput = document.getElementById('selected-accoudoir_bois'); // Input caché
-        let selected = false;
+    document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-options .option img');
+    const mainImage = document.querySelector('.main-display img');
+    const suivantButton = document.querySelector('.btn-suivant');
+    const helpPopup = document.getElementById('help-popup');
+    const abandonnerPopup = document.getElementById('abandonner-popup');
+    const selectionPopup = document.getElementById('selection-popup');
+    const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois'); 
+    const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
+    let selectedOptions = {};
 
+    // Afficher la transition des éléments
+    document.querySelectorAll('.transition').forEach(element => {
+        element.classList.add('show');
+    });
 
-        document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
+    // Sélectionner un accoudoir
+    options.forEach(img => {
+        img.addEventListener('click', () => {
+            const boisId = img.getAttribute('data-bois-id');
+            const parentOption = img.closest('.option');
+            let quantityInput = parentOption.querySelector('.quantity-input1');
+
+            if (selectedOptions[boisId]) {
+                delete selectedOptions[boisId]; // Désélectionner
+                img.classList.remove('selected');
+                quantityInput.value = 0;
+            } else {
+                selectedOptions[boisId] = 1; // Ajouter avec quantité 1 par défaut
+                img.classList.add('selected');
+                quantityInput.value = 1;
+            }
+
+            updateHiddenInputs();
         });
+    });
 
+    // Mettre à jour la quantité
+    document.querySelectorAll('.btn-increase, .btn-decrease').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const parentOption = event.target.closest('.option');
+            const boisId = parentOption.querySelector('img').getAttribute('data-bois-id');
+            let quantityInput = parentOption.querySelector('.quantity-input1');
 
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            img.classList.add('selected');
-            mainImage.src = img.src;
-            selectedCouleurBoisInput.value = img.getAttribute('data-bois-id'); // Mettre à jour l'input caché
-            selected = true;  
-          });
+            if (!selectedOptions[boisId]) return; // Si non sélectionné, ne rien faire
+
+            let newValue = parseInt(quantityInput.value, 10) + (event.target.classList.contains('btn-increase') ? 1 : -1);
+            newValue = Math.max(newValue, 0); // Empêcher d'aller sous 0
+            quantityInput.value = newValue;
+            
+            if (newValue === 0) {
+                delete selectedOptions[boisId]; // Supprimer si quantité = 0
+                parentOption.querySelector('img').classList.remove('selected');
+            } else {
+                selectedOptions[boisId] = newValue;
+            }
+
+            updateHiddenInputs();
         });
+    });
 
+    // Vérifier la sélection avant de passer à l'étape suivante
+    suivantButton.addEventListener('click', (event) => {
+        if (Object.keys(selectedOptions).length === 0 || !selectedNbAccoudoirInput.value || selectedNbAccoudoirInput.value == "0") {
+            event.preventDefault(); 
+            selectionPopup.style.display = 'flex'; 
+        }
+    });
 
-        suivantButton.addEventListener('click', (event) => {
-          if (!selected) {
-            event.preventDefault();
-            selectionPopup.style.display = 'flex';
-          }
-        });
+    // Fermer le popup de sélection
+    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+        selectionPopup.style.display = 'none';
+    });
 
-
-        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-          selectionPopup.style.display = 'none';
-        });
-
-
-        window.addEventListener('click', (event) => {
-          if (event.target === selectionPopup) {
+    window.addEventListener('click', (event) => {
+        if (event.target === selectionPopup) {
             selectionPopup.style.display = 'none';
-          }
-        });
+        }
+    });
 
+    // Afficher l'aide
+    document.querySelector('.btn-aide').addEventListener('click', () => {
+        helpPopup.style.display = 'flex';
+    });
 
-        document.querySelector('.btn-aide').addEventListener('click', () => {
-          helpPopup.style.display = 'flex';
-        });
+    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+        helpPopup.style.display = 'none';
+    });
 
-
-        document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-          helpPopup.style.display = 'none';
-        });
-
-
-        window.addEventListener('click', (event) => {
-          if (event.target === helpPopup) {
+    window.addEventListener('click', (event) => {
+        if (event.target === helpPopup) {
             helpPopup.style.display = 'none';
-          }
-        });
+        }
+    });
+
+    // Afficher le popup d'abandon
+    document.querySelector('.btn-abandonner').addEventListener('click', () => {
+        abandonnerPopup.style.display = 'flex';
+    });
+
+    document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+        window.location.href = '../pages/';
+    });
+
+    document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+        abandonnerPopup.style.display = 'none';
+    });
+
+    // Mettre à jour les champs cachés pour l'envoi du formulaire
+    function updateHiddenInputs() {
+        selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
+        selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
+    }
+});
 
 
-        document.querySelector('.btn-abandonner').addEventListener('click', () => {
-          abandonnerPopup.style.display = 'flex';
-        });
+</script>
 
-
-        document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-          window.location.href = '../pages/';
-        });
-
-
-        document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-          abandonnerPopup.style.display = 'none';
-        });
-      });
-
-      function updateQuantity(button, change) {
-  let input = button.parentElement.querySelector('.quantity-input1');
-  let currentValue = parseInt(input.value, 10);
-  let newValue = currentValue + change;
- 
-  // Empêcher d'aller en dessous de 0
-  if (newValue < 0) newValue = 0;
-
-
-  input.value = newValue;
-}
-
-    </script>
 </main>
 
 <?php require_once '../../squelette/footer.php' ?>
 </body>
-</html>
+</html> 
