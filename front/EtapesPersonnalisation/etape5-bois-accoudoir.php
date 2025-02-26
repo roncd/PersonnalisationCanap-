@@ -110,12 +110,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    data-bois-prix="<?php echo $bois['prix']; ?>">
               <p><?php echo htmlspecialchars($bois['nom']); ?></p>
               <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
+             <!-- Compteur de quantité -->
+             <div class="quantity-selector1">
+              <button class="btn-decrease" onclick="updateQuantity(this, -1)">-</button>
+              <input type="text" class="quantity-input1" value="0" readonly>
+              <button class="btn-increase" onclick="updateQuantity(this, 1)">+</button>
             </div>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <p>Aucune couleur disponible pour le moment.</p>
-        <?php endif; ?>
-      </section>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>Aucun accoudoir disponible pour le moment.</p>
+      <?php endif; ?>
+    </section>
 
       <div class="footer">
         <p>Total : <span>899 €</span></p>
@@ -256,6 +262,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           abandonnerPopup.style.display = 'none';
         });
       });
+
+      function updateQuantity(button, change) {
+  let input = button.parentElement.querySelector('.quantity-input1');
+  let currentValue = parseInt(input.value, 10);
+  let newValue = currentValue + change;
+ 
+  // Empêcher d'aller en dessous de 0
+  if (newValue < 0) newValue = 0;
+
+
+  input.value = newValue;
+}
+
     </script>
 </main>
 
