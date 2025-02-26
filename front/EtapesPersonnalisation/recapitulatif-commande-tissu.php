@@ -15,8 +15,8 @@ $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
 $stmt->execute([$id_client]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$tables = ['structure', 'type_banquette', 'mousse', 'couleur_bois', 'accoudoir_bois',
-  'dossier_bois', 'couleur_tissu_bois', 'motif_bois', 'decoration'
+$tables = ['structure', 'type_banquette', 'mousse', 'accoudoir_tissu',
+  'dossier_tissu', 'couleur_tissu', 'motif_tissu', 'modele'
 ];
 
 function fetchData($pdo, $table) {
@@ -37,7 +37,36 @@ foreach ($tables as $table) {
         'img' => $item['img'],
     ];
 }
+}
+$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM dimension");
+$stmt->execute();
+$data['dimension'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$assocData['dimension'] = [];
 
+foreach ($data['dimension'] as $dim) {
+  $assocData['dimension'][$dim['id']] = [
+    'longueurA' => $dim['longueurA'],
+    'longueurB' => $dim['longueurB'],
+    'longueurC' => $dim['longueurC']
+];}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
+  // Vérifier si un commentaire a été saisi
+  if (!empty($_POST["comment"])) {
+      $commentaire = trim($_POST["comment"]); 
+
+      if ($commande) {
+        $id = $commande['id']; // Récupérer l'ID de la commande temporaire
+          // Mettre à jour la commande temporaire avec le commentaire
+          $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE commande_temporaire.id = ?");
+          $stmt->execute([$commentaire, $id]);
+          $message = '<p class="message success">Commentaire ajouté avec succès !</p>';
+      } else {
+        $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
+      }
+  } else {
+    $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -54,6 +83,20 @@ foreach ($tables as $table) {
     .footer p {
       margin-bottom: 20px; /* Augmente l'espace entre le texte et les boutons */
     }
+    .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
   </style>
 </head>
 <body>
@@ -66,8 +109,9 @@ foreach ($tables as $table) {
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column">
-      <h2>Récapitulatif de la commande</h2><section class="color-options">
-        
+      <h2>Récapitulatif de la commande</h2>
+  
+  <section class="color-options">      
   <h3>Étape 1 : Choisi ta structure</h3>
   <?php
   echo '<div class="option">
@@ -78,7 +122,16 @@ foreach ($tables as $table) {
   ?>
  
   <h3>Étape 1 : Choisi tes dimensions</h3>
-
+  <?php
+  echo '
+        <div class="dimension-container">
+        <p class="input-field">Longueur banquette A (en cm): ' . htmlspecialchars($dim['longueurA']?? 'N/A') . '</p>
+        </div> <div class="dimension-container">
+        <p class="input-field">Longueur banquette B (en cm): ' . htmlspecialchars($dim['longueurB']?? 'N/A') . '</p>
+        </div> <div class="dimension-container">
+        <p class="input-field">Longueur banquette C (en cm): ' . htmlspecialchars($dim['longueurC']?? 'N/A') . '</p>   
+        </div>';
+  ?>
 
   <h3>Étape 2 : Choisi ton type de banquette</h3>
   <?php
@@ -86,41 +139,51 @@ foreach ($tables as $table) {
           <img src="../../admin/uploads/banquette/'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['img'] ?? 'N/A').'" 
               alt="'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A').'">
           <p>'. htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A') . '</p>
+        
         </div>';
   ?>
 
-  <h3>Étape 3 : Choisi ta couleur de bois</h3>
+  <h3>Étape 3 : Choisi ton modèle</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/couleur-banquette-bois/'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/modele/'.htmlspecialchars($assocData['modele'][$commande['id_modele']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? 'N/A') . '</p>
         </div>';
   ?>
-  <h3>Étape 4 : Choisi ta decoration</h3>
+  <h3>Étape 4 : Choisi ta couleur de tissu</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/decoration/'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? 'N/A') . '</p>
-        </div>';
-  ?>
-
-  <h3>Étape 5 : Choisi tes accoudoirs</h3>
-  <?php
-  echo '<div class="option">
-          <img src="../../admin/uploads/accoudoirs-bois/'.htmlspecialchars($assocData['accoudoir_bois'][$commande['id_accoudoir_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['accoudoir_bois'][$commande['id_accoudoir_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['accoudoir_bois'][$commande['id_accoudoir_bois']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/couleur-tissu-tissu/'.htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? 'N/A') . '</p>
         </div>';
   ?>
 
-  <h3>Étape 6 : Choisi ton dossier</h3>
+  <h3>Étape 4 : Choisi ton motif de coussin</h3>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/motif-tissu/'.htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 5 : Choisi ton dossier</h3>
    <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/dossier-bois/'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/dossier-tissu/'.htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? 'N/A') . '</p>
+        </div>';
+  ?>
+
+  <h3>Étape 6 : Choisi tes accoudoirs</h3>
+  <?php
+  echo '<div class="option">
+          <img src="../../admin/uploads/accoudoirs-tissu/'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['img'] ?? 'N/A').'" 
+              alt="'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A').'">
+          <p>'. htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A') . '</p>
         </div>';
   ?>
 
@@ -132,27 +195,7 @@ foreach ($tables as $table) {
           <p>'. htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? 'N/A') . '</p>
         </div>';
   ?>
-
-  <h3>Étape 8 : Choisi ton tissu</h3>
-  <?php
-  echo '<div class="option">
-          <img src="../../admin/uploads/couleur-tissu-bois/'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? 'N/A') . '</p>
-        </div>';
-  ?>
-
-  <h3>Étape 8 : Choisi ton motif de coussin</h3>
-   <?php
-   echo '<div class="option">
-          <img src="../../admin/uploads/motif-bois/'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? 'N/A') . '</p>
-        </div>';
-  ?>
 </section>
-
-
       <div class="footer-processus">
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
@@ -174,12 +217,13 @@ foreach ($tables as $table) {
         
       <!-- Section commentaire -->
       <section class="comment-section">
-      <h3>Ajoute un commentaire à propos de ta commande :                     </h3>
-      <textarea class="textarea-custom" name="comment" rows="5" placeholder="Écris ton commentaire ici..."></textarea>
-      <button class="btn-submit-com">Ajouter</button>
-
+      <?php if (!empty($message)) { echo $message; } ?>
+      <h3>Ajoute un commentaire à propos de ta commande : </h3>
+      <form action="" method="POST">
+          <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."></textarea>
+          <button type="submit" class="btn-submit-com">Ajouter</button>
+      </form>
       </section>
-       
       </section>
       
     </div>

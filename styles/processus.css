@@ -266,13 +266,14 @@ span {
 /* Style du textarea */
 .textarea-custom {
   width: 100%; /* Utilise 100% de la largeur de son parent */
-  max-width: 600px; /* Limite la largeur à 600px */
+  max-width: 480px; /* Limite la largeur à 600px */
   min-width: 300px; /* Définit une largeur minimale de 300px */
-  height: 40px;
+  height: 70px;
   padding: 10px;
   background-color: rgba(227, 209, 200, 0.71); /* Beige avec opacité */
   border-radius: 8px;
   font-size: 1em;
+  border-color: rgba(227, 209, 200, 0.71);
   line-height: 1.5;
   resize: vertical; /* Permet de redimensionner verticalement */
   margin-bottom: 10px;
@@ -319,6 +320,13 @@ span {
 
 label {
   margin-bottom: 5px;
+}
+
+.dimension-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .input-field {
